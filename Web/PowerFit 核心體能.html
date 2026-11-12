@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerFit 核心體能 | 突破極限，成就不凡</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Anton for Impact Titles, Inter for Body Text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        // Tailwind Custom Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#F97316',
+                            hover: '#EA580C',
+                            dark: '#171717',
+                            card: '#262626',
+                            muted: '#A3A3A3',
+                        }
+                    },
+                    fontFamily: {
+                        impact: ['Anton', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'glow-orange': '0 0 25px rgba(249, 115, 22, 0.65)',
+                        'glow-orange-lg': '0 0 40px rgba(249, 115, 22, 0.85)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 自訂樣式與爆發力動效 */
+        body {
+            background-color: #171717;
+            color: #F5F5F5;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 斜角切線區塊 (Skew Dividers) */
+        .skew-divider-top {
+            clip-path: polygon(0 0, 100% 4vw, 100% 100%, 0 100%);
+        }
+        .skew-divider-bottom {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4vw), 0 100%);
+        }
+        .skew-card {
+            transform: skewX(-6deg);
+        }
+        .unskew-content {
+            transform: skewX(6deg);
+        }
+
+        /* 爆發力橘色發光與按鈕閃耀效果 */
+        .btn-power {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-power::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        .btn-power:hover::before {
+            left: 100%;
+        }
+        .btn-power:hover {
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.8);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* 背景影片覆蓋遮罩 */
+        .hero-overlay {
+            background: linear-gradient(180deg, rgba(23, 23, 23, 0.7) 0%, rgba(23, 23, 23, 0.95) 100%);
+        }
+
+        /* 視差背景類別 (Parallax Background) */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Hero 輪播切換動畫 */
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            pointer-events: none;
+        }
+        .hero-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 微笑彈窗動畫 */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-modal {
+            animation: modalFadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-orange selection:text-black">
+
+    <!-- 1. 導覽列 Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-brand-dark/90 backdrop-blur-md border-b border-neutral-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- LOGO -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <div class="bg-brand-orange text-black p-2 rounded-lg font-impact text-2xl skew-card group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-bolt unskew-content"></i>
+                    </div>
+                    <span class="font-impact text-3xl tracking-wider text-white">POWER<span class="text-brand-orange">FIT</span></span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-sm font-bold tracking-wider uppercase">
+                    <a href="#about" class="text-neutral-300 hover:text-brand-orange transition-colors">關於品牌</a>
+                    <a href="#courses" class="text-neutral-300 hover:text-brand-orange transition-colors">課程介紹</a>
+                    <a href="#coaches" class="text-neutral-300 hover:text-brand-orange transition-colors">教練團隊</a>
+                    <a href="#pricing" class="text-neutral-300 hover:text-brand-orange transition-colors">收費方案</a>
+                    <a href="#register" class="btn-power bg-brand-orange text-black px-5 py-2.5 rounded-lg font-black tracking-wider transition-all shadow-glow-orange">
+                        免費體驗
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white hover:text-brand-orange focus:outline-none p-2" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-neutral-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" class="mobile-link block text-neutral-300 hover:text-brand-orange font-bold text-lg py-2">關於品牌</a>
+            <a href="#courses" class="mobile-link block text-neutral-300 hover:text-brand-orange font-bold text-lg py-2">課程介紹</a>
+            <a href="#coaches" class="mobile-link block text-neutral-300 hover:text-brand-orange font-bold text-lg py-2">教練團隊</a>
+            <a href="#pricing" class="mobile-link block text-neutral-300 hover:text-brand-orange font-bold text-lg py-2">收費方案</a>
+            <a href="#register" class="mobile-link btn-power block text-center bg-brand-orange text-black font-black py-3 rounded-lg uppercase tracking-wider shadow-glow-orange mt-2">
+                免費體驗
+            </a>
+        </div>
+    </nav>
+
+    <!-- 2. Hero 區塊 ( Banner 輪播 + 視差滾動 + 強烈標語 ) -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        
+        <!-- Banner 輪播容器 -->
+        <div id="hero-carousel" class="absolute inset-0 w-full h-full z-0">
+            <!-- Slide 1: 熱血鍛鍊影片 -->
+            <div class="hero-slide active">
+                <video autoplay loop muted playsinline class="w-full h-full object-cover filter brightness-75 scale-105">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-man-holding-a-weight-barbell-in-a-gym-42795-large.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- Slide 2: 高效有氧 (視差圖片 1) -->
+            <div class="hero-slide">
+                <div class="w-full h-full bg-cover bg-center parallax-bg filter brightness-75 scale-105" 
+                     style="background-image: url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1920&auto=format&fit=crop');">
+                </div>
+            </div>
+
+            <!-- Slide 3: 極限個人私教 (視差圖片 2) -->
+            <div class="hero-slide">
+                <div class="w-full h-full bg-cover bg-center parallax-bg filter brightness-75 scale-105" 
+                     style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop');">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 暗色覆蓋層與網格紋理 -->
+        <div class="absolute inset-0 hero-overlay z-10"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(#F97316_1px,transparent_1px)] [background-size:32px_32px] opacity-10 z-10"></div>
+
+        <!-- 輪播左右切換按鈕 -->
+        <button id="prev-slide" class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-black/50 hover:bg-brand-orange hover:text-black text-white border border-neutral-700 rounded-full flex items-center justify-center transition-all focus:outline-none">
+            <i class="fa-solid fa-chevron-left text-xl"></i>
+        </button>
+        <button id="next-slide" class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-black/50 hover:bg-brand-orange hover:text-black text-white border border-neutral-700 rounded-full flex items-center justify-center transition-all focus:outline-none">
+            <i class="fa-solid fa-chevron-right text-xl"></i>
+        </button>
+
+        <!-- 輪播指示圓點 (Carousel Dots) -->
+        <div class="absolute bottom-20 left-1/2 -translate-x-1/2 z-30 flex space-x-3">
+            <button class="carousel-dot w-8 h-2 rounded-full bg-brand-orange transition-all" data-index="0"></button>
+            <button class="carousel-dot w-2.5 h-2 rounded-full bg-white/40 hover:bg-white transition-all" data-index="1"></button>
+            <button class="carousel-dot w-2.5 h-2 rounded-full bg-white/40 hover:bg-white transition-all" data-index="2"></button>
+        </div>
+
+        <!-- Hero 主要文字內容 -->
+        <div class="relative z-20 max-w-5xl mx-auto px-4 text-center py-20">
+            <div class="inline-block bg-brand-orange/20 border border-brand-orange text-brand-orange px-4 py-1.5 rounded-full text-sm sm:text-base font-extrabold uppercase tracking-widest mb-6 animate-pulse">
+                <i class="fa-solid fa-fire mr-2"></i>全台最強飆悍鍛鍊聖殿
+            </div>
+            
+            <h1 class="font-impact text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight text-white uppercase leading-none mb-6">
+                突破極限 <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-orange-400 to-yellow-500">成就不凡</span>
+            </h1>
+
+            <p class="text-gray-300 text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto font-medium mb-10 leading-relaxed">
+                拒絕藉口！PowerFit 提供世界級進口健身器材、頂級強悍教練陣容與專屬極限鍛鍊環境，帶領你改寫身體極限。
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                <a href="#register" class="btn-power w-full sm:w-auto bg-brand-orange text-black text-xl font-black px-10 py-5 rounded-lg tracking-wider uppercase flex items-center justify-center space-x-3 shadow-glow-orange">
+                    <span>立即免費預約體驗</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#courses" class="w-full sm:w-auto bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-700 text-white text-xl font-bold px-8 py-5 rounded-lg tracking-wider uppercase transition-all text-center backdrop-blur-sm">
+                    探索核心課程
+                </a>
+            </div>
+        </div>
+
+        <!-- 向下滾動指標 -->
+        <a href="#stats" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 text-white/50 hover:text-brand-orange transition-colors animate-bounce">
+            <i class="fa-solid fa-chevron-down text-3xl"></i>
+        </a>
+    </section>
+
+    <!-- 3. 動態數據計數器 區塊 (Stats Counter) -->
+    <section id="stats" class="bg-neutral-900 border-y border-neutral-800 py-16 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <!-- 數據卡片 1 -->
+                <div class="p-6 bg-brand-dark/50 rounded-xl border border-neutral-800/80 hover:border-brand-orange/40 transition-all">
+                    <div class="text-brand-orange text-4xl sm:text-5xl font-impact mb-2">
+                        <span class="counter" data-target="15000">0</span>+
+                    </div>
+                    <div class="text-neutral-400 font-bold uppercase tracking-wider text-sm sm:text-base">活躍極限會員</div>
+                </div>
+
+                <!-- 數據卡片 2 -->
+                <div class="p-6 bg-brand-dark/50 rounded-xl border border-neutral-800/80 hover:border-brand-orange/40 transition-all">
+                    <div class="text-brand-orange text-4xl sm:text-5xl font-impact mb-2">
+                        <span class="counter" data-target="85">0</span>+
+                    </div>
+                    <div class="text-neutral-400 font-bold uppercase tracking-wider text-sm sm:text-base">國際級專業教練</div>
+                </div>
+
+                <!-- 數據卡片 3 -->
+                <div class="p-6 bg-brand-dark/50 rounded-xl border border-neutral-800/80 hover:border-brand-orange/40 transition-all">
+                    <div class="text-brand-orange text-4xl sm:text-5xl font-impact mb-2">
+                        <span class="counter" data-target="12">0</span>
+                    </div>
+                    <div class="text-neutral-400 font-bold uppercase tracking-wider text-sm sm:text-base">旗艦級連鎖據點</div>
+                </div>
+
+                <!-- 數據卡片 4 -->
+                <div class="p-6 bg-brand-dark/50 rounded-xl border border-neutral-800/80 hover:border-brand-orange/40 transition-all">
+                    <div class="text-brand-orange text-4xl sm:text-5xl font-impact mb-2">
+                        <span class="counter" data-target="99">0</span>%
+                    </div>
+                    <div class="text-neutral-400 font-bold uppercase tracking-wider text-sm sm:text-base">學員滿意目標達成</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 4. 品牌特色/關於品牌 (視差滾動背景 + 斜角切線) -->
+    <section id="about" class="py-24 relative z-10 bg-cover bg-fixed bg-center border-y border-neutral-800" 
+             style="background-image: linear-gradient(to right, rgba(23, 23, 23, 0.95), rgba(23, 23, 23, 0.85)), url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1920&auto=format&fit=crop');">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- 左側文案 -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center space-x-2 text-brand-orange font-black uppercase tracking-widest text-sm">
+                        <span class="w-8 h-1 bg-brand-orange inline-block"></span>
+                        <span>Why Choose PowerFit</span>
+                    </div>
+                    <h2 class="text-4xl sm:text-5xl font-impact uppercase tracking-tight text-white leading-tight">
+                        重塑鍛鍊定義 <br><span class="text-brand-orange">打造強悍終極體態</span>
+                    </h2>
+                    <p class="text-neutral-300 text-lg leading-relaxed">
+                        PowerFit 核心體能不是一般的健身房，這裡是強者的鍛鍊場。我們擁有頂級 Eleiko 舉重裝備、Hammer Strength 重訓器材，搭配科學化數據追蹤，助你以最快速度突破停滯期。
+                    </p>
+                    
+                    <div class="space-y-4 pt-4">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-brand-orange/10 p-3 rounded-lg text-brand-orange font-bold">
+                                <i class="fa-solid fa-dumbbell text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">最高規格進口重訓設備</h4>
+                                <p class="text-neutral-400 text-sm">完全滿足肌力訓練、健力、舉重與各階段體能訓練需求。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-brand-orange/10 p-3 rounded-lg text-brand-orange font-bold">
+                                <i class="fa-solid fa-heart-pulse text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">科學化體能數據監控</h4>
+                                <p class="text-neutral-400 text-sm">結合客製化 InBody 分析與心率追蹤，成果一目瞭然。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-brand-orange/10 p-3 rounded-lg text-brand-orange font-bold">
+                                <i class="fa-solid fa-shower text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">尊榮極致衛浴與烤箱設施</h4>
+                                <p class="text-neutral-400 text-sm">高質感獨立高壓淋浴間與冷熱水療，高強度訓練後的最佳修復。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側圖片 (帶有傾斜與深色護套風格) -->
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-brand-orange to-amber-600 rounded-2xl blur-lg opacity-30 transform -rotate-2"></div>
+                    <div class="relative rounded-2xl overflow-hidden border-2 border-neutral-800 bg-neutral-900 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop" 
+                             alt="PowerFit Gym Facility" 
+                             class="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700"
+                             onerror="this.src='https://placehold.co/800x600/171717/F97316?text=PowerFit+Gym'">
+                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6">
+                            <p class="text-brand-orange font-impact text-2xl">24/7 全天候自主進出訓練</p>
+                            <p class="text-gray-300 text-sm">隨時開啟你的高能量訓練日常</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 課程介紹 區塊 (Courses - Tab Switch Filter) -->
+    <section id="courses" class="py-24 bg-neutral-900 relative skew-divider-top skew-divider-bottom my-12 py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-brand-orange font-black uppercase tracking-widest text-sm mb-2">Training Programs</h2>
+                <h3 class="text-4xl sm:text-5xl font-impact uppercase text-white tracking-tight">王牌鍛鍊課程</h3>
+                <p class="text-neutral-400 mt-4 text-lg">不論你的目標是突破重量極限、高效撕裂脂肪，或是深層修復展現柔軟度，這裡都有為你量身打造的頂級課程。</p>
+                
+                <!-- 課程分類按鈕 Tabs -->
+                <div class="flex flex-wrap justify-center gap-3 mt-8">
+                    <button class="course-tab active bg-brand-orange text-black px-6 py-2.5 rounded-full font-black text-sm uppercase tracking-wider transition-all" data-category="all">
+                        全部課程
+                    </button>
+                    <button class="course-tab bg-neutral-800 text-gray-300 hover:text-white px-6 py-2.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all" data-category="strength">
+                        <i class="fa-solid fa-dumbbell mr-1"></i> 肌力爆發
+                    </button>
+                    <button class="course-tab bg-neutral-800 text-gray-300 hover:text-white px-6 py-2.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all" data-category="cardio">
+                        <i class="fa-solid fa-fire mr-1"></i> 高效有氧
+                    </button>
+                    <button class="course-tab bg-neutral-800 text-gray-300 hover:text-white px-6 py-2.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all" data-category="yoga">
+                        <i class="fa-solid fa-spa mr-1"></i> 瑜珈伸展
+                    </button>
+                </div>
+            </div>
+
+            <!-- 課程卡片網格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 課程卡片 1 -->
+                <div class="course-card group bg-brand-dark rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-orange transition-all duration-300 flex flex-col" data-category="strength">
+                    <div class="relative overflow-hidden h-60">
+                        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop" 
+                             alt="CrossFit Extreme" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x400/262626/F97316?text=Power+Strength'">
+                        <span class="absolute top-4 left-4 bg-brand-orange text-black text-xs font-black px-3 py-1 rounded-md uppercase">肌力爆發</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-impact uppercase text-white mb-2 group-hover:text-brand-orange transition-colors">極限硬派肌力重訓</h4>
+                            <p class="text-neutral-400 text-sm mb-4 leading-relaxed">強調三項大重量基礎訓練與多關節複合動作，專為打造頑強肉體與強大肌肉力量設計。</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs font-bold text-neutral-400">
+                            <span><i class="fa-regular fa-clock text-brand-orange mr-1"></i> 60 分鐘/堂</span>
+                            <span><i class="fa-solid fa-gauge-high text-brand-orange mr-1"></i> 強度: 高</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 課程卡片 2 -->
+                <div class="course-card group bg-brand-dark rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-orange transition-all duration-300 flex flex-col" data-category="cardio">
+                    <div class="relative overflow-hidden h-60">
+                        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800&auto=format&fit=crop" 
+                             alt="HIIT Fat Burn" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x400/262626/F97316?text=HIIT+Cardio'">
+                        <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-md uppercase">高效有氧</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-impact uppercase text-white mb-2 group-hover:text-brand-orange transition-colors">HIIT 飆速撕裂燃脂</h4>
+                            <p class="text-neutral-400 text-sm mb-4 leading-relaxed">高強度間歇訓練 combined 間歇心肺，能在課後持續觸發 EPOC 後燃效應，持續燃脂48小時。</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs font-bold text-neutral-400">
+                            <span><i class="fa-regular fa-clock text-brand-orange mr-1"></i> 45 分鐘/堂</span>
+                            <span><i class="fa-solid fa-gauge-high text-brand-orange mr-1"></i> 強度: 極高</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 課程卡片 3 -->
+                <div class="course-card group bg-brand-dark rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-orange transition-all duration-300 flex flex-col" data-category="yoga">
+                    <div class="relative overflow-hidden h-60">
+                        <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=800&auto=format&fit=crop" 
+                             alt="Power Yoga" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x400/262626/F97316?text=Power+Yoga'">
+                        <span class="absolute top-4 left-4 bg-amber-500 text-black text-xs font-black px-3 py-1 rounded-md uppercase">瑜珈伸展</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-impact uppercase text-white mb-2 group-hover:text-brand-orange transition-colors">強化核心動態瑜珈</h4>
+                            <p class="text-neutral-400 text-sm mb-4 leading-relaxed">結合呼吸法與深層核心肌群穩定，修復高強度訓練後的緊繃肌肉，提升關節活動度。</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs font-bold text-neutral-400">
+                            <span><i class="fa-regular fa-clock text-brand-orange mr-1"></i> 50 分鐘/堂</span>
+                            <span><i class="fa-solid fa-gauge-high text-brand-orange mr-1"></i> 強度: 中等</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 課程卡片 4 -->
+                <div class="course-card group bg-brand-dark rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-orange transition-all duration-300 flex flex-col" data-category="strength">
+                    <div class="relative overflow-hidden h-60">
+                        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop" 
+                             alt="Bodybuilding Master" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x400/262626/F97316?text=Bodybuilding'">
+                        <span class="absolute top-4 left-4 bg-brand-orange text-black text-xs font-black px-3 py-1 rounded-md uppercase">肌力爆發</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-impact uppercase text-white mb-2 group-hover:text-brand-orange transition-colors">1對1 私人教練極限雕塑</h4>
+                            <p class="text-neutral-400 text-sm mb-4 leading-relaxed">完全為個人量身定制的訓練菜單與飲食指引，精準修正動作軌跡，成果極速見效。</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs font-bold text-neutral-400">
+                            <span><i class="fa-regular fa-clock text-brand-orange mr-1"></i> 60 分鐘/堂</span>
+                            <span><i class="fa-solid fa-gauge-high text-brand-orange mr-1"></i> 強度: 客製化</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 課程卡片 5 -->
+                <div class="course-card group bg-brand-dark rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-orange transition-all duration-300 flex flex-col" data-category="cardio">
+                    <div class="relative overflow-hidden h-60">
+                        <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=800&auto=format&fit=crop" 
+                             alt="Fight Boxing" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x400/262626/F97316?text=Boxing+Fit'">
+                        <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1 rounded-md uppercase">高效有氧</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-impact uppercase text-white mb-2 group-hover:text-brand-orange transition-colors">格鬥拳擊體能衝刺</h4>
+                            <p class="text-neutral-400 text-sm mb-4 leading-relaxed">結合泰拳與西洋拳組合出拳，強烈抒發壓力的同時大幅鍛鍊核心轉體爆發力。</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs font-bold text-neutral-400">
+                            <span><i class="fa-regular fa-clock text-brand-orange mr-1"></i> 50 分鐘/堂</span>
+                            <span><i class="fa-solid fa-gauge-high text-brand-orange mr-1"></i> 強度: 高</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 課程卡片 6 -->
+                <div class="course-card group bg-brand-dark rounded-xl overflow-hidden border border-neutral-800 hover:border-brand-orange transition-all duration-300 flex flex-col" data-category="yoga">
+                    <div class="relative overflow-hidden h-60">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop" 
+                             alt="筋膜放鬆" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x400/262626/F97316?text=Myofascial+Release'">
+                        <span class="absolute top-4 left-4 bg-amber-500 text-black text-xs font-black px-3 py-1 rounded-md uppercase">瑜珈伸展</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-impact uppercase text-white mb-2 group-hover:text-brand-orange transition-colors">筋膜滾筒與深層放鬆</h4>
+                            <p class="text-neutral-400 text-sm mb-4 leading-relaxed">利用滾筒與按摩球深入解除肌肉黏連，加速肌肉恢復，防止運動傷害發生的關鍵課程。</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex justify-between items-center text-xs font-bold text-neutral-400">
+                            <span><i class="fa-regular fa-clock text-brand-orange mr-1"></i> 45 分鐘/堂</span>
+                            <span><i class="fa-solid fa-gauge-high text-brand-orange mr-1"></i> 強度: 輕鬆</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 教練團隊陣容 (Coaches) -->
+    <section id="coaches" class="py-24 bg-brand-dark relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-brand-orange font-black uppercase tracking-widest text-sm mb-2">Master Trainers</h2>
+                <h3 class="text-4xl sm:text-5xl font-impact uppercase text-white tracking-tight">頂尖教練團隊</h3>
+                <p class="text-neutral-400 mt-4 text-lg">擁有國家級證照與多年實戰比賽經驗，隨時準備引導你邁向體能高峰。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 教練 1 -->
+                <div class="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-brand-orange transition-all duration-300 group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=800&auto=format&fit=crop" 
+                             alt="Coach Alex" 
+                             class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x800/171717/F97316?text=Coach+Alex'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h4 class="text-3xl font-impact uppercase text-white">ALEX CHEN</h4>
+                            <p class="text-brand-orange font-bold text-sm uppercase">總教練 / 健力國家代表</p>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <p class="text-xs text-neutral-400 font-bold uppercase tracking-wider">專長：肌力與體能總監、大重量動作矯正、健力培訓</p>
+                        <blockquote class="text-neutral-300 italic text-sm border-l-2 border-brand-orange pl-3">
+                            「疼痛是暫時的，放棄卻是永恆的。坐而言不如起而行！」
+                        </blockquote>
+                        <div class="pt-2 flex space-x-3 text-neutral-400 text-sm">
+                            <span class="bg-neutral-800 px-2.5 py-1 rounded text-xs">NSCA-CSCS</span>
+                            <span class="bg-neutral-800 px-2.5 py-1 rounded text-xs">NASM-CPT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 教練 2 -->
+                <div class="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-brand-orange transition-all duration-300 group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1548690312-e3b507d8c110?q=80&w=800&auto=format&fit=crop" 
+                             alt="Coach Sarah" 
+                             class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x800/171717/F97316?text=Coach+Sarah'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h4 class="text-3xl font-impact uppercase text-white">SARAH LIN</h4>
+                            <p class="text-brand-orange font-bold text-sm uppercase">女性曲線雕塑專家的</p>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <p class="text-xs text-neutral-400 font-bold uppercase tracking-wider">專長：臀腿線條塑造、產後體態修復、HIIT減脂</p>
+                        <blockquote class="text-neutral-300 italic text-sm border-l-2 border-brand-orange pl-3">
+                            「汗水是你脂肪流出的眼淚，每一秒的堅持都算數。」
+                        </blockquote>
+                        <div class="pt-2 flex space-x-3 text-neutral-400 text-xs">
+                            <span class="bg-neutral-800 px-2.5 py-1 rounded">ACE-CPT</span>
+                            <span class="bg-neutral-800 px-2.5 py-1 rounded">EXOS-XPS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 教練 3 -->
+                <div class="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-brand-orange transition-all duration-300 group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop" 
+                             alt="Coach Marcus" 
+                             class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/600x800/171717/F97316?text=Coach+Marcus'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-6">
+                            <h4 class="text-3xl font-impact uppercase text-white">MARCUS HUANG</h4>
+                            <p class="text-brand-orange font-bold text-sm uppercase">格鬥體能與功能性教練</p>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <p class="text-xs text-neutral-400 font-bold uppercase tracking-wider">專長：自由搏擊、TRX懸吊訓練、運動員專項體能</p>
+                        <blockquote class="text-neutral-300 italic text-sm border-l-2 border-brand-orange pl-3">
+                            「突破極限不是口號，而是每天踏進健身房的紀律。」
+                        </blockquote>
+                        <div class="pt-2 flex space-x-3 text-neutral-400 text-xs">
+                            <span class="bg-neutral-800 px-2.5 py-1 rounded">TRX-STC</span>
+                            <span class="bg-neutral-800 px-2.5 py-1 rounded">IKFF 壺鈴認證</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. 會員收費方案表 (Pricing Plans) -->
+    <section id="pricing" class="py-24 bg-neutral-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-brand-orange font-black uppercase tracking-widest text-sm mb-2">Membership Plans</h2>
+                <h3 class="text-4xl sm:text-5xl font-impact uppercase text-white tracking-tight">透明實惠收費方案</h3>
+                <p class="text-neutral-400 mt-4 text-lg">無隱藏費用、免綁定繁瑣合約，選擇最適合你的蛻變計畫。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <!-- 方案 1: 體驗型 -->
+                <div class="bg-brand-dark border border-neutral-800 rounded-2xl p-8 hover:border-neutral-700 transition-all">
+                    <h4 class="text-2xl font-impact uppercase text-white mb-2">自主單月通行</h4>
+                    <p class="text-neutral-400 text-sm mb-6">適合彈性排程與自由體驗者</p>
+                    <div class="mb-6">
+                        <span class="text-4xl sm:text-5xl font-impact text-white">NT$ 1,480</span>
+                        <span class="text-neutral-400 font-bold text-sm"> / 月</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-neutral-300 text-sm">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>全台門市 24H 自由進出場</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>頂級重訓設備無限使用</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>豪華衛浴設施與置物櫃</li>
+                        <li class="flex items-center text-neutral-600"><i class="fa-solid fa-xmark mr-3"></i>不含團體課程自由參加</li>
+                    </ul>
+                    <a href="#register" class="block text-center bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-3 rounded-lg uppercase tracking-wider transition-colors">
+                        選擇此方案
+                    </a>
+                </div>
+
+                <!-- 方案 2: 最受歡迎 (爆發力主推) -->
+                <div class="bg-brand-dark border-2 border-brand-orange rounded-2xl p-8 relative shadow-glow-orange transform lg:-translate-y-4">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-orange text-black font-black text-xs px-4 py-1.5 rounded-full uppercase tracking-widest shadow-md">
+                        🔥 最受歡迎極限推薦
+                    </div>
+                    <h4 class="text-2xl font-impact uppercase text-white mb-2">年度狂暴鍛鍊卡</h4>
+                    <p class="text-neutral-400 text-sm mb-6">專為下定決心徹底改變的運動員設計</p>
+                    <div class="mb-6">
+                        <span class="text-4xl sm:text-5xl font-impact text-brand-orange">NT$ 980</span>
+                        <span class="text-neutral-400 font-bold text-sm"> / 月</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-neutral-300 text-sm">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>全台門市 24H 自由進出場</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>團體有氧/瑜珈課程無限次免費參加</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>每月贈送 1 次 InBody 精密體檢測量</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>贈送 1 堂私人教練一對一觀念教導</li>
+                    </ul>
+                    <a href="#register" class="btn-power block text-center bg-brand-orange text-black font-black py-4 rounded-lg uppercase tracking-wider shadow-lg">
+                        立即搶先預約
+                    </a>
+                </div>
+
+                <!-- 方案 3: 私教特訓 -->
+                <div class="bg-brand-dark border border-neutral-800 rounded-2xl p-8 hover:border-neutral-700 transition-all">
+                    <h4 class="text-2xl font-impact uppercase text-white mb-2">1 對 1 白金私教包</h4>
+                    <p class="text-neutral-400 text-sm mb-6">高效率突破停滯期與精準控管</p>
+                    <div class="mb-6">
+                        <span class="text-4xl sm:text-5xl font-impact text-white">NT$ 1,600</span>
+                        <span class="text-neutral-400 font-bold text-sm"> / 堂起</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-neutral-300 text-sm">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>專屬私人教練全程客製化指引</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>飲食與生活作息每日紀錄與建議</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>包含場館無限通行權限</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-orange mr-3"></i>運動防護與筋膜放術輔導</li>
+                    </ul>
+                    <a href="#register" class="block text-center bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-3 rounded-lg uppercase tracking-wider transition-colors">
+                        預約教練諮詢
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. 免費體驗報名表單 (Free Trial Registration Form) -->
+    <section id="register" class="py-24 bg-brand-dark relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-neutral-900 border-2 border-neutral-800 rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-brand-orange/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="text-center mb-10">
+                    <span class="bg-brand-orange/20 text-brand-orange px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border border-brand-orange/30">Limited Time Offer</span>
+                    <h2 class="text-4xl sm:text-5xl font-impact uppercase text-white mt-4">預約免費 1 天極限體驗</h2>
+                    <p class="text-neutral-400 mt-2 text-sm sm:text-base">填寫表單，立即獲取免費 1 Day 體驗通行證與免費 InBody 體適能檢測！</p>
+                </div>
+
+                <!-- 報名表單 -->
+                <form id="trial-form" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- 姓名 -->
+                        <div>
+                            <label class="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2" for="name">真實姓名 *</label>
+                            <input type="text" id="name" required placeholder="例如：陳大雄" 
+                                   class="w-full bg-brand-dark border border-neutral-700 rounded-lg px-4 py-3.5 text-white placeholder-neutral-500 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all">
+                        </div>
+
+                        <!-- 電話 -->
+                        <div>
+                            <label class="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2" for="phone">行動電話 *</label>
+                            <input type="tel" id="phone" required placeholder="例如：0912345678" 
+                                   class="w-full bg-brand-dark border border-neutral-700 rounded-lg px-4 py-3.5 text-white placeholder-neutral-500 focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- 選擇據點 -->
+                        <div>
+                            <label class="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2" for="location">體驗分店 *</label>
+                            <select id="location" required class="w-full bg-brand-dark border border-neutral-700 rounded-lg px-4 py-3.5 text-white focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all">
+                                <option value="" disabled selected>請選擇方便前往的據點</option>
+                                <option value="taipei-xinyi">台北信義旗艦館</option>
+                                <option value="taipei-zhongshan">台北中山體驗館</option>
+                                <option value="newtaipei-banqiao">新北板橋訓練場</option>
+                                <option value="taichung-xitun">台中西屯旗艦館</option>
+                                <option value="kaohsiung-zuoying">高雄左營極限館</option>
+                            </select>
+                        </div>
+
+                        <!-- 預約時段 -->
+                        <div>
+                            <label class="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2" for="goal">首要健身目標</label>
+                            <select id="goal" class="w-full bg-brand-dark border border-neutral-700 rounded-lg px-4 py-3.5 text-white focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all">
+                                <option value="muscle">增肌與力量突破</option>
+                                <option value="fat-loss">減脂與體態雕塑</option>
+                                <option value="endurance">提升體能與心肺</option>
+                                <option value="posture">姿勢矯正與放鬆</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3 pt-2">
+                        <input type="checkbox" id="terms" required class="w-5 h-5 accent-brand-orange rounded cursor-pointer">
+                        <label for="terms" class="text-xs text-neutral-400 cursor-pointer">
+                            我同意接收 PowerFit 的體驗確認簡訊與活動優惠通知。
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-power w-full bg-brand-orange text-black font-black py-4 rounded-xl text-lg uppercase tracking-wider shadow-glow-orange transition-all">
+                        送出預約，開啟強悍蛻變
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成功報名 Modal 彈窗 (代替 alert) -->
+    <div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-neutral-900 border-2 border-brand-orange rounded-2xl max-w-md w-full p-8 text-center animate-modal relative">
+            <div class="w-16 h-16 bg-brand-orange text-black rounded-full flex items-center justify-center mx-auto text-3xl font-black mb-4">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="text-3xl font-impact uppercase text-white mb-2">預約成功！</h3>
+            <p class="text-neutral-300 text-sm mb-6 leading-relaxed">
+                我們已收到您的體驗申請。PowerFit 健身顧問將於 <span class="text-brand-orange font-bold">24 小時內</span> 與您聯繫，確認入場時間與免費 InBody 檢測細節！
+            </p>
+            <button id="close-modal-btn" class="w-full bg-brand-orange text-black font-black py-3 rounded-lg uppercase tracking-wider hover:bg-white transition-colors">
+                我知道了，準備突破極限
+            </button>
+        </div>
+    </div>
+
+    <!-- 9. 頁尾 Footer -->
+    <footer class="bg-black border-t border-neutral-800 text-neutral-400 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <!-- 品牌簡介 -->
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center space-x-2">
+                        <span class="font-impact text-3xl tracking-wider text-white">POWER<span class="text-brand-orange">FIT</span></span>
+                    </a>
+                    <p class="text-xs text-neutral-500 leading-relaxed">
+                        突破極限，成就不凡。全台頂級極限鍛鍊場館，為追求卓越體態的你而生。
+                    </p>
+                    <div class="flex space-x-4 text-lg text-white">
+                        <a href="#" class="hover:text-brand-orange transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" class="hover:text-brand-orange transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="hover:text-brand-orange transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="hover:text-brand-orange transition-colors"><i class="fa-brands fa-line"></i></a>
+                    </div>
+                </div>
+
+                <!-- 快速連結 -->
+                <div>
+                    <h5 class="text-white font-bold uppercase tracking-wider text-sm mb-4">快速導覽</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#about" class="hover:text-brand-orange transition-colors">關於 PowerFit</a></li>
+                        <li><a href="#courses" class="hover:text-brand-orange transition-colors">核心訓練課程</a></li>
+                        <li><a href="#coaches" class="hover:text-brand-orange transition-colors">專業教練團隊</a></li>
+                        <li><a href="#pricing" class="hover:text-brand-orange transition-colors">會員收費方案</a></li>
+                    </ul>
+                </div>
+
+                <!-- 營業時間 -->
+                <div>
+                    <h5 class="text-white font-bold uppercase tracking-wider text-sm mb-4">營業時間</h5>
+                    <ul class="space-y-2 text-sm text-neutral-400">
+                        <li>自主訓練區：<span class="text-brand-orange font-bold">24 小時無休</span></li>
+                        <li>專人諮詢：10:00 - 22:00</li>
+                        <li>團體課程：07:00 - 21:00</li>
+                    </ul>
+                </div>
+
+                <!-- 聯絡資訊 -->
+                <div>
+                    <h5 class="text-white font-bold uppercase tracking-wider text-sm mb-4">總部聯絡</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><i class="fa-solid fa-location-dot text-brand-orange mr-2"></i>台北市信義區極限路 88 號</li>
+                        <li><i class="fa-solid fa-phone text-brand-orange mr-2"></i>(02) 2789-9999</li>
+                        <li><i class="fa-solid fa-envelope text-brand-orange mr-2"></i>service@powerfit.com.tw</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-neutral-900 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-neutral-600">
+                <p>&copy; 2026 PowerFit 核心體能. All Rights Reserved.</p>
+                <div class="flex space-x-6 mt-4 sm:mt-0">
+                    <a href="#" class="hover:text-neutral-400">隱私權政策</a>
+                    <a href="#" class="hover:text-neutral-400">服務條款</a>
+                    <a href="#" class="hover:text-neutral-400">場館守則</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 10. 右下角客服機器人 (AI Floating Chatbot Widget) -->
+    <div id="chatbot-widget" class="fixed bottom-6 right-6 z-50">
+        <!-- 展開後的對話視窗 -->
+        <div id="chat-window" class="hidden w-[350px] sm:w-[380px] bg-brand-dark border-2 border-brand-orange/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-4 animate-modal transition-all">
+            <!-- 視窗標題頭部 -->
+            <div class="bg-neutral-900 border-b border-neutral-800 p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <div class="w-10 h-10 bg-brand-orange rounded-full flex items-center justify-center text-black font-black">
+                            <i class="fa-solid fa-robot text-lg"></i>
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-neutral-900 rounded-full"></span>
+                    </div>
+                    <div>
+                        <h4 class="font-impact text-lg text-white tracking-wider">POWERBOT <span class="text-brand-orange text-xs font-sans font-bold">24H 在線</span></h4>
+                        <p class="text-[11px] text-neutral-400">PowerFit 智能健身顧問</p>
+                    </div>
+                </div>
+                <button id="close-chat-btn" class="text-neutral-400 hover:text-white p-1 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- 對話內容顯示區 -->
+            <div id="chat-messages" class="p-4 h-80 overflow-y-auto space-y-3 text-sm bg-neutral-900/60">
+                <!-- 機器人歡迎訊息 -->
+                <div class="flex items-start space-x-2">
+                    <div class="w-7 h-7 bg-brand-orange text-black rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="bg-neutral-800 border border-neutral-700 text-neutral-200 p-3 rounded-2xl rounded-tl-none max-w-[80%] leading-relaxed">
+                        你好！我是 PowerFit 核心體能的智能助手 🔥 有什麼我可以幫你的嗎？
+                    </div>
+                </div>
+
+                <!-- 熱門快捷按鈕 -->
+                <div id="quick-replies" class="pl-9 space-y-1.5 pt-1">
+                    <p class="text-[11px] text-neutral-500 font-bold uppercase tracking-wider mb-1">熱門詢問主題：</p>
+                    <button class="quick-btn block w-full text-left bg-neutral-800 hover:bg-brand-orange hover:text-black border border-neutral-700 text-neutral-300 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors" data-msg="免費體驗怎麼預約？">
+                        🔥 免費體驗怎麼預約？
+                    </button>
+                    <button class="quick-btn block w-full text-left bg-neutral-800 hover:bg-brand-orange hover:text-black border border-neutral-700 text-neutral-300 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors" data-msg="會員收費方案有哪些？">
+                        💪 會員收費方案有哪些？
+                    </button>
+                    <button class="quick-btn block w-full text-left bg-neutral-800 hover:bg-brand-orange hover:text-black border border-neutral-700 text-neutral-300 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors" data-msg="場館營業時間？">
+                        ⏰ 場館營業時間？
+                    </button>
+                </div>
+            </div>
+
+            <!-- 輸入框與發送按鈕 -->
+            <form id="chat-form" class="p-3 bg-neutral-900 border-t border-neutral-800 flex items-center space-x-2">
+                <input type="text" id="chat-input" placeholder="請輸入您的問題..." required 
+                       class="flex-1 bg-brand-dark border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-brand-orange">
+                <button type="submit" class="bg-brand-orange text-black p-2 rounded-lg font-bold hover:bg-white transition-colors focus:outline-none">
+                    <i class="fa-solid fa-paper-plane px-1"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- 懸浮浮動按鈕 (Floating Trigger Button) -->
+        <button id="toggle-chat-btn" class="btn-power w-14 h-14 bg-brand-orange text-black rounded-full flex items-center justify-center shadow-glow-orange hover:scale-110 transition-transform relative focus:outline-none">
+            <i class="fa-solid fa-comments text-2xl"></i>
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-neutral-900 animate-ping"></span>
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-neutral-900"></span>
+        </button>
+    </div>
+
+    <!-- JavaScript 邏輯控制 -->
+    <script>
+        // 1. 行動裝置選單 Toggle (加強 Null 檢查Guard)
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        // 2. Banner 輪播效果 (Hero Carousel)
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevBtn = document.getElementById('prev-slide');
+        const nextBtn = document.getElementById('next-slide');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('w-2.5', 'bg-white/40');
+                    dot.classList.add('w-8', 'bg-brand-orange');
+                } else {
+                    dot.classList.remove('w-8', 'bg-brand-orange');
+                    dot.classList.add('w-2.5', 'bg-white/40');
+                }
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            let prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prevIndex);
+        }
+
+        // 設置自動輪播
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(slideInterval);
+            startAutoSlide();
+        }
+
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetAutoSlide();
+            });
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetAutoSlide();
+            });
+        }
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                showSlide(i);
+                resetAutoSlide();
+            });
+        });
+
+        // 開啟自動輪播
+        startAutoSlide();
+
+        // 3. 課程分類篩選 (Course Tab Filtering)
+        const courseTabs = document.querySelectorAll('.course-tab');
+        const courseCards = document.querySelectorAll('.course-card');
+
+        courseTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有 active 樣式
+                courseTabs.forEach(t => {
+                    t.classList.remove('active', 'bg-brand-orange', 'text-black');
+                    t.classList.add('bg-neutral-800', 'text-gray-300');
+                });
+
+                // 設置當前 active 樣式
+                tab.classList.add('active', 'bg-brand-orange', 'text-black');
+                tab.classList.remove('bg-neutral-800', 'text-gray-300');
+
+                const category = tab.getAttribute('data-category');
+
+                courseCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 4. 數字動態計數器 (Animated Number Counter on Scroll)
+        const counters = document.querySelectorAll('.counter');
+        let animated = false;
+
+        function startCounters() {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const speed = 200; // 數值越大越慢
+                const increment = target / speed;
+
+                let count = 0;
+                const updateCount = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count);
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // 滾動監聽觸發計數器
+        window.addEventListener('scroll', () => {
+            const statsSection = document.getElementById('stats');
+            if (!statsSection) return;
+            const sectionPos = statsSection.getBoundingClientRect().top;
+            const screenPos = window.innerHeight / 1.3;
+
+            if (sectionPos < screenPos && !animated) {
+                animated = true;
+                startCounters();
+            }
+        });
+
+        // 5. 免費體驗表單提交驗證與 Modal 彈窗控制
+        const trialForm = document.getElementById('trial-form');
+        const successModal = document.getElementById('success-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+
+        trialForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // 顯示彈窗替代 alert
+            successModal.classList.remove('hidden');
+            trialForm.reset();
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+
+        // 點擊 Modal 背景關閉
+        successModal.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                successModal.classList.add('hidden');
+            }
+        });
+
+        // 6. 客服機器人邏輯 (Chatbot Controller)
+        const toggleChatBtn = document.getElementById('toggle-chat-btn');
+        const closeChatBtn = document.getElementById('close-chat-btn');
+        const chatWindow = document.getElementById('chat-window');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const quickBtns = document.querySelectorAll('.quick-btn');
+
+        // 開啟/關閉對話視窗
+        toggleChatBtn.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+        });
+
+        // 自動新增使用者訊息
+        function appendUserMessage(msg) {
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'flex items-start justify-end space-x-2';
+            userMsgDiv.innerHTML = `
+                <div class="bg-brand-orange text-black font-medium p-3 rounded-2xl rounded-tr-none max-w-[80%] leading-relaxed">
+                    ${msg}
+                </div>
+            `;
+            chatMessages.appendChild(userMsgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 自動新增機器人回覆
+        function appendBotMessage(replyMsg) {
+            const botMsgDiv = document.createElement('div');
+            botMsgDiv.className = 'flex items-start space-x-2';
+            botMsgDiv.innerHTML = `
+                <div class="w-7 h-7 bg-brand-orange text-black rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div class="bg-neutral-800 border border-neutral-700 text-neutral-200 p-3 rounded-2xl rounded-tl-none max-w-[80%] leading-relaxed">
+                    ${replyMsg}
+                </div>
+            `;
+            chatMessages.appendChild(botMsgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 簡單關鍵字 AI 回應邏輯
+        function getBotResponse(userMsg) {
+            const msg = userMsg.toLowerCase();
+            if (msg.includes('體驗') || msg.includes('預約') || msg.includes('免費')) {
+                return '您可以點擊網頁上的「免費體驗」按鈕或下滑填寫表單，即可免費獲得 1 天通行證與免費 InBody 檢測喔！';
+            } else if (msg.includes('費用') || msg.includes('收費') || msg.includes('價格') || msg.includes('方案')) {
+                return 'PowerFit 提供單月通行 (NT$1,480/月)、熱門年度卡 (NT$980/月) 以及 1對1 私人教練白金包 (NT$1,600/堂起)，歡迎點選選單中的「收費方案」查看詳細比較！';
+            } else if (msg.includes('時間') || msg.includes('營業') || msg.includes('幾點')) {
+                return 'PowerFit 全台據點自主訓練區皆為 24 小時無休開放！專人諮詢時段為每日 10:00 - 22:00。';
+            } else if (msg.includes('教練') || msg.includes('私教')) {
+                return '我們的教練均具備 NSCA, ACE, NASM 等國際權威證照，並提供客製化肌力與體能訓練規劃！';
+            } else if (msg.includes('據點') || msg.includes('地址') || msg.includes('館')) {
+                return '我們在台北信義、中山、新北板橋、台中西屯與高雄左營皆有旗艦館！填寫體驗表單即可選擇離您最近的分店。';
+            } else {
+                return '感謝您的訊息！若需要更詳細的說明，您可以留下聯繫方式或直接填寫體驗表單，專員將會儘速與您聯繫！💪';
+            }
+        }
+
+        // 處理輸入表單發送
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            appendUserMessage(text);
+            chatInput.value = '';
+
+            // 模擬思考延遲
+            setTimeout(() => {
+                const reply = getBotResponse(text);
+                appendBotMessage(reply);
+            }, 600);
+        });
+
+        // 處理熱門快捷按鈕點擊
+        quickBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const msg = btn.getAttribute('data-msg');
+                appendUserMessage(msg);
+                setTimeout(() => {
+                    const reply = getBotResponse(msg);
+                    appendBotMessage(reply);
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

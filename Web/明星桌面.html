@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>明星桌布時鐘</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Orbitron:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Share+Tech+Mono&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-mono-tech { font-family: 'Share Tech Mono', monospace; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        
+        /* Glassmorphism UI */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Smooth Background Transitions */
+        .bg-transition {
+            transition: background-image 1s ease-in-out, filter 0.5s ease-in-out;
+        }
+
+        /* Custom Scrollbar for Settings */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="relative w-screen h-screen overflow-hidden bg-slate-950 text-white flex items-center justify-center">
+
+    <!-- 背景圖片層 (Background Wallpaper Layer) -->
+    <div id="wallpaper" class="absolute inset-0 bg-cover bg-center bg-no-repeat bg-transition filter brightness-90 z-0" style="background-image: url('https://placehold.co/1920x1080/1e293b/cbd5e1?text=Loading+Wallpaper...');"></div>
+
+    <!-- 柔和遮罩層 (Dark Overlay for Readability) -->
+    <div id="overlay" class="absolute inset-0 bg-black/30 z-0 transition-opacity duration-300"></div>
+
+    <!-- 頂部 / 觸控提示 or 簡潔控制區 (Top Bar Icons) -->
+    <div class="absolute top-6 right-6 z-20 flex items-center gap-3">
+        <!-- 暫停/播放輪播按鈕 -->
+        <button id="toggle-slideshow" title="暫停/播放輪播" class="w-11 h-11 rounded-full glass-panel flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition shadow-lg active:scale-95">
+            <i id="slideshow-icon" class="fa-solid fa-pause text-sm"></i>
+        </button>
+        <!-- 下一張圖片按鈕 -->
+        <button id="next-img" title="下一張桌布" class="w-11 h-11 rounded-full glass-panel flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition shadow-lg active:scale-95">
+            <i class="fa-solid fa-forward-step text-sm"></i>
+        </button>
+        <!-- 齒輪設定按鈕 -->
+        <button id="open-settings" title="開啟設定" class="w-11 h-11 rounded-full glass-panel flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition shadow-lg active:scale-95">
+            <i class="fa-solid fa-gear text-lg animate-spin-slow"></i>
+        </button>
+    </div>
+
+    <!-- 全螢幕觸控隱藏介面提示 (可點擊畫面隱藏/顯示UI) -->
+    <div id="ui-container" class="relative z-10 flex flex-col items-center justify-center transition-opacity duration-300 cursor-default">
+        
+        <!-- 數字時鐘本體 -->
+        <div id="clock-container" class="flex flex-col items-center justify-center p-8 rounded-3xl glass-panel shadow-2xl transition-all duration-300 group">
+            
+            <!-- 日期與星期 -->
+            <div id="date-display" class="text-white/90 text-lg md:text-2xl font-light tracking-widest mb-2 drop-shadow-md">
+                2026年 11月 1日 星期日
+            </div>
+
+            <!-- 主時鐘顯示 -->
+            <div class="flex items-baseline justify-center">
+                <span id="time-display" class="font-orbitron font-bold text-6xl md:text-9xl tracking-tight text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+                    12:00
+                </span>
+                <div id="seconds-ampm" class="ml-3 flex flex-col justify-between h-full font-semibold text-lg md:text-2xl text-white/80 drop-shadow">
+                    <span id="ampm-display" class="hidden">PM</span>
+                    <span id="seconds-display" class="font-mono-tech text-xl md:text-3xl text-cyan-300">00</span>
+                </div>
+            </div>
+
+            <!-- 自訂標語或文字 -->
+            <div id="custom-quote" class="mt-4 text-white/70 text-xs md:text-sm tracking-widest font-light italic text-center max-w-md px-4">
+                "Keep shining bright every single day."
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 底部圖片資訊 (微光提示目前圖片來源) -->
+    <div id="image-credit" class="absolute bottom-4 left-6 z-10 text-white/50 text-xs tracking-wider drop-shadow pointer-events-none">
+        載入圖片中...
+    </div>
+
+    <!-- 齒輪設定抽屜 / 彈窗 (Settings Modal) -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="settings-card" class="w-11/12 max-w-lg max-h-[90vh] overflow-y-auto glass-card rounded-3xl p-6 md:p-8 shadow-2xl transform scale-95 transition-transform duration-300 text-white">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-sliders text-cyan-400 text-xl"></i>
+                    <h2 class="text-xl font-bold tracking-wide">桌布與時鐘設定</h2>
+                </div>
+                <button id="close-settings" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Settings Options) -->
+            <div class="space-y-6">
+                
+                <!-- 1. 時鐘字型樣式 -->
+                <div>
+                    <label class="block text-sm font-medium text-white/80 mb-2">時鐘字體風格</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" data-font="orbitron" class="font-option py-2.5 px-3 rounded-xl bg-white/10 border border-white/20 font-orbitron text-sm hover:bg-white/25 transition text-center">Orbitron</button>
+                        <button type="button" data-font="mono" class="font-option py-2.5 px-3 rounded-xl bg-white/10 border border-white/20 font-mono-tech text-sm hover:bg-white/25 transition text-center">Tech Mono</button>
+                        <button type="button" data-font="montserrat" class="font-option py-2.5 px-3 rounded-xl bg-white/10 border border-white/20 font-montserrat text-sm hover:bg-white/25 transition text-center">Montserrat</button>
+                    </div>
+                </div>
+
+                <!-- 2. 時鐘顯示設定 -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center justify-between bg-white/5 p-3.5 rounded-2xl border border-white/10">
+                        <span class="text-sm">顯示秒數</span>
+                        <input type="checkbox" id="setting-show-seconds" class="w-5 h-5 accent-cyan-500 rounded cursor-pointer">
+                    </div>
+                    <div class="flex items-center justify-between bg-white/5 p-3.5 rounded-2xl border border-white/10">
+                        <span class="text-sm">12小時制 (AM/PM)</span>
+                        <input type="checkbox" id="setting-12hr" class="w-5 h-5 accent-cyan-500 rounded cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- 3. 時鐘面板背景毛玻璃效果 -->
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 space-y-3">
+                    <div class="flex justify-between items-center text-sm">
+                        <span>時鐘面板背景透明度</span>
+                        <span id="opacity-val" class="text-cyan-300 font-mono">45%</span>
+                    </div>
+                    <input type="range" id="setting-bg-opacity" min="0" max="100" value="45" class="w-full accent-cyan-400 cursor-pointer">
+                </div>
+
+                <!-- 4. 畫面背景明暗 / 模糊度 -->
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span>桌布背景暗度 (遮罩)</span>
+                            <span id="darkness-val" class="text-cyan-300 font-mono">30%</span>
+                        </div>
+                        <input type="range" id="setting-darkness" min="0" max="80" value="30" class="w-full accent-cyan-400 cursor-pointer">
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span>背景圖片模糊度 (Blur)</span>
+                            <span id="blur-val" class="text-cyan-300 font-mono">0px</span>
+                        </div>
+                        <input type="range" id="setting-blur" min="0" max="20" value="0" class="w-full accent-cyan-400 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- 5. 圖片輪播設定 -->
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/10 space-y-3">
+                    <div class="flex justify-between items-center text-sm">
+                        <span>圖片自動輪播頻率</span>
+                        <span id="interval-val" class="text-cyan-300 font-mono">15 秒</span>
+                    </div>
+                    <input type="range" id="setting-interval" min="5" max="60" step="5" value="15" class="w-full accent-cyan-400 cursor-pointer">
+                    <p class="text-xs text-white/50">從提供的試算表清單中自動隨機或順序切換圖片。</p>
+                </div>
+
+                <!-- 6. 自訂標語輸入 -->
+                <div>
+                    <label class="block text-sm font-medium text-white/80 mb-2">自訂下方文字標語</label>
+                    <input type="text" id="setting-quote-input" placeholder="輸入你想顯示的勵志或偶像小語..." class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-cyan-400 text-sm transition">
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="mt-8 pt-4 border-t border-white/10 flex items-center justify-between">
+                <button id="reset-defaults" class="text-xs text-white/60 hover:text-white transition underline">
+                    恢復預設值
+                </button>
+                <button id="save-settings" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-sm shadow-lg shadow-cyan-500/20 transition active:scale-95">
+                    儲存並關閉
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 訊息提示框 (Custom Message Box) -->
+    <div id="message-box" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900/90 text-white px-6 py-3 rounded-2xl border border-white/20 shadow-2xl opacity-0 pointer-events-none transition-all duration-300 text-sm">
+        設定已更新成功！
+    </div>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // 提供的 Google Sheets 試算表 CSV 網址
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRNbxXwfksWngp3qJ-TnHLQpc-sSNxM-2avAJdR6M1cq9DREbqOa0LaFELx5WWQt1q8X0C0pDFcqjVJ/pub?output=csv";
+
+        // 預設備用圖片 (防止讀取失敗時的預設明星桌布)
+        const FALLBACK_IMAGES = [
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1920&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1920&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1920&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1920&auto=format&fit=crop"
+        ];
+
+        let imageList = [];
+        let currentImageIndex = 0;
+        let slideshowTimer = null;
+        let isSlideshowPaused = false;
+
+        // 使用者設定狀態與預設值
+        let settings = {
+            fontStyle: 'orbitron',       // 'orbitron', 'mono', 'montserrat'
+            showSeconds: true,           // true / false
+            is12Hour: false,             // true / false
+            bgOpacity: 45,               // 0 - 100
+            darkness: 30,                // 0 - 80
+            blur: 0,                     // 0 - 20
+            interval: 15,                // 秒數 (5 - 60)
+            quote: "Keep shining bright every single day."
+        };
+
+        // DOM 元素參照
+        const wallpaperEl = document.getElementById('wallpaper');
+        const overlayEl = document.getElementById('overlay');
+        const clockContainerEl = document.getElementById('clock-container');
+        const timeDisplayEl = document.getElementById('time-display');
+        const secondsDisplayEl = document.getElementById('seconds-display');
+        const secondsAmpmContainer = document.getElementById('seconds-ampm');
+        const ampmDisplayEl = document.getElementById('ampm-display');
+        const dateDisplayEl = document.getElementById('date-display');
+        const customQuoteEl = document.getElementById('custom-quote');
+        const imageCreditEl = document.getElementById('image-credit');
+
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsCard = document.getElementById('settings-card');
+        const openSettingsBtn = document.getElementById('open-settings');
+        const closeSettingsBtn = document.getElementById('close-settings');
+        const saveSettingsBtn = document.getElementById('save-settings');
+        const resetDefaultsBtn = document.getElementById('reset-defaults');
+        const toggleSlideshowBtn = document.getElementById('toggle-slideshow');
+        const slideshowIcon = document.getElementById('slideshow-icon');
+        const nextImgBtn = document.getElementById('next-img');
+        const messageBox = document.getElementById('message-box');
+
+        // 設定表單控制項
+        const showSecondsCheckbox = document.getElementById('setting-show-seconds');
+        const is12hrCheckbox = document.getElementById('setting-12hr');
+        const bgOpacityRange = document.getElementById('setting-bg-opacity');
+        const opacityValSpan = document.getElementById('opacity-val');
+        const darknessRange = document.getElementById('setting-darkness');
+        const darknessValSpan = document.getElementById('darkness-val');
+        const blurRange = document.getElementById('setting-blur');
+        const blurValSpan = document.getElementById('blur-val');
+        const intervalRange = document.getElementById('setting-interval');
+        const intervalValSpan = document.getElementById('interval-val');
+        const quoteInput = document.getElementById('setting-quote-input');
+        const fontOptionBtns = document.querySelectorAll('.font-option');
+
+        // 初始化載入
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSettingsFromStorage();
+            fetchImagesFromSheet();
+            initClock();
+            applySettingsToUI();
+        });
+
+        // 從 LocalStorage 載入設定
+        function loadSettingsFromStorage() {
+            const saved = localStorage.getItem('star_wallpaper_settings');
+            if (saved) {
+                try {
+                    settings = { ...settings, ...JSON.parse(saved) };
+                } catch (e) {
+                    console.error("Failed to parse settings", e);
+                }
+            }
+        }
+
+        // 儲存設定至 LocalStorage
+        function saveSettingsToStorage() {
+            localStorage.setItem('star_wallpaper_settings', JSON.stringify(settings));
+        }
+
+        // 顯示提示訊息 (取代 alert)
+        function showMessage(text) {
+            messageBox.textContent = text;
+            messageBox.classList.remove('opacity-0', 'pointer-events-none');
+            messageBox.classList.add('opacity-100');
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100');
+                messageBox.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // 從 Google Sheets CSV 讀取圖片連結
+        async function fetchImagesFromSheet() {
+            imageCreditEl.textContent = "正在載入明星圖片庫...";
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                if (!response.ok) throw new Error("Network response was not ok");
+                const csvText = await response.text();
+                parseCSV(csvText);
+            } catch (error) {
+                console.warn("無法透過網路讀取試算表，使用預設備用圖片。", error);
+                imageList = FALLBACK_IMAGES;
+                initWallpaper();
+            }
+        }
+
+        // 解析 CSV 資料 (尋找所有有效的圖片網址)
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            let urls = [];
+            
+            lines.forEach(line => {
+                // 以逗號或引號分割，或直接搜尋 http/https 網址
+                const matches = line.match(/(https?:\/\/[^\s",']+\.(?:png|jpg|jpeg|webp|avif)(?:\?[^\s",']*)?)/gi);
+                if (matches) {
+                    matches.forEach(url => {
+                        // 清理可能殘留的引號
+                        const cleanUrl = url.replace(/['"]+/g, '').trim();
+                        if (!urls.includes(cleanUrl)) {
+                            urls.push(cleanUrl);
+                        }
+                    });
+                }
+            });
+
+            // 如果試算表內沒抓到網址，嘗試抓取儲存格中可能沒有副檔名但能用的圖片網址，或退回備用圖
+            if (urls.length === 0) {
+                lines.forEach(line => {
+                    const parts = line.split(',');
+                    parts.forEach(part => {
+                        let clean = part.replace(/['"]+/g, '').trim();
+                        if (clean.startsWith('http')) {
+                            urls.push(clean);
+                        }
+                    });
+                });
+            }
+
+            if (urls.length > 0) {
+                imageList = urls;
+            } else {
+                imageList = FALLBACK_IMAGES;
+            }
+
+            initWallpaper();
+        }
+
+        // 初始化桌布
+        function initWallpaper() {
+            if (imageList.length === 0) imageList = FALLBACK_IMAGES;
+            // 隨機或從頭開始
+            currentImageIndex = Math.floor(Math.random() * imageList.length);
+            changeWallpaper(false);
+            startSlideshow();
+        }
+
+        // 切換桌布圖片
+        function changeWallpaper(smooth = true) {
+            if (!imageList || imageList.length === 0) return;
+            
+            const imgUrl = imageList[currentImageIndex];
+            
+            // 預載圖片以確保流暢切換
+            const img = new Image();
+            img.src = imgUrl;
+            img.onload = () => {
+                wallpaperEl.style.backgroundImage = `url('${imgUrl}')`;
+                imageCreditEl.textContent = `圖片來源: 試算表 (${currentImageIndex + 1} / ${imageList.length})`;
+            };
+            img.onerror = () => {
+                // 如果該張圖片載入失敗，自動跳到下一張
+                currentImageIndex = (currentImageIndex + 1) % imageList.length;
+            };
+        }
+
+        // 啟動自動輪播計時器
+        function startSlideshow() {
+            stopSlideshow();
+            if (isSlideshowPaused) return;
+
+            const intervalMs = settings.interval * 1000;
+            slideshowTimer = setInterval(() => {
+                currentImageIndex = (currentImageIndex + 1) % imageList.length;
+                changeWallpaper(true);
+            }, intervalMs);
+        }
+
+        // 停止輪播計時器
+        function stopSlideshow() {
+            if (slideshowTimer) {
+                clearInterval(slideshowTimer);
+                slideshowTimer = null;
+            }
+        }
+
+        // 時鐘計時核心
+        function initClock() {
+            updateClock();
+            setInterval(updateClock, 200);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // 日期格式化
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[now.getDay()];
+            dateDisplayEl.textContent = `${year}年 ${month}月 ${date}日 ${weekday}`;
+
+            // 12/24小時制處理
+            let ampmStr = '';
+            if (settings.is12Hour) {
+                ampmStr = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // 0點顯示為 12
+                ampmDisplayEl.textContent = ampmStr;
+                ampmDisplayEl.classList.remove('hidden');
+            } else {
+                ampmDisplayEl.classList.add('hidden');
+            }
+
+            // 補零
+            const hoursFormatted = String(hours).padStart(2, '0');
+            const minutesFormatted = String(minutes).padStart(2, '0');
+            const secondsFormatted = String(seconds).padStart(2, '0');
+
+            timeDisplayEl.textContent = `${hoursFormatted}:${minutesFormatted}`;
+            secondsDisplayEl.textContent = secondsFormatted;
+        }
+
+        // 將設定套用到UI畫面與樣式
+        function applySettingsToUI() {
+            // 1. 字體樣式套用
+            timeDisplayEl.className = "font-bold tracking-tight text-white drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] " + 
+                (settings.fontStyle === 'orbitron' ? 'font-orbitron text-6xl md:text-9xl' :
+                 settings.fontStyle === 'mono' ? 'font-mono-tech text-6xl md:text-9xl' : 'font-montserrat text-6xl md:text-9xl');
+
+            // 2. 秒數顯示開關
+            if (settings.showSeconds) {
+                secondsDisplayEl.style.display = 'block';
+            } else {
+                secondsDisplayEl.style.display = 'none';
+            }
+
+            // 3. 時鐘面板透明度
+            const bgAlpha = settings.bgOpacity / 100;
+            clockContainerEl.style.background = `rgba(15, 23, 42, ${bgAlpha})`;
+
+            // 4. 背景暗度 (overlay)
+            const darknessAlpha = settings.darkness / 100;
+            overlayEl.style.backgroundColor = `rgba(0, 0, 0, ${darknessAlpha})`;
+
+            // 5. 背景模糊度
+            wallpaperEl.style.filter = `brightness(90%) blur(${settings.blur}px)`;
+
+            // 6. 標語
+            customQuoteEl.textContent = `"${settings.quote}"`;
+            if (!settings.quote || settings.quote.trim() === "") {
+                customQuoteEl.style.display = 'none';
+            } else {
+                customQuoteEl.style.display = 'block';
+            }
+
+            // 同步更新設定 Modal 裡的控制項數值
+            showSecondsCheckbox.checked = settings.showSeconds;
+            is12hrCheckbox.checked = settings.is12Hour;
+            bgOpacityRange.value = settings.bgOpacity;
+            opacityValSpan.textContent = `${settings.bgOpacity}%`;
+            darknessRange.value = settings.darkness;
+            darknessValSpan.textContent = `${settings.darkness}%`;
+            blurRange.value = settings.blur;
+            blurValSpan.textContent = `${settings.blur}px`;
+            intervalRange.value = settings.interval;
+            intervalValSpan.textContent = `${settings.interval} 秒`;
+            quoteInput.value = settings.quote;
+
+            // 高亮選中的字體按鈕
+            fontOptionBtns.forEach(btn => {
+                if (btn.dataset.font === settings.fontStyle) {
+                    btn.classList.add('bg-cyan-500/30', 'border-cyan-400');
+                    btn.classList.remove('bg-white/10', 'border-white/20');
+                } else {
+                    btn.classList.remove('bg-cyan-500/30', 'border-cyan-400');
+                    btn.classList.add('bg-white/10', 'border-white/20');
+                }
+            });
+        }
+
+        // 開啟設定 Modal
+        openSettingsBtn.addEventListener('click', () => {
+            settingsModal.classList.remove('opacity-0', 'pointer-events-none');
+            settingsCard.classList.remove('scale-95');
+            settingsCard.classList.add('scale-100');
+        });
+
+        // 關閉設定 Modal
+        function closeModal() {
+            settingsModal.classList.add('opacity-0', 'pointer-events-none');
+            settingsCard.classList.remove('scale-100');
+            settingsCard.classList.add('scale-95');
+        }
+
+        closeSettingsBtn.addEventListener('click', closeModal);
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) closeModal();
+        });
+
+        // 即時預覽數值變更
+        bgOpacityRange.addEventListener('input', (e) => {
+            settings.bgOpacity = parseInt(e.target.value);
+            opacityValSpan.textContent = `${settings.bgOpacity}%`;
+            const bgAlpha = settings.bgOpacity / 100;
+            clockContainerEl.style.background = `rgba(15, 23, 42, ${bgAlpha})`;
+        });
+
+        darknessRange.addEventListener('input', (e) => {
+            settings.darkness = parseInt(e.target.value);
+            darknessValSpan.textContent = `${settings.darkness}%`;
+            const darknessAlpha = settings.darkness / 100;
+            overlayEl.style.backgroundColor = `rgba(0, 0, 0, ${darknessAlpha})`;
+        });
+
+        blurRange.addEventListener('input', (e) => {
+            settings.blur = parseInt(e.target.value);
+            blurValSpan.textContent = `${settings.blur}px`;
+            wallpaperEl.style.filter = `brightness(90%) blur(${settings.blur}px)`;
+        });
+
+        intervalRange.addEventListener('input', (e) => {
+            settings.interval = parseInt(e.target.value);
+            intervalValSpan.textContent = `${settings.interval} 秒`;
+        });
+
+        // 字體按鈕點擊
+        fontOptionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                settings.fontStyle = btn.dataset.font;
+                applySettingsToUI();
+            });
+        });
+
+        // 儲存設定按鈕
+        saveSettingsBtn.addEventListener('click', () => {
+            settings.showSeconds = showSecondsCheckbox.checked;
+            settings.is12Hour = is12hrCheckbox.checked;
+            settings.quote = quoteInput.value;
+            
+            applySettingsToUI();
+            saveSettingsToStorage();
+            startSlideshow(); // 重新套用輪播頻率
+            closeModal();
+            showMessage("設定已成功儲存！");
+        });
+
+        // 恢復預設值
+        resetDefaultsBtn.addEventListener('click', () => {
+            settings = {
+                fontStyle: 'orbitron',
+                showSeconds: true,
+                is12Hour: false,
+                bgOpacity: 45,
+                darkness: 30,
+                blur: 0,
+                interval: 15,
+                quote: "Keep shining bright every single day."
+            };
+            applySettingsToUI();
+            saveSettingsToStorage();
+            startSlideshow();
+            showMessage("已恢復預設設定！");
+        });
+
+        // 輪播暫停/播放切換
+        toggleSlideshowBtn.addEventListener('click', () => {
+            isSlideshowPaused = !isSlideshowPaused;
+            if (isSlideshowPaused) {
+                stopSlideshow();
+                slideshowIcon.className = "fa-solid fa-play text-sm";
+                showMessage("已暫停自動輪播桌布");
+            } else {
+                startSlideshow();
+                slideshowIcon.className = "fa-solid fa-pause text-sm";
+                showMessage("已恢復自動輪播桌布");
+            }
+        });
+
+        // 下一張圖片按鈕
+        nextImgBtn.addEventListener('click', () => {
+            if (imageList.length > 0) {
+                currentImageIndex = (currentImageIndex + 1) % imageList.length;
+                changeWallpaper(true);
+                showMessage("已切換至下一張桌布");
+            }
+        });
+
+    </script>
+</body>
+</html>

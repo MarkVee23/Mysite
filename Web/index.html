@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark | AI 時代專案/產品經理 (PM) & 跨界短影音企劃</title>
+    
+    <!-- Standard SEO -->
+    <meta name="description" content="Mark (許翔) 是一位具備生醫背景、To B/To C 業務、行銷顧問、YouTube 自媒體與短影音操盤經驗的跨界 PM。擁有 PMP 證書，擅長以 AI 協作工作流、數據驅動內容與專案落地交付。">
+    <meta name="keywords" content="Mark, 專案經理, 產品經理, PM, 短影音企劃, AI工作流, PMP, 數據驅動, 內容行銷, 威士威, 品牌溝通">
+    <meta name="author" content="Mark Hsu">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mark | AI 時代專案/產品經理 (PM) & 跨界短影音企劃">
+    <meta property="og:description" content="走過業務、行銷與內容企劃的跨界者，懂用戶、做過百萬流量成果，致力將豐富經驗帶入 AI 產品開發與專案管理。">
+    <meta property="og:image" content="https://i.pinimg.com/736x/f0/9b/bd/f09bbdf84b1b6c67bcfcd3293cbbd73d.jpg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            900: '#881337',
+                        },
+                        dark: {
+                            bg: '#0b0f19',
+                            card: '#161e2e',
+                            border: '#2a3447'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) for SEO / GEO / AEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Mark (許翔)",
+      "jobTitle": "AI 時代專案/產品經理 (PM) & 內容策略師",
+      "description": "走過業務、行銷、內容企劃的跨界者，懂用戶，做過百萬自然流量成果，現在將這些經驗帶進 AI 產品。兼具 PMP 證書與 AI 協作工具應用能力。",
+      "image": "https://i.pinimg.com/736x/f0/9b/bd/f09bbdf84b1b6c67bcfcd3293cbbd73d.jpg",
+      "sameAs": [
+        "https://www.instagram.com/mark_inspirer/",
+        "https://www.linkedin.com/in/markhsuhsiang184/"
+      ],
+      "knowsAbout": [
+        "Project Management",
+        "Product Management",
+        "AI Workflow Automation",
+        "Short-form Video Strategy",
+        "Data-driven Iteration",
+        "Prompt Engineering",
+        "Claude & ChatGPT & Gemini"
+      ],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "certification",
+        "name": "PMP (Project Management Professional)"
+      }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Mark 的核心專長與背景是什麼？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mark 從生醫產業出發，歷經 To C/To B 業務開發、行銷顧問、自媒體操盤與連鎖酒商影音企劃經理。曾獨立操盤創下單支 272 萬自然流量短影音，擅長結合數據與 AI 工具（Claude, GPT, Gemini）推進專案與產品管理。"
+        }
+      }, {
+        "@type": "Question",
+        "name": "Mark 如何將 AI 應用於專案與內容產出？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mark 建立套裝 AI 協作工作流，運用大語言模型進行選題整理、Hook 設計、數據判讀與分鏡圖生成，大幅縮短前製時間，同時保有專業品質把關與團隊溝通控制。"
+        }
+      }]
+    }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(22, 30, 46, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 50%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pulse-glow {
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-200 font-sans antialiased selection:bg-rose-500 selection:text-white relative">
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full z-40 glass-panel border-b border-slate-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-sky-500 p-[2px] transition-transform group-hover:scale-105">
+                    <img src="https://i.pinimg.com/736x/f0/9b/bd/f09bbdf84b1b6c67bcfcd3293cbbd73d.jpg" alt="Mark Profile" class="w-full h-full object-cover rounded-[10px]">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-extrabold text-white tracking-wider">MARK HSU</span>
+                    <span class="text-[10px] text-rose-400 font-medium tracking-widest uppercase">AI PM & Content Strategist</span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#about" class="hover:text-rose-400 transition-colors">背景定位</a>
+                <a href="#results" class="hover:text-rose-400 transition-colors">核心成果</a>
+                <a href="#skills" class="hover:text-rose-400 transition-colors">專業技能</a>
+                <a href="#portfolio" class="hover:text-rose-400 transition-colors">短影音作品</a>
+                <a href="#transformation" class="hover:text-rose-400 transition-colors">AI 轉型之路</a>
+            </nav>
+
+            <!-- Actions & Socials -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="https://www.linkedin.com/in/markhsuhsiang184/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white text-lg transition-colors p-2" title="LinkedIn Profile">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a href="https://www.instagram.com/mark_inspirer/" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-rose-400 text-lg transition-colors p-2" title="Instagram Profile">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <button onclick="openContactModal()" class="bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-semibold text-xs px-4 py-2.5 rounded-full transition-all shadow-lg hover:shadow-rose-600/30 flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>與我聯繫</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="menu-btn" aria-label="Open navigation menu" class="md:hidden text-slate-300 hover:text-white text-2xl focus:outline-none">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-slate-800 px-6 py-4 space-y-4">
+            <a href="#about" class="mobile-link block text-slate-300 hover:text-rose-400 text-sm font-medium">背景定位</a>
+            <a href="#results" class="mobile-link block text-slate-300 hover:text-rose-400 text-sm font-medium">核心成果</a>
+            <a href="#skills" class="mobile-link block text-slate-300 hover:text-rose-400 text-sm font-medium">專業技能</a>
+            <a href="#portfolio" class="mobile-link block text-slate-300 hover:text-rose-400 text-sm font-medium">短影音作品集</a>
+            <a href="#transformation" class="mobile-link block text-slate-300 hover:text-rose-400 text-sm font-medium">AI 轉型之路</a>
+            <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-4 text-xl">
+                    <a href="https://www.linkedin.com/in/markhsuhsiang184/" target="_blank" class="text-slate-400 hover:text-white"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/mark_inspirer/" target="_blank" class="text-slate-400 hover:text-rose-400"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <button onclick="openContactModal()" class="bg-rose-600 text-white text-xs px-4 py-2 rounded-full font-semibold">
+                    與我聯繫
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <main class="pt-24 sm:pt-32">
+
+        <!-- Hero Section -->
+        <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Text Column -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border border-rose-500/30 text-rose-400 text-xs font-semibold tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        <span>跨界創新 · 數據驅動 · AI 落地</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+                        我是 <span class="text-gradient">Mark</span><br>
+                        AI 時代的專案/產品經理
+                    </h1>
+
+                    <p class="text-lg sm:text-xl text-slate-300 font-light leading-relaxed">
+                        「我是一個走過業務、行銷、內容企劃的跨界者，懂用戶，做過成果，現在要把這些經驗帶進 AI 產品。」
+                    </p>
+
+                    <div class="glass-card p-5 rounded-2xl border-l-4 border-l-rose-500 text-sm text-slate-300 leading-relaxed text-left">
+                        <p class="mb-2 font-semibold text-white">✳️ 身分背景與解題思維：</p>
+                        過去從生醫產業出發，一路跨足 To C / To B 業務開發、客戶管理、行銷顧問、YouTube 自媒體、短影音操盤，至連鎖酒商餐飲品牌的影音企劃經理。每個角色看似不同，但我的執行方式始終像在執行一個個小專案：<span class="text-rose-400 font-medium">釐清問題、整合資源、交付結果</span>。
+                    </div>
+
+                    <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                        <button onclick="openContactModal()" class="bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition-all pulse-glow flex items-center gap-2">
+                            <i class="fa-regular fa-envelope"></i>
+                            <span>與我建立聯繫</span>
+                        </button>
+                        <a href="https://www.linkedin.com/in/markhsuhsiang184/" target="_blank" rel="noopener noreferrer" class="glass-card hover:bg-slate-800 text-slate-200 font-medium text-sm px-6 py-3.5 rounded-xl border border-slate-700 transition-all flex items-center gap-2">
+                            <i class="fa-brands fa-linkedin text-sky-400"></i>
+                            <span>LinkedIn 檔案</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Profile Image Card Column -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative group max-w-sm w-full">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-rose-600 to-sky-600 rounded-3xl blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
+                        <div class="relative glass-card rounded-3xl p-4 overflow-hidden border border-slate-700/80">
+                            <img src="https://i.pinimg.com/736x/f0/9b/bd/f09bbdf84b1b6c67bcfcd3293cbbd73d.jpg" alt="Mark Photo" class="w-full h-auto object-cover rounded-2xl shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+                            
+                            <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <div class="text-xs text-slate-400">目前專注領域</div>
+                                    <div class="text-sm font-bold text-white">AI PM / Short-Form Video</div>
+                                </div>
+                                <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full border border-emerald-500/20 font-medium flex items-center gap-1">
+                                    <i class="fa-solid fa-certificate text-[10px]"></i> PMP 認證
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Highlights Section -->
+        <section id="results" class="py-16 bg-slate-900/60 border-y border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <h2 class="text-xs text-rose-400 font-bold tracking-widest uppercase mb-2">Quantifiable Results</h2>
+                    <p class="text-2xl sm:text-4xl font-extrabold text-white">短影音實戰與爆款成果</p>
+                    <p class="text-sm text-slate-400 mt-2">以 IG 後台數據即時判讀成效，持續優化腳本企劃內容</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-8 rounded-2xl text-center border-t-2 border-t-rose-500 hover:translate-y-[-4px] transition-transform">
+                        <div class="text-4xl font-black text-rose-500 mb-1">272.7 萬+</div>
+                        <div class="text-base font-bold text-white mb-2">最高單支自然流量</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            娛樂探店結合幽默內容與生活開箱，引爆社群自然轉發與品牌記憶點。
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl text-center border-t-2 border-t-sky-500 hover:translate-y-[-4px] transition-transform">
+                        <div class="text-4xl font-black text-sky-400 mb-1">3 支影片</div>
+                        <div class="text-base font-bold text-white mb-2">破 100 萬次播放</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            精準設計內容漏斗，多支影片達到 10萬~65萬+ 觀看，建立強大品牌信任。
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-2xl text-center border-t-2 border-t-emerald-500 hover:translate-y-[-4px] transition-transform">
+                        <div class="text-4xl font-black text-emerald-400 mb-1">端到端落地</div>
+                        <div class="text-base font-bold text-white mb-2">帶動門市業績成長</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            一年內明顯提升品牌知名度，最佳影片上線當月實體門市業績表現亮眼。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Content Funnel Breakdown Card -->
+                <div class="mt-10 glass-card p-6 sm:p-8 rounded-2xl border border-slate-700/60">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-rose-500"></i>
+                        <span>實戰內容漏斗 (Content Funnel) 設計策略</span>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300">
+                        <div class="space-y-2 bg-slate-900/40 p-4 rounded-xl border border-slate-800">
+                            <span class="text-xs text-rose-400 font-bold uppercase tracking-wider">Top of Funnel · 擴大曝光</span>
+                            <h4 class="font-bold text-white">娛樂類探店曝光 & 生活化產品開箱</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                先以探店影片放大門市特色或優惠誘因，製造話題、互動與廣泛轉發，快速進入大眾視野。
+                            </p>
+                        </div>
+                        <div class="space-y-2 bg-slate-900/40 p-4 rounded-xl border border-slate-800">
+                            <span class="text-xs text-sky-400 font-bold uppercase tracking-wider">Middle/Bottom of Funnel · 信任轉化</span>
+                            <h4 class="font-bold text-white">員工互動、幽默情境與理念人物</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                生活化切入品牌設定，累積觀眾信任感與親切度，銜接 Meta 廣告投放，成功將流量引導至門市。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skill Stack Section -->
+        <section id="skills" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs text-rose-400 font-bold tracking-widest uppercase mb-2">Core Competencies</h2>
+                <p class="text-2xl sm:text-4xl font-extrabold text-white">跨界專業技能庫</p>
+                <p class="text-sm text-slate-400 mt-2">從內容全流程獨立掌控，到 AI 工具整合與產品/專案溝通</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Skill 1 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-rose-500/50 transition-all space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">短影音策略與全流程製作</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        獨立掌握選題、腳本、Hook 設計、演員組織、拍攝、剪輯後製到平台上架與流量經營完整鏈路。
+                    </p>
+                </div>
+
+                <!-- Skill 2 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-sky-500/50 transition-all space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">AI 協作工作流 (AI Workflow)</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        靈活運用 Claude、GPT、Gemini 進行腳本與 Hook 分析、數據判讀、選題整理與素材生成，大幅縮短前製時間，品質精準把關。
+                    </p>
+                </div>
+
+                <!-- Skill 3 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-emerald-500/50 transition-all space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">數據驅動與企劃迭代</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        善於解讀平台後台數據（續看率、互動率、轉換率），以數據為導向持續優化企劃方向與內容細節。
+                    </p>
+                </div>
+
+                <!-- Skill 4 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-purple-500/50 transition-all space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-diagram-project"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">跨部門專案落地執行</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        具備端到端溝通執行力，成功串連線下門市、第一線店員、社群廣告團隊與管理層需求。
+                    </p>
+                </div>
+
+                <!-- Skill 5 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-amber-500/50 transition-all space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">客戶與市場洞察溝通</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        具備生醫、B2B/B2C 業務與行銷顧問背景，擅長傾聽理解使用者需求，將複雜議題轉化為可執行規劃。
+                    </p>
+                </div>
+
+                <!-- Skill 6 -->
+                <div class="glass-card p-6 rounded-2xl hover:border-rose-400/50 transition-all space-y-3">
+                    <div class="w-12 h-12 rounded-xl bg-rose-400/10 text-rose-300 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-boxes-packing"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">專案敏捷推進 (PMP Framework)</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        重拾 PMP 專案管理架構，結合敏捷與 AI 現代工具，確保專案時程、品質與資源最佳化調配。
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Portfolio Showcase Section -->
+        <section id="portfolio" class="py-16 sm:py-24 bg-slate-900/40 border-y border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <h2 class="text-xs text-rose-400 font-bold tracking-widest uppercase mb-2">Featured Work</h2>
+                        <p class="text-2xl sm:text-4xl font-extrabold text-white">最新作品集與百萬流量矩陣</p>
+                    </div>
+                    <div class="text-xs text-slate-400 max-w-sm">
+                        點擊下方圖像可開啟高品質全圖檢視。所有短影音企劃均由 Mark 獨立掌握選題、演員、拍攝後製與成效數據分析。
+                    </div>
+                </div>
+
+                <!-- Portfolio Poster Container -->
+                <div class="relative group cursor-pointer overflow-hidden rounded-3xl border border-slate-700/80 shadow-2xl glass-card" onclick="openLightbox('https://i.pinimg.com/736x/91/01/c8/9101c8945a182648b1d0bce65007845e.jpg')">
+                    <div class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/10 transition-colors z-10 flex items-center justify-center">
+                        <span class="bg-rose-600/90 text-white font-bold text-xs px-5 py-2.5 rounded-full shadow-lg backdrop-blur group-hover:scale-110 transition-transform flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                            <span>點擊放大檢視完整作品集圖表</span>
+                        </span>
+                    </div>
+                    <img src="https://i.pinimg.com/736x/91/01/c8/9101c8945a182648b1d0bce65007845e.jpg" alt="Mark Reels 作品集長圖" class="w-full h-auto object-cover max-h-[750px] object-top">
+                </div>
+            </div>
+        </section>
+
+        <!-- Modern PM Transformation & Learning Section -->
+        <section id="transformation" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div class="glass-card rounded-3xl p-8 sm:p-12 border border-slate-700/80 relative overflow-hidden">
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-rose-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-8 space-y-6">
+                        <span class="bg-rose-500/10 text-rose-400 text-xs px-3 py-1 rounded-full border border-rose-500/20 font-semibold">
+                            演進與持續成長
+                        </span>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">轉型中的我：擁抱 AI 時代的新 PM 姿態</h2>
+                        
+                        <ul class="space-y-4 text-sm text-slate-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-rose-500 mt-1"></i>
+                                <span><strong class="text-white">系統化進修：</strong>正在修習「AI 時代的專案管理師培訓」課程，深入探索敏捷與 LLM 工作流結合的最佳實踐。</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-rose-500 mt-1"></i>
+                                <span><strong class="text-white">Vibe Coding 實作：</strong>規劃專題 AI 應用 Web App，學習最新無程式碼/低程式碼及 AI 輔助開發架構，縮短 MVP 驗證週期。</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-circle-check text-rose-500 mt-1"></i>
+                                <span><strong class="text-white">重拾 PMP 專案思維：</strong>曾於 2014 年取得 PMP 認證，現在結合 AI 時代的新工具與方法，打造效率高且溝通順暢的落地團隊。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:col-span-4 flex justify-center">
+                        <div class="w-full bg-slate-900/80 p-6 rounded-2xl border border-slate-800 text-center space-y-4">
+                            <i class="fa-solid fa-rocket text-4xl text-rose-500"></i>
+                            <h3 class="text-lg font-bold text-white">準備好開啟合作了嗎？</h3>
+                            <p class="text-xs text-slate-400">
+                                無論是 AI 產品專案推進、短影音爆款企劃諮詢，歡迎隨時透過表單或社群聯絡我！
+                            </p>
+                            <button onclick="openContactModal()" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs py-3 rounded-xl transition-all">
+                                立即填寫與我聯繫
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-12 text-slate-400 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="https://i.pinimg.com/736x/f0/9b/bd/f09bbdf84b1b6c67bcfcd3293cbbd73d.jpg" alt="Mark Profile" class="w-8 h-8 rounded-full object-cover">
+                <span>© 2026 Mark (許翔). All rights reserved.</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-base">
+                <a href="https://www.linkedin.com/in/markhsuhsiang184/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="LinkedIn">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+                <a href="https://www.instagram.com/mark_inspirer/" target="_blank" rel="noopener noreferrer" class="hover:text-rose-400 transition-colors" title="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <button onclick="openContactModal()" class="hover:text-rose-400 transition-colors" title="Contact Form">
+                    <i class="fa-regular fa-envelope"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Audio Player Toggle Floating Button -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <button id="audio-toggle-btn" onclick="toggleAudio()" class="glass-panel hover:bg-slate-800 text-white p-3 sm:px-4 sm:py-3 rounded-full border border-slate-700/80 shadow-2xl flex items-center gap-3 transition-all group">
+            <div class="relative flex items-center justify-center">
+                <i id="audio-icon" class="fa-solid fa-volume-xmark text-slate-400 text-sm"></i>
+                <span id="audio-pulse" class="absolute w-3 h-3 bg-rose-500 rounded-full animate-ping opacity-0"></span>
+            </div>
+            <div class="hidden sm:flex flex-col text-left">
+                <span id="audio-status-text" class="text-[10px] text-slate-400 font-medium leading-none">背景音樂</span>
+                <span id="audio-action-text" class="text-xs font-bold text-rose-400 leading-tight">點擊播放</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bg-audio" loop preload="none">
+        <source src="https://img.ai365.fans/artworks/019e854d-7605-4e87-bed7-b70eceb4f279/xt3cwtltj2e.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Lightbox Modal for Portfolio Showcase -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-3xl focus:outline-none">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-2xl glass-card p-2 border border-slate-700">
+            <img id="lightbox-img" src="" alt="Portfolio Full Detail" class="w-full h-auto rounded-xl">
+        </div>
+    </div>
+
+    <!-- Contact Form Modal (Google Apps Script Integration) -->
+    <div id="contact-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div id="contact-modal-content" class="glass-card max-w-md w-full rounded-2xl p-6 sm:p-8 border border-slate-700 shadow-2xl transform scale-95 transition-transform duration-300 relative">
+            
+            <button onclick="closeContactModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="mb-6 text-center">
+                <div class="w-10 h-10 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-2 text-lg">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">與 Mark 建立聯繫</h3>
+                <p class="text-xs text-slate-400 mt-1">填寫下方表單，資料將自動送出至試算表</p>
+            </div>
+
+            <form id="gas-contact-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">您的姓名 / 稱呼 *</label>
+                    <input type="text" name="name" required placeholder="例如：王小明" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-rose-500 transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">聯絡 Email *</label>
+                    <input type="email" name="email" required placeholder="example@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-rose-500 transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">合作或諮詢項目 / 訊息內容 *</label>
+                    <textarea name="message" rows="3" required placeholder="請簡單說明您的需求或合作構想..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-rose-500 transition-colors"></textarea>
+                </div>
+
+                <button type="submit" id="gas-submit-btn" class="w-full bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>確認送出訊息</span>
+                </button>
+
+                <div id="gas-status-msg" class="text-xs text-center font-semibold hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts for Audio, Mobile Menu and Modal Form -->
+    <script>
+        // Google Apps Script Web App URL
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzeIn2ISO-r6Yrbw7rSbcYYUsp-LDtF4c9FWsjILRXm74s0xSildRAEIDnUtLtH-YkJ/exec';
+
+        // Lightbox Functions
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lightbox.classList.remove('hidden');
+            setTimeout(() => {
+                lightbox.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('opacity-0');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+            }, 300);
+        }
+
+        // Modal Controls
+        function openContactModal() {
+            const modal = document.getElementById('contact-modal');
+            const content = document.getElementById('contact-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contact-modal');
+            const content = document.getElementById('contact-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('gas-status-msg').classList.add('hidden');
+            }, 300);
+        }
+
+        // Background Audio Toggle Logic
+        let isPlaying = false;
+        function toggleAudio() {
+            const audio = document.getElementById('bg-audio');
+            const icon = document.getElementById('audio-icon');
+            const pulse = document.getElementById('audio-pulse');
+            const statusText = document.getElementById('audio-status-text');
+            const actionText = document.getElementById('audio-action-text');
+
+            if (!isPlaying) {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    icon.className = "fa-solid fa-volume-high text-rose-500 text-sm";
+                    pulse.classList.remove('opacity-0');
+                    statusText.innerText = "播放中";
+                    actionText.innerText = "點擊關閉";
+                }).catch(err => {
+                    console.log("Audio play deferred by browser user interaction policy", err);
+                });
+            } else {
+                audio.pause();
+                isPlaying = false;
+                icon.className = "fa-solid fa-volume-xmark text-slate-400 text-sm";
+                pulse.classList.add('opacity-0');
+                statusText.innerText = "背景音樂";
+                actionText.innerText = "點擊播放";
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // GAS Form Submission Handler
+        document.getElementById('gas-contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('gas-submit-btn');
+            const statusMsg = document.getElementById('gas-status-msg');
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i><span>傳送中...</span>';
+
+            const formData = new FormData(this);
+            const data = new URLSearchParams(formData);
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: data
+            })
+            .then(() => {
+                statusMsg.innerText = '✅ 訊息已成功傳送並寫入試算表！';
+                statusMsg.className = 'text-xs text-center font-semibold bg-emerald-500/20 text-emerald-400 p-2 rounded-lg block';
+                this.reset();
+                setTimeout(() => {
+                    closeContactModal();
+                }, 2500);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                statusMsg.innerText = '❌ 傳送失敗，請稍後再試。';
+                statusMsg.className = 'text-xs text-center font-semibold bg-rose-500/20 text-rose-400 p-2 rounded-lg block';
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>確認送出訊息</span>';
+            });
+        });
+    </script>
+</body>
+</html>

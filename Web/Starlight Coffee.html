@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>Starlight Coffee | Modern Specialty Coffee & Minimalist Experience</title>
+    <meta name="description" content="Discover the art of coffee at Starlight Coffee (星辰咖啡). Experience our premium specialty blends in a modern, minimalist atmosphere designed for coffee connoisseurs.">
+    <meta name="keywords" content="Starlight Coffee, 星辰咖啡, Specialty Coffee, Minimalist Cafe, Pour Over, Espresso, Coffee Roasters">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Starlight Coffee | Modern Specialty Coffee & Minimalist Experience">
+    <meta property="og:description" content="Experience precision craftsmanship and pure roast profiles in an ultra-minimalist aesthetic.">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0a0a0a',
+                            dark: '#121212',
+                            gray: '#262626',
+                            lightGray: '#f4f4f5',
+                            white: '#ffffff',
+                            accent: '#333333'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif']
+                    },
+                    letterSpacing: {
+                        widest2: '0.25em',
+                        ultra: '0.35em'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Inter & Playfair Display for subtle typographic contrast -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555555;
+        }
+
+        /* Subtle Grayscale Filters for Unified Aesthetic */
+        .mono-img {
+            filter: grayscale(100%) contrast(110%);
+            transition: filter 0.5s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .mono-img:hover {
+            filter: grayscale(80%) contrast(115%);
+            transform: scale(1.03);
+        }
+
+        /* Subtle Glassmorphism */
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Smooth Reveal Animation Helper */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-white selection:bg-white selection:text-black">
+
+    <!-- ================= NAVIGATION BAR ================= -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="group flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full border border-white flex items-center justify-center transition-transform duration-500 group-hover:rotate-45">
+                    <span class="text-xs tracking-tighter font-bold">✦</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold tracking-widest text-white uppercase">Starlight</span>
+                    <span class="text-[9px] tracking-ultra text-gray-400 uppercase -mt-1">Coffee • 星辰咖啡</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-10 text-xs tracking-widest uppercase text-gray-400 font-medium">
+                <a href="#about" class="hover:text-white transition-colors duration-300">Brand Philosophy</a>
+                <a href="#craft" class="hover:text-white transition-colors duration-300">Precision Craft</a>
+                <a href="#menu" class="hover:text-white transition-colors duration-300">Signature Menu</a>
+                <a href="#space" class="hover:text-white transition-colors duration-300">The Space</a>
+                <a href="#contact" class="hover:text-white transition-colors duration-300">Inquiry</a>
+            </nav>
+
+            <!-- CTA Button -->
+            <div class="hidden md:block">
+                <a href="#contact" class="inline-block text-xs uppercase tracking-widest px-6 py-3 border border-white/30 hover:border-white hover:bg-white hover:text-black transition-all duration-300 rounded-full">
+                    Reserve Table
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="menu-btn" class="md:hidden text-white focus:outline-none p-2" aria-label="Toggle Navigation Menu">
+                <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 top-[70px] bg-brand-black/95 backdrop-blur-xl z-40 p-8 flex flex-col justify-between border-t border-white/10">
+            <div class="flex flex-col space-y-8 text-sm uppercase tracking-widest font-light mt-6">
+                <a href="#about" class="mobile-nav-link text-gray-300 hover:text-white border-b border-white/10 pb-4">01 / Brand Philosophy</a>
+                <a href="#craft" class="mobile-nav-link text-gray-300 hover:text-white border-b border-white/10 pb-4">02 / Precision Craft</a>
+                <a href="#menu" class="mobile-nav-link text-gray-300 hover:text-white border-b border-white/10 pb-4">03 / Signature Menu</a>
+                <a href="#space" class="mobile-nav-link text-gray-300 hover:text-white border-b border-white/10 pb-4">04 / The Space</a>
+                <a href="#contact" class="mobile-nav-link text-gray-300 hover:text-white border-b border-white/10 pb-4">05 / Contact & Inquiry</a>
+            </div>
+            <div class="pt-6 border-t border-white/10 text-xs text-gray-500 uppercase tracking-widest flex justify-between items-center">
+                <span>Taipei • Taiwan</span>
+                <div class="flex gap-4 text-white text-base">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-6 md:px-12 overflow-hidden">
+        <!-- Background Monochromatic Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=2000" 
+                 alt="Specialty Coffee Dripping" 
+                 class="w-full h-full object-cover filter grayscale contrast-125 opacity-25">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/60 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center">
+            <!-- Subtle Tag -->
+            <div class="fade-in-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/15 bg-white/5 text-[11px] uppercase tracking-ultra text-gray-300 mb-8 backdrop-blur-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                <span>Specialty Coffee Architecture</span>
+            </div>
+
+            <!-- Main Headline -->
+            <h1 class="fade-in-up text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extralight tracking-tight leading-none mb-8 text-white uppercase">
+                Purity In <br class="hidden sm:inline" />
+                <span class="font-serif italic font-normal text-gray-300">Every Extraction</span>
+            </h1>
+
+            <p class="fade-in-up max-w-2xl text-gray-400 text-sm md:text-base font-light tracking-wide leading-relaxed mb-12">
+                Starlight Coffee (星辰咖啡) bridges minimalist architecture with microscopic precision roasting. Experience single-origin lots curated exclusively for refined palates.
+            </p>
+
+            <!-- CTA Actions -->
+            <div class="fade-in-up flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
+                <a href="#menu" class="w-full sm:w-auto px-10 py-4 bg-white text-black text-xs uppercase tracking-widest font-semibold hover:bg-gray-200 transition-all duration-300 rounded-full text-center shadow-lg hover:shadow-white/10">
+                    Explore Menu
+                </a>
+                <a href="#about" class="w-full sm:w-auto px-10 py-4 border border-white/30 text-white text-xs uppercase tracking-widest font-light hover:border-white hover:bg-white/5 transition-all duration-300 rounded-full text-center">
+                    Read Philosophy
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 hover:text-white transition-colors duration-300" aria-label="Scroll to About Section">
+            <span class="text-[10px] uppercase tracking-widest">Scroll</span>
+            <div class="w-4 h-7 border border-white/30 rounded-full flex justify-center p-1">
+                <div class="w-1 h-1.5 bg-white rounded-full animate-bounce"></div>
+            </div>
+        </a>
+    </section>
+
+
+    <!-- ================= BRAND NARRATIVE / ABOUT ================= -->
+    <section id="about" class="py-28 px-6 md:px-12 border-t border-white/10 relative">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                <!-- Section Header / Column 1 -->
+                <div class="lg:col-span-5 fade-in-up">
+                    <span class="text-xs uppercase tracking-ultra text-gray-500 block mb-3">01 / Brand Narrative</span>
+                    <h2 class="text-3xl sm:text-5xl font-light tracking-tight leading-tight uppercase mb-6">
+                        The Art of <br />
+                        <span class="font-serif italic font-normal text-gray-400">Restraint & Taste</span>
+                    </h2>
+                    <div class="w-12 h-px bg-white mb-8"></div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6 font-light">
+                        Founded on the principle that exceptional coffee requires neither clutter nor distraction, 星辰咖啡 (Starlight Coffee) reduces the roasting process to its purest chemical essence.
+                    </p>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light mb-8">
+                        Every green bean is hand-selected from high-altitude micro-lots across Ethiopia, Colombia, and Taiwan's Alishan region. We balance roast intensity down to seconds to preserve complex terroir profiles.
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
+                        <div>
+                            <span class="block text-2xl font-light text-white mb-1">98.5°</span>
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500">Brew Temp</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-light text-white mb-1">1:15</span>
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500">Ratio Standard</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-light text-white mb-1">100%</span>
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500">Arabica Specialty</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Asymmetrical Visual Layout / Column 2 -->
+                <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 fade-in-up">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/5] bg-brand-dark group">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=800" 
+                             alt="Pour over coffee precision" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/800x1000/121212/ffffff?text=Pour+Over'">
+                        <div class="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black via-black/40 to-transparent">
+                            <span class="text-[10px] uppercase tracking-widest text-gray-400">Technique</span>
+                            <h3 class="text-sm font-medium tracking-wide uppercase text-white mt-1">Single Origin Pour-Over</h3>
+                        </div>
+                    </div>
+
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/5] bg-brand-dark group md:mt-12">
+                        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=800" 
+                             alt="Minimalist Coffee Shop Space" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/800x1000/121212/ffffff?text=Architecture'">
+                        <div class="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black via-black/40 to-transparent">
+                            <span class="text-[10px] uppercase tracking-widest text-gray-400">Environment</span>
+                            <h3 class="text-sm font-medium tracking-wide uppercase text-white mt-1">Acoustic Minimal Space</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= CRAFT & PROCESS SECTION ================= -->
+    <section id="craft" class="py-28 px-6 md:px-12 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-20 fade-in-up">
+                <span class="text-xs uppercase tracking-ultra text-gray-500 block mb-3">02 / Precision Craft</span>
+                <h2 class="text-3xl md:text-5xl font-light uppercase tracking-tight">The Extraction Ritual</h2>
+                <p class="text-gray-400 text-sm font-light mt-4">Four disciplined stages transform raw botanical harvest into an unforgettable sensory moment.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="fade-in-up glass-panel p-8 rounded-2xl relative hover:border-white/30 transition-all duration-300">
+                    <span class="text-4xl font-extralight text-white/20 block mb-6">01</span>
+                    <h3 class="text-base font-medium uppercase tracking-wider mb-3">Sourcing</h3>
+                    <p class="text-gray-400 text-xs font-light leading-relaxed">Direct trade with micro-farms operating above 1,800m elevation for dense bean structure and floral acidity.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="fade-in-up glass-panel p-8 rounded-2xl relative hover:border-white/30 transition-all duration-300">
+                    <span class="text-4xl font-extralight text-white/20 block mb-6">02</span>
+                    <h3 class="text-base font-medium uppercase tracking-wider mb-3">Nordic Roast</h3>
+                    <p class="text-gray-400 text-xs font-light leading-relaxed">Light-to-medium roasting curves that highlight origin characteristics without baking in heavy charred tones.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="fade-in-up glass-panel p-8 rounded-2xl relative hover:border-white/30 transition-all duration-300">
+                    <span class="text-4xl font-extralight text-white/20 block mb-6">03</span>
+                    <h3 class="text-base font-medium uppercase tracking-wider mb-3">Water Chemistry</h3>
+                    <p class="text-gray-400 text-xs font-light leading-relaxed">Custom mineralized reverse osmosis water tailored specifically to optimize soluble compound yield.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="fade-in-up glass-panel p-8 rounded-2xl relative hover:border-white/30 transition-all duration-300">
+                    <span class="text-4xl font-extralight text-white/20 block mb-6">04</span>
+                    <h3 class="text-base font-medium uppercase tracking-wider mb-3">Zero-Dose Pour</h3>
+                    <p class="text-gray-400 text-xs font-light leading-relaxed">Individual dose weighing and precise temperature-controlled pour geometry for crystal clear tasting notes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= PRODUCT SHOWCASE / MENU ================= -->
+    <section id="menu" class="py-28 px-6 md:px-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 fade-in-up">
+                <div>
+                    <span class="text-xs uppercase tracking-ultra text-gray-500 block mb-3">03 / Curated Offerings</span>
+                    <h2 class="text-3xl md:text-5xl font-light uppercase tracking-tight">Signature Blends & Lots</h2>
+                </div>
+                <!-- Filter Tabs -->
+                <div class="flex flex-wrap gap-2 mt-6 md:mt-0" id="menu-filters">
+                    <button class="filter-btn active text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border border-white bg-white text-black transition-all duration-300" data-category="all">All Items</button>
+                    <button class="filter-btn text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-white/50 transition-all duration-300" data-category="pour-over">Pour Over</button>
+                    <button class="filter-btn text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-white/50 transition-all duration-300" data-category="espresso">Espresso</button>
+                    <button class="filter-btn text-xs uppercase tracking-widest px-5 py-2.5 rounded-full border border-white/20 text-gray-400 hover:text-white hover:border-white/50 transition-all duration-300" data-category="signature">Signature</button>
+                </div>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+                
+                <!-- Product Card 1 -->
+                <div class="menu-item fade-in-up group border border-white/10 rounded-2xl p-6 bg-brand-dark hover:border-white/40 transition-all duration-500" data-category="pour-over">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-6 bg-black">
+                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&q=80&w=800" 
+                             alt="Nebula Yirgacheffe Coffee" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/600x600/121212/ffffff?text=Yirgacheffe'">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-medium tracking-wide">Nebula Yirgacheffe</h3>
+                        <span class="text-sm font-light text-gray-300">$12.00</span>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">Ethiopia • Natural Process</p>
+                    <p class="text-gray-400 text-xs leading-relaxed font-light mb-6">Fragrant jasmine aroma accompanied by vibrant bergamot acidity and a clean white peach finish.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400">
+                        <span>Elevation: 2,100m</span>
+                        <span class="text-white font-mono">Light Roast</span>
+                    </div>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="menu-item fade-in-up group border border-white/10 rounded-2xl p-6 bg-brand-dark hover:border-white/40 transition-all duration-500" data-category="espresso">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-6 bg-black">
+                        <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=800" 
+                             alt="Monolith Espresso" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/600x600/121212/ffffff?text=Monolith+Espresso'">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-medium tracking-wide">Monolith Espresso</h3>
+                        <span class="text-sm font-light text-gray-300">$8.50</span>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">House Blend • Colombia & Guatemala</p>
+                    <p class="text-gray-400 text-xs leading-relaxed font-light mb-6">Velvety crema with rich dark cacao nib notes, roasted hazelnut complexity, and a long dark caramel tail.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400">
+                        <span>Extraction: 1:2.1</span>
+                        <span class="text-white font-mono">Medium Roast</span>
+                    </div>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="menu-item fade-in-up group border border-white/10 rounded-2xl p-6 bg-brand-dark hover:border-white/40 transition-all duration-500" data-category="signature">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-6 bg-black">
+                        <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=800" 
+                             alt="Starlight Cold Brew" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/600x600/121212/ffffff?text=Cold+Brew'">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-medium tracking-wide">Obsidian Nitro Draft</h3>
+                        <span class="text-sm font-light text-gray-300">$10.00</span>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">Signature • 18-Hour Immersion</p>
+                    <p class="text-gray-400 text-xs leading-relaxed font-light mb-6">Steeped in cold mountain water and charged with nitrogen for a silky stout-like mouthfeel without dairy.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400">
+                        <span>Chill Temp: 2°C</span>
+                        <span class="text-white font-mono">Signature</span>
+                    </div>
+                </div>
+
+                <!-- Product Card 4 -->
+                <div class="menu-item fade-in-up group border border-white/10 rounded-2xl p-6 bg-brand-dark hover:border-white/40 transition-all duration-500" data-category="pour-over">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-6 bg-black">
+                        <img src="https://images.unsplash.com/photo-1521302200778-33500795e128?auto=format&fit=crop&q=80&w=800" 
+                             alt="Alishan Cloud Reserve" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/600x600/121212/ffffff?text=Alishan+Reserve'">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-medium tracking-wide">Alishan Cloud Reserve</h3>
+                        <span class="text-sm font-light text-gray-300">$15.00</span>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">Taiwan • Anaerobic Fermentation</p>
+                    <p class="text-gray-400 text-xs leading-relaxed font-light mb-6">Extremely rare high-altitude lot with delicate notes of oolong tea blossom, honey, and ripe melon finish.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400">
+                        <span>Elevation: 1,200m</span>
+                        <span class="text-white font-mono">Ultra-Light</span>
+                    </div>
+                </div>
+
+                <!-- Product Card 5 -->
+                <div class="menu-item fade-in-up group border border-white/10 rounded-2xl p-6 bg-brand-dark hover:border-white/40 transition-all duration-500" data-category="signature">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-6 bg-black">
+                        <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=800" 
+                             alt="Black Sesame Latte" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/600x600/121212/ffffff?text=Black+Latte'">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-medium tracking-wide">Kurogoma Cortado</h3>
+                        <span class="text-sm font-light text-gray-300">$9.00</span>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">Signature • Artisan Infusion</p>
+                    <p class="text-gray-400 text-xs leading-relaxed font-light mb-6">Slow-roasted black sesame paste emulsified with dense ristretto and micro-foamed oat milk.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400">
+                        <span>Base: Monolith</span>
+                        <span class="text-white font-mono">Specialty</span>
+                    </div>
+                </div>
+
+                <!-- Product Card 6 -->
+                <div class="menu-item fade-in-up group border border-white/10 rounded-2xl p-6 bg-brand-dark hover:border-white/40 transition-all duration-500" data-category="espresso">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-6 bg-black">
+                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=800" 
+                             alt="Flat White" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/600x600/121212/ffffff?text=Flat+White'">
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-medium tracking-wide">Minimalist Flat White</h3>
+                        <span class="text-sm font-light text-gray-300">$8.00</span>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-4">Espresso Milk • Single Estate</p>
+                    <p class="text-gray-400 text-xs leading-relaxed font-light mb-6">Precision micro-foam integrated seamlessly with a double shot of single-origin Gesha roast.</p>
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400">
+                        <span>Ratio: 1:3</span>
+                        <span class="text-white font-mono">Velvet Texture</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= ARCHITECTURAL SPACE ================= -->
+    <section id="space" class="py-28 px-6 md:px-12 bg-brand-dark border-t border-white/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-6 fade-in-up">
+                    <span class="text-xs uppercase tracking-ultra text-gray-500 block mb-3">04 / Environmental Design</span>
+                    <h2 class="text-3xl md:text-5xl font-light uppercase tracking-tight mb-6">A Sanctuary for Concentration</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light mb-6">
+                        Designed in collaboration with minimalist architects, Starlight Coffee features acoustic dampening walls, natural basalt stone countertops, and soft shadow lighting. 
+                    </p>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light mb-8">
+                        Every element is intentional—eliminating visual noise so you can fully immerse yourself in the tactile and olfactory nuances of world-class coffee.
+                    </p>
+
+                    <div class="flex items-center gap-8">
+                        <div class="border-l-2 border-white pl-4">
+                            <span class="text-xs uppercase tracking-widest text-gray-400 block">Location</span>
+                            <span class="text-sm font-medium text-white">Xinyi District, Taipei</span>
+                        </div>
+                        <div class="border-l-2 border-white/30 pl-4">
+                            <span class="text-xs uppercase tracking-widest text-gray-400 block">Hours</span>
+                            <span class="text-sm font-medium text-white">08:00 — 19:00 Daily</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 fade-in-up">
+                    <div class="relative rounded-2xl overflow-hidden aspect-[16/10] border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&q=80&w=1200" 
+                             alt="Architectural Interior of Starlight Coffee" 
+                             class="w-full h-full object-cover mono-img"
+                             onerror="this.src='https://placehold.co/1200x800/121212/ffffff?text=Interior+Space'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= CONTACT & INQUIRY ================= -->
+    <section id="contact" class="py-28 px-6 md:px-12 border-t border-white/10 relative">
+        <div class="max-w-4xl mx-auto">
+            
+            <div class="text-center mb-16 fade-in-up">
+                <span class="text-xs uppercase tracking-ultra text-gray-500 block mb-3">05 / Contact & Reservations</span>
+                <h2 class="text-3xl md:text-5xl font-light uppercase tracking-tight">Initiate an Inquiry</h2>
+                <p class="text-gray-400 text-sm font-light mt-4">For private tasting events, bean wholesale, or table reservations.</p>
+            </div>
+
+            <!-- Form Container -->
+            <form id="contact-form" class="fade-in-up space-y-8" novalidate>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Name Input -->
+                    <div class="relative">
+                        <label for="name" class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Your Name *</label>
+                        <input type="text" id="name" name="name" placeholder="e.g. Alexander Chen"
+                               class="w-full bg-brand-dark border border-white/15 rounded-xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors duration-300">
+                        <span class="error-msg text-[11px] text-red-400 mt-1.5 hidden">Please provide your full name.</span>
+                    </div>
+
+                    <!-- Email Input -->
+                    <div class="relative">
+                        <label for="email" class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Email Address *</label>
+                        <input type="email" id="email" name="email" placeholder="e.g. alexander@domain.com"
+                               class="w-full bg-brand-dark border border-white/15 rounded-xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors duration-300">
+                        <span class="error-msg text-[11px] text-red-400 mt-1.5 hidden">Please enter a valid email address.</span>
+                    </div>
+
+                </div>
+
+                <!-- Topic Select -->
+                <div class="relative">
+                    <label for="topic" class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Inquiry Type</label>
+                    <select id="topic" name="topic" class="w-full bg-brand-dark border border-white/15 rounded-xl px-5 py-4 text-sm text-white focus:outline-none focus:border-white transition-colors duration-300 appearance-none cursor-pointer">
+                        <option value="reservation">Private Table Reservation</option>
+                        <option value="tasting">Custom Coffee Tasting Session</option>
+                        <option value="wholesale">Wholesale & Bean Supply</option>
+                        <option value="general">General Inquiry</option>
+                    </select>
+                    <div class="absolute right-5 bottom-4 pointer-events-none text-gray-400 text-xs">▼</div>
+                </div>
+
+                <!-- Message Input -->
+                <div class="relative">
+                    <label for="message" class="block text-xs uppercase tracking-widest text-gray-400 mb-2">Message *</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Share your date, preferred time, or inquiry details..."
+                              class="w-full bg-brand-dark border border-white/15 rounded-xl px-5 py-4 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors duration-300 resize-none"></textarea>
+                    <span class="error-msg text-[11px] text-red-400 mt-1.5 hidden">Message must be at least 10 characters long.</span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center pt-4">
+                    <button type="submit" id="submit-btn" class="w-full md:w-auto px-12 py-4 bg-white text-black text-xs uppercase tracking-ultra font-semibold hover:bg-gray-200 transition-all duration-300 rounded-full cursor-pointer shadow-lg">
+                        Send Message
+                    </button>
+                </div>
+            </form>
+
+            <!-- Success Notification Modal / Box -->
+            <div id="form-feedback" class="hidden mt-8 p-6 glass-panel rounded-2xl border border-emerald-500/30 text-center">
+                <div class="w-10 h-10 rounded-full bg-white/10 text-emerald-400 flex items-center justify-center mx-auto mb-3 text-lg">✓</div>
+                <h3 class="text-base font-medium tracking-wide text-white uppercase mb-1">Inquiry Transmitted</h3>
+                <p class="text-xs text-gray-400 font-light">Thank you for reaching out to Starlight Coffee. Our concierge team will respond within 24 hours.</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="border-t border-white/10 py-16 px-6 md:px-12 bg-black">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 rounded-full border border-white/50 flex items-center justify-center text-[10px]">✦</div>
+                <span class="text-sm tracking-widest text-white uppercase font-light">Starlight Coffee / 星辰咖啡</span>
+            </div>
+
+            <p class="text-xs text-gray-500 font-light text-center">
+                &copy; <span id="year"></span> STARLIGHT COFFEE ROASTERS. ALL RIGHTS RESERVED.
+            </p>
+
+            <div class="flex items-center space-x-6 text-gray-400 text-sm">
+                <a href="#" class="hover:text-white transition-colors duration-300" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-white transition-colors duration-300" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="hover:text-white transition-colors duration-300" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set dynamic copyright year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // ----------------------------------------------------
+            // 1. Sticky Navbar Transition on Scroll
+            // ----------------------------------------------------
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-brand-black/85', 'backdrop-blur-md', 'py-4', 'border-b', 'border-white/10');
+                    navbar.classList.remove('py-6');
+                } else {
+                    navbar.classList.remove('bg-brand-black/85', 'backdrop-blur-md', 'py-4', 'border-b', 'border-white/10');
+                    navbar.classList.add('py-6');
+                }
+            });
+
+            // ----------------------------------------------------
+            // 2. Mobile Menu Toggle
+            // ----------------------------------------------------
+            const menuBtn = document.getElementById('menu-btn');
+            const menuIcon = document.getElementById('menu-icon');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+            function toggleMobileMenu() {
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                if (isOpen) {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.replace('fa-xmark', 'fa-bars');
+                    document.body.style.overflow = '';
+                } else {
+                    mobileMenu.classList.remove('hidden');
+                    menuIcon.classList.replace('fa-bars', 'fa-xmark');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            menuBtn.addEventListener('click', toggleMobileMenu);
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // ----------------------------------------------------
+            // 3. Scroll Reveal Animation (Intersection Observer)
+            // ----------------------------------------------------
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            fadeElements.forEach(el => revealObserver.observe(el));
+
+            // ----------------------------------------------------
+            // 4. Menu Filtering System
+            // ----------------------------------------------------
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset active states
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-white', 'text-black');
+                        b.classList.add('border-white/20', 'text-gray-400');
+                    });
+
+                    // Set active style
+                    btn.classList.add('active', 'bg-white', 'text-black');
+                    btn.classList.remove('border-white/20', 'text-gray-400');
+
+                    const category = btn.getAttribute('data-category');
+
+                    menuItems.forEach(item => {
+                        if (category === 'all' || item.getAttribute('data-category') === category) {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, 50);
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+
+            // ----------------------------------------------------
+            // 5. Contact Form Real-Time Validation
+            // ----------------------------------------------------
+            const form = document.getElementById('contact-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const messageInput = document.getElementById('message');
+            const feedbackBox = document.getElementById('form-feedback');
+
+            // Email Regex helper
+            const isValidEmail = (email) => {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            };
+
+            const validateField = (input, condition, errorSpan) => {
+                if (!condition) {
+                    input.classList.add('border-red-500');
+                    input.classList.remove('border-white/15', 'border-white');
+                    errorSpan.classList.remove('hidden');
+                    return false;
+                } else {
+                    input.classList.remove('border-red-500');
+                    input.classList.add('border-white/15');
+                    errorSpan.classList.add('hidden');
+                    return true;
+                }
+            };
+
+            // Input Event Listeners for real-time clearance
+            nameInput.addEventListener('input', () => {
+                validateField(nameInput, nameInput.value.trim().length > 1, nameInput.nextElementSibling);
+            });
+
+            emailInput.addEventListener('input', () => {
+                validateField(emailInput, isValidEmail(emailInput.value.trim()), emailInput.nextElementSibling);
+            });
+
+            messageInput.addEventListener('input', () => {
+                validateField(messageInput, messageInput.value.trim().length >= 10, messageInput.nextElementSibling);
+            });
+
+            // Form Submit Listener
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const isNameValid = validateField(nameInput, nameInput.value.trim().length > 1, nameInput.nextElementSibling);
+                const isEmailValid = validateField(emailInput, isValidEmail(emailInput.value.trim()), emailInput.nextElementSibling);
+                const isMessageValid = validateField(messageInput, messageInput.value.trim().length >= 10, messageInput.nextElementSibling);
+
+                if (isNameValid && isEmailValid && isMessageValid) {
+                    // Simulate sleek form submission without page reload
+                    const submitBtn = document.getElementById('submit-btn');
+                    submitBtn.innerText = 'Transmitting...';
+                    submitBtn.disabled = true;
+
+                    setTimeout(() => {
+                        form.reset();
+                        form.classList.add('hidden');
+                        feedbackBox.classList.remove('hidden');
+                    }, 1200);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

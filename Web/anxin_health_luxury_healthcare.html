@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>安心康健 Anxin Health | 頂級私人醫療診所 Luxury Healthcare Clinic</title>
+    <meta name="description" content="安心康健 (Anxin Health) 提供頂級私人醫療、精準預防醫學、抗衰老再生醫療與尊榮健康管理服務。優雅莫蘭迪空間、權威醫療團隊，為您締造專屬尊榮的健康奢華體驗。">
+    <meta name="keywords" content="安心康健, Anxin Health, 頂級診所, 私人醫療, 預防醫學, 高級健檢, 抗衰老醫學, 尊榮健診, 健檢中心">
+    <meta name="author" content="Anxin Health Co.">
+    <meta property="og:title" content="安心康健 Anxin Health | 頂級私人醫療診所">
+    <meta property="og:description" content="專屬尊榮醫療體驗，融合精準醫學與極致隱私，打造極致健康生活。">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        morandi: {
+                            blue: '#7B8FA1',      // Muted Dusty Blue
+                            bluedark: '#4A5B6B',  // Deep Dusty Blue
+                            sage: '#8EA793',      // Calming Sage Green
+                            sagelight: '#E3E9E4', // Subtle Light Sage
+                            gray: '#E0DCD3',      // Warm Beige Gray
+                            graydark: '#2A2D32',  // Charcoal Neutral
+                            clay: '#C08267',      // Warm Earthy Clay
+                            gold: '#D4AF37',      // Subtle Champagne Gold Accent
+                            sand: '#F7F5F0',      // Off-white Background
+                            card: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'Noto Serif TC', 'serif'],
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 30px -10px rgba(0, 0, 0, 0.05)',
+                        'hover': '0 20px 40px -15px rgba(123, 143, 161, 0.2)',
+                        'glass': '0 8px 32px 0 rgba(123, 143, 161, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Customizations & Morandi Micro-styling */
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #F7F5F0;
+            color: #2A2D32;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Cinzel', 'Noto Serif TC', serif;
+        }
+
+        .glass-nav {
+            background: rgba(247, 245, 240, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(224, 220, 211, 0.5);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(224, 220, 211, 0.6);
+        }
+
+        .morandi-gradient {
+            background: linear-gradient(135deg, #7B8FA1 0%, #4A5B6B 100%);
+        }
+
+        .morandi-light-gradient {
+            background: linear-gradient(135deg, #F7F5F0 0%, #E3E9E4 100%);
+        }
+
+        .gold-border-glow:hover {
+            border-color: #D4AF37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F5F0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7B8FA1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4A5B6B;
+        }
+
+        /* Smooth Transition Classes */
+        .transition-all-300 {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hero Canvas Pattern */
+        .hero-pattern {
+            background-image: radial-gradient(rgba(123, 143, 161, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Parallax Background Utility Classes */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Banner Slide Transitions */
+        .hero-slide {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+        }
+        .hero-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-morandi-blue selection:text-white">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-morandi-bluedark text-morandi-sand text-xs py-2 px-4 text-center tracking-wider font-light flex justify-between items-center max-w-full overflow-hidden">
+        <div class="hidden md:flex items-center gap-4 mx-auto">
+            <span><i class="fa-solid fa-crown text-morandi-gold mr-1"></i> 全預約制尊榮診療專線：+886 (2) 2898-8888</span>
+            <span class="text-morandi-blue">|</span>
+            <span><i class="fa-solid fa-clock mr-1"></i> 週一至週六 09:00 - 20:00 (週日尊榮私廚維護日)</span>
+        </div>
+        <div class="md:hidden text-center w-full">
+            <span><i class="fa-solid fa-crown text-morandi-gold mr-1"></i> 安心康健 頂級私家醫療服務中心</span>
+        </div>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-40 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-full bg-morandi-bluedark flex items-center justify-center text-morandi-sand font-serif font-bold text-xl shadow-md group-hover:bg-morandi-clay transition-all duration-300">
+                        安
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-heading text-xl tracking-widest text-morandi-graydark font-bold leading-tight">安心康健</span>
+                        <span class="text-[10px] tracking-[0.25em] text-morandi-blue uppercase">ANXIN HEALTH CARE</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden lg:flex items-center space-x-8 font-medium text-sm text-morandi-graydark">
+                    <a href="#about" class="hover:text-morandi-blue transition-colors duration-200">品牌哲學</a>
+                    <a href="#services" class="hover:text-morandi-blue transition-colors duration-200">尊榮服務</a>
+                    <a href="#team" class="hover:text-morandi-blue transition-colors duration-200">權威醫師團隊</a>
+                    <a href="#experience" class="hover:text-morandi-blue transition-colors duration-200">奢華會所空間</a>
+                    <a href="#location" class="hover:text-morandi-blue transition-colors duration-200">會所位置</a>
+                </div>
+
+                <!-- Right Action CTA -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="tel:+886228988888" class="text-xs font-semibold text-morandi-bluedark hover:text-morandi-clay transition">
+                        <i class="fa-solid fa-phone mr-1"></i> VIP 專線
+                    </a>
+                    <button onclick="openBookingModal()" class="bg-morandi-bluedark hover:bg-morandi-clay text-white px-6 py-2.5 rounded-full text-sm font-medium tracking-wide shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2">
+                        <span>預約專屬諮詢</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Navigation Toggle -->
+                <div class="lg:hidden flex items-center gap-2">
+                    <button onclick="openBookingModal()" class="bg-morandi-bluedark text-white px-3 py-1.5 rounded-full text-xs font-medium">
+                        線上預約
+                    </button>
+                    <button id="mobile-menu-btn" class="p-2 rounded-lg text-morandi-graydark hover:bg-morandi-gray/30 focus:outline-none" aria-label="Toggle Navigation">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-morandi-sand border-b border-morandi-gray/50 px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-morandi-graydark hover:bg-morandi-sage/20">品牌哲學</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-morandi-graydark hover:bg-morandi-sage/20">尊榮服務</a>
+            <a href="#team" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-morandi-graydark hover:bg-morandi-sage/20">權威醫師團隊</a>
+            <a href="#experience" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-morandi-graydark hover:bg-morandi-sage/20">奢華會所空間</a>
+            <a href="#location" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-morandi-graydark hover:bg-morandi-sage/20">會所位置</a>
+            <div class="pt-2 border-t border-morandi-gray/40 flex flex-col gap-2">
+                <button onclick="openBookingModal(); toggleMobileMenu();" class="w-full bg-morandi-bluedark text-white py-3 rounded-lg font-medium text-center shadow">
+                    立即線上預約諮詢
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION WITH SLIDER & PARALLAX -->
+    <section class="relative min-h-[90vh] flex items-center justify-center hero-pattern overflow-hidden py-12 lg:py-16">
+        <!-- Parallax Floating Decorative Elements -->
+        <div class="parallax-element absolute top-10 -left-20 w-96 h-96 bg-morandi-sage/20 rounded-full blur-3xl pointer-events-none" data-speed="-0.15"></div>
+        <div class="parallax-element absolute bottom-10 -right-20 w-[30rem] h-[30rem] bg-morandi-blue/20 rounded-full blur-3xl pointer-events-none" data-speed="0.2"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+
+                <!-- Left Content Area -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left parallax-element" data-speed="0.05">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-morandi-sagelight border border-morandi-sage/30 text-morandi-bluedark text-xs font-medium tracking-widest uppercase">
+                        <span class="w-2 h-2 rounded-full bg-morandi-sage animate-pulse"></span>
+                        私人全方位健康守護會所
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-heading font-bold text-morandi-graydark tracking-tight leading-tight">
+                        重塑生命寧靜 <br/>
+                        <span class="text-morandi-bluedark">奢華隱私與精準醫療的完美契合</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-morandi-graydark/80 font-light leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        「安心康健 (Anxin Health)」以現代醫學技術為核心，搭配頂級會所式隱私空間，提供一對一私人醫師團隊服務。從預防醫學、基因定序到高階再生與全身抗衰老，陪伴您優雅邁向生命的巔峰。
+                    </p>
+
+                    <!-- CTAs & Trust Highlights -->
+                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <button onclick="openBookingModal()" class="w-full sm:w-auto bg-morandi-bluedark hover:bg-morandi-clay text-white px-8 py-4 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group">
+                            <span>預約 VIP 專屬諮詢</span>
+                            <i class="fa-solid fa-calendar-check group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+
+                        <a href="#experience" class="w-full sm:w-auto border border-morandi-blue text-morandi-bluedark hover:bg-morandi-blue/10 px-8 py-4 rounded-full font-medium transition-all duration-300 text-center">
+                            探索奢華空間
+                        </a>
+                    </div>
+
+                    <!-- Trust Stats Bar -->
+                    <div class="pt-8 border-t border-morandi-gray/60 grid grid-cols-3 gap-4 text-center lg:text-left">
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-bold font-heading text-morandi-bluedark">100%</div>
+                            <div class="text-xs text-morandi-graydark/70 mt-1">隱私獨立診療診室</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-bold font-heading text-morandi-clay">20+</div>
+                            <div class="text-xs text-morandi-graydark/70 mt-1">國內外頂尖主任醫師</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-bold font-heading text-morandi-sage">1 : 1</div>
+                            <div class="text-xs text-morandi-graydark/70 mt-1">健康管家全時陪同</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual Hero Banner Slider (Interactive Carousel) -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none group" id="hero-slider-container">
+                        
+                        <!-- Carousel Wrapper -->
+                        <div class="relative rounded-3xl overflow-hidden shadow-hover border-4 border-white/80 min-h-[480px]">
+                            
+                            <!-- Slide 1 -->
+                            <div class="hero-slide active">
+                                <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1000&q=80"
+                                     alt="Anxin Health Luxury Medical Center" 
+                                     class="w-full h-[480px] object-cover hover:scale-105 transition-transform duration-700"
+                                     onerror="this.src='https://placehold.co/600x800/7B8FA1/FFFFFF?text=Anxin+Health+Clinic'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-morandi-graydark/70 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass-card border border-white/50 text-morandi-graydark">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-morandi-sage/30 flex items-center justify-center text-morandi-bluedark shrink-0">
+                                            <i class="fa-solid fa-shield-halved text-lg"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold">國家級品質認證 & 國際JCI標準</div>
+                                            <div class="text-xs text-morandi-graydark/70">精準醫学數據庫保障個人隱私</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="hero-slide">
+                                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1000&q=80"
+                                     alt="Precision Medical Technology" 
+                                     class="w-full h-[480px] object-cover hover:scale-105 transition-transform duration-700"
+                                     onerror="this.src='https://placehold.co/600x800/8EA793/FFFFFF?text=Precision+Care'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-morandi-graydark/70 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass-card border border-white/50 text-morandi-graydark">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-morandi-blue/30 flex items-center justify-center text-morandi-bluedark shrink-0">
+                                            <i class="fa-solid fa-dna text-lg"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold">全基因組定序與再生健康干預</div>
+                                            <div class="text-xs text-morandi-graydark/70">超前預測疾患，實現客製化活力延緩</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="hero-slide">
+                                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80"
+                                     alt="Private Zen Suite" 
+                                     class="w-full h-[480px] object-cover hover:scale-105 transition-transform duration-700"
+                                     onerror="this.src='https://placehold.co/600x800/C08267/FFFFFF?text=Private+Suite'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-morandi-graydark/70 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass-card border border-white/50 text-morandi-graydark">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-morandi-clay/30 flex items-center justify-center text-morandi-clay shrink-0">
+                                            <i class="fa-solid fa-hotel text-lg"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-semibold">莫蘭迪禪意 VIP 獨立專屬 Suite</div>
+                                            <div class="text-xs text-morandi-graydark/70">全程零打擾，享受如奢華度假般的醫療體驗</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slider Controls (Left/Right Arrows) -->
+                            <button onclick="prevHeroSlide()" aria-label="Previous Slide" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/70 hover:bg-white text-morandi-bluedark flex items-center justify-center shadow-md transition opacity-0 group-hover:opacity-100 z-20">
+                                <i class="fa-solid fa-chevron-left text-sm"></i>
+                            </button>
+                            <button onclick="nextHeroSlide()" aria-label="Next Slide" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/70 hover:bg-white text-morandi-bluedark flex items-center justify-center shadow-md transition opacity-0 group-hover:opacity-100 z-20">
+                                <i class="fa-solid fa-chevron-right text-sm"></i>
+                            </button>
+
+                            <!-- Slider Indicator Dots -->
+                            <div class="absolute top-4 right-4 z-20 flex gap-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full">
+                                <button onclick="setHeroSlide(0)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white transition-all duration-300" aria-label="Slide 1"></button>
+                                <button onclick="setHeroSlide(1)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" aria-label="Slide 2"></button>
+                                <button onclick="setHeroSlide(2)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" aria-label="Slide 3"></button>
+                            </div>
+                        </div>
+
+                        <!-- Secondary floating accent badge -->
+                        <div class="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-morandi-gray/30 hidden sm:flex items-center gap-3 z-30">
+                            <div class="w-8 h-8 rounded-full bg-morandi-clay/20 flex items-center justify-center text-morandi-clay">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs text-morandi-graydark/60">顧客滿意度</div>
+                                <div class="text-sm font-bold text-morandi-graydark">99.8% 尊榮好評</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- BRAND PHILOSOPHY / ABOUT SECTION WITH PARALLAX -->
+    <section id="about" class="py-24 bg-white relative overflow-hidden">
+        <!-- Parallax Background Element -->
+        <div class="parallax-element absolute -right-20 top-1/4 w-96 h-96 bg-morandi-sagelight/60 rounded-full blur-3xl pointer-events-none" data-speed="-0.1"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-morandi-clay text-xs font-semibold tracking-widest uppercase">The Essence of Care</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-morandi-graydark mt-2">以人為本，安心至上</h2>
+                <div class="w-12 h-0.5 bg-morandi-sage mx-auto my-4"></div>
+                <p class="text-morandi-graydark/70 leading-relaxed">
+                    在「安心康健」，我們深信醫療不僅是症狀的解除，更是一場關於生命質感與心靈安定的靜心之旅。我們融合現代高端預防醫學與個人化管家式照護，為您與家人築起最堅實的健康防護網。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-8 rounded-2xl bg-morandi-sand border border-morandi-gray/40 hover:border-morandi-blue transition-all duration-300 group shadow-sm hover:shadow-hover">
+                    <div class="w-14 h-14 rounded-2xl bg-morandi-blue/10 flex items-center justify-center text-morandi-bluedark text-2xl mb-6 group-hover:bg-morandi-bluedark group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <h3 class="text-xl font-heading font-bold mb-3 text-morandi-graydark">頂尖主治團隊</h3>
+                    <p class="text-sm text-morandi-graydark/70 leading-relaxed">
+                        匯聚台大、榮總等醫學中心主任級醫師及國際客座專家，提供最精確的臨床決策與一站式跨科會診服務。
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="p-8 rounded-2xl bg-morandi-sand border border-morandi-gray/40 hover:border-morandi-blue transition-all duration-300 group shadow-sm hover:shadow-hover">
+                    <div class="w-14 h-14 rounded-2xl bg-morandi-sage/20 flex items-center justify-center text-morandi-sage text-2xl mb-6 group-hover:bg-morandi-sage group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-dna"></i>
+                    </div>
+                    <h3 class="text-xl font-heading font-bold mb-3 text-morandi-graydark">超前精準預防</h3>
+                    <p class="text-sm text-morandi-graydark/70 leading-relaxed">
+                        引進全基因組定序與次世代生化檢測，於疾患發生前進行早期風險預測與客製化干預管理。
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="p-8 rounded-2xl bg-morandi-sand border border-morandi-gray/40 hover:border-morandi-blue transition-all duration-300 group shadow-sm hover:shadow-hover">
+                    <div class="w-14 h-14 rounded-2xl bg-morandi-clay/20 flex items-center justify-center text-morandi-clay text-2xl mb-6 group-hover:bg-morandi-clay group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+                    <h3 class="text-xl font-heading font-bold mb-3 text-morandi-graydark">極致隱私保密</h3>
+                    <p class="text-sm text-morandi-graydark/70 leading-relaxed">
+                        獨立專屬進出通道、全預約分流機制與單一VIP診間，確保您在舒心的氛圍中享受無壓力診療體驗。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFESSIONAL SERVICES SECTION SECTION -->
+    <section id="services" class="py-20 bg-morandi-sand">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+                <div>
+                    <span class="text-morandi-blue text-xs font-semibold tracking-widest uppercase">Tailored Healthcare Programs</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-bold text-morandi-graydark mt-2">尊榮醫療服務項目</h2>
+                </div>
+                <p class="text-morandi-graydark/70 text-sm max-w-md mt-4 md:mt-0">
+                    每一項醫療療程均由專家團隊深度量身定做，結合高科技設備與人文關懷，守護您的全面健康。
+                </p>
+            </div>
+
+            <!-- Service Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Service Card 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-soft hover:shadow-hover border border-morandi-gray/40 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-morandi-sagelight flex items-center justify-center text-morandi-bluedark text-xl mb-5 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <h3 class="text-lg font-heading font-bold text-morandi-graydark mb-2">VIP 精準全方位健檢</h3>
+                        <p class="text-xs text-morandi-graydark/70 leading-relaxed mb-4">
+                            涵蓋零輻射磁振造影(MRI)、低劑量肺部CT及癌症早期循環腫瘤細胞篩檢，提供深度醫學級報告。
+                        </p>
+                    </div>
+                    <button onclick="openServiceDetail('VIP 精準全方位健檢', '包含高階無痛內視鏡、全方位心血管風險評估、多基因健康風險檢測，安排一日或兩日一夜私密貴賓花園住宿檢查。')" class="text-xs font-semibold text-morandi-bluedark hover:text-morandi-clay flex items-center gap-1 mt-2">
+                        <span>了解詳細療程</span>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-soft hover:shadow-hover border border-morandi-gray/40 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-morandi-blue/10 flex items-center justify-center text-morandi-blue text-xl mb-5 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-capsules"></i>
+                        </div>
+                        <h3 class="text-lg font-heading font-bold text-morandi-graydark mb-2">抗衰老與再生醫學</h3>
+                        <p class="text-xs text-morandi-graydark/70 leading-relaxed mb-4">
+                            自體幹細胞儲存與應用諮詢、外泌體再生修復點滴、全細胞荷爾蒙動態平衡療程。
+                        </p>
+                    </div>
+                    <button onclick="openServiceDetail('抗衰老與再生醫學', '採用衛福部核可之再生醫療技術，經國際實驗室嚴格把關，從細胞層級修復與延緩衰老，重拾生機與活力。')" class="text-xs font-semibold text-morandi-bluedark hover:text-morandi-clay flex items-center gap-1 mt-2">
+                        <span>了解詳細療程</span>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-soft hover:shadow-hover border border-morandi-gray/40 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-morandi-clay/20 flex items-center justify-center text-morandi-clay text-xl mb-5 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="text-lg font-heading font-bold text-morandi-graydark mb-2">身心整合與腦神經保健</h3>
+                        <p class="text-xs text-morandi-graydark/70 leading-relaxed mb-4">
+                            結合深度睡眠管理、高壓氧治療、rTMS重複經顱磁刺激及高階音療放鬆，煥發大腦專注力。
+                        </p>
+                    </div>
+                    <button onclick="openServiceDetail('身心整合與腦神經保健', '針對企業高管與精英階層打造的睡眠與壓力復原計畫，整合身心科權威與神經內科醫師聯合診療。')" class="text-xs font-semibold text-morandi-bluedark hover:text-morandi-clay flex items-center gap-1 mt-2">
+                        <span>了解詳細療程</span>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+
+                <!-- Service Card 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-soft hover:shadow-hover border border-morandi-gray/40 transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-morandi-sage/20 flex items-center justify-center text-morandi-sage text-xl mb-5 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-apple-whole"></i>
+                        </div>
+                        <h3 class="text-lg font-heading font-bold text-morandi-graydark mb-2">私人御用營養與代謝管理</h3>
+                        <p class="text-xs text-morandi-graydark/70 leading-relaxed mb-4">
+                            星級主廚與國家級營養師聯手，依據個人血清腸道菌群報告，定制星級療癒餐單與補充劑。
+                        </p>
+                    </div>
+                    <button onclick="openServiceDetail('私人御用營養與代謝管理', '一對一專屬營養師全天候線上追蹤，搭配無毒有機餐食外送與微量元素靜脈補充，極速優化體能指標。')" class="text-xs font-semibold text-morandi-bluedark hover:text-morandi-clay flex items-center gap-1 mt-2">
+                        <span>了解詳細療程</span>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ELITE MEDICAL TEAM SECTION -->
+    <section id="team" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-morandi-clay text-xs font-semibold tracking-widest uppercase">World-Class Specialists</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-bold text-morandi-graydark mt-2">權威名醫團隊</h2>
+                <div class="w-12 h-0.5 bg-morandi-sage mx-auto my-4"></div>
+                <p class="text-morandi-graydark/70 text-sm">安心康健嚴選權威醫學專家，兼備臨床經驗與國際前沿研究背景。</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Doctor Card 1 -->
+                <div class="rounded-2xl bg-morandi-sand overflow-hidden border border-morandi-gray/40 hover:shadow-hover transition-all duration-300 flex flex-col">
+                    <div class="h-72 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=800&q=80" 
+                             alt="Dr. Alexander Chen" 
+                             class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/400x500/7B8FA1/FFFFFF?text=Dr.+Chen'">
+                        <div class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-morandi-bluedark">
+                            院長 / 首席預防醫學專家
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-heading font-bold text-morandi-graydark">陳震宇 醫學博士</h3>
+                            <p class="text-xs text-morandi-clay font-medium mb-3">Dr. Alexander Chen, M.D., Ph.D.</p>
+                            <ul class="text-xs text-morandi-graydark/70 space-y-1 mb-4">
+                                <li>• 前台灣醫學中心 內科主任</li>
+                                <li>• 美國哈佛醫學中心 再生醫學研究員</li>
+                                <li>• 台灣預防醫學學會 理事</li>
+                            </ul>
+                        </div>
+                        <button onclick="openDoctorModal('陳震宇 醫學博士', '院長 / 首席預防醫學專家', '專長：高階心血管預防、幹細胞應用技術、慢性病逆轉治療。具備超過20年臨床經驗，致力於將國際最新醫療科技帶給每一位貴賓。')" class="w-full py-2.5 border border-morandi-bluedark text-morandi-bluedark rounded-xl text-xs font-semibold hover:bg-morandi-bluedark hover:text-white transition">
+                            查看詳細資歷與門診
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Doctor Card 2 -->
+                <div class="rounded-2xl bg-morandi-sand overflow-hidden border border-morandi-gray/40 hover:shadow-hover transition-all duration-300 flex flex-col">
+                    <div class="h-72 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1594824813566-7885a3977336?auto=format&fit=crop&w=800&q=80" 
+                             alt="Dr. Evelyn Lin" 
+                             class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/400x500/8EA793/FFFFFF?text=Dr.+Lin'">
+                        <div class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-morandi-sage">
+                            副院長 / 抗衰老權威
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-heading font-bold text-morandi-graydark">林思涵 醫師</h3>
+                            <p class="text-xs text-morandi-clay font-medium mb-3">Dr. Evelyn Lin, M.D.</p>
+                            <ul class="text-xs text-morandi-graydark/70 space-y-1 mb-4">
+                                <li>• 國立臺灣大學醫學系 畢業</li>
+                                <li>• 瑞士蒙特勒抗衰老中心 訪問學者</li>
+                                <li>• 國際功能醫學會 (IFM) 認證醫師</li>
+                            </ul>
+                        </div>
+                        <button onclick="openDoctorModal('林思涵 醫師', '副院長 / 抗衰老權威', '專長：微循環修復、女性全生命週期荷爾蒙調理、代謝優化。主張以溫和而強大的功能醫學調理，喚醒身體自癒潛能。')" class="w-full py-2.5 border border-morandi-bluedark text-morandi-bluedark rounded-xl text-xs font-semibold hover:bg-morandi-bluedark hover:text-white transition">
+                            查看詳細資歷與門診
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Doctor Card 3 -->
+                <div class="rounded-2xl bg-morandi-sand overflow-hidden border border-morandi-gray/40 hover:shadow-hover transition-all duration-300 flex flex-col">
+                    <div class="h-72 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=800&q=80" 
+                             alt="Dr. James Huang" 
+                             class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/400x500/C08267/FFFFFF?text=Dr.+Huang'">
+                        <div class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-morandi-clay">
+                            腦神經身心中心 主任
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-heading font-bold text-morandi-graydark">黃尚德 醫師</h3>
+                            <p class="text-xs text-morandi-clay font-medium mb-3">Dr. James Huang, M.D.</p>
+                            <ul class="text-xs text-morandi-graydark/70 space-y-1 mb-4">
+                                <li>• 台北榮民總醫院 神經內科主治醫師</li>
+                                <li>• 英國倫敦大學學院 (UCL) 腦科學碩士</li>
+                                <li>• 臺灣睡眠醫學學會 專科醫師</li>
+                            </ul>
+                        </div>
+                        <button onclick="openDoctorModal('黃尚德 醫師', '腦神經身心中心 主任', '專長：高階睡眠障礙干預、經顱磁刺激 (rTMS)、大腦認知功能提昇。專注於現代高壓人群的腦健康與精神韌性重建。')" class="w-full py-2.5 border border-morandi-bluedark text-morandi-bluedark rounded-xl text-xs font-semibold hover:bg-morandi-bluedark hover:text-white transition">
+                            查看詳細資歷與門診
+                        </button>
+                    </div>
+                </div>
+            </div>
+    <!-- LUXURY EXPERIENCE & VIRTUAL SANCTUARY TOUR WITH PARALLAX -->
+    <section id="experience" class="py-24 bg-morandi-bluedark text-white relative overflow-hidden">
+        <!-- Parallax Accent Graphic -->
+        <div class="parallax-element absolute top-0 right-0 w-full h-full bg-cover bg-center opacity-10 pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=80');" data-speed="0.12"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-morandi-gold text-xs font-semibold tracking-widest uppercase">The Luxury Sanctuary</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-bold text-morandi-sand leading-tight">
+                        遠離喧囂 <br/> 隱入莫蘭迪式的療癒殿堂
+                    </h2>
+                    <p class="text-morandi-sand/80 text-sm font-light leading-relaxed">
+                        安心康健全館採用低飽和度莫蘭迪色調與天然木石元素打造。全獨立空氣淨化過慮系統、隱密隔音諮詢室與專屬私人休息Suite，讓每一位蒞臨的貴賓都能感到至高無上的尊榮與平靜。
+                    </p>
+
+                    <!-- Interactive Space Selector Tabs -->
+                    <div class="space-y-3 pt-4">
+                        <button onclick="switchSpaceTab(0)" id="tab-0" class="space-tab active w-full p-4 rounded-xl bg-white/10 border border-white/20 text-left transition flex items-center justify-between">
+                            <span class="font-medium text-sm">01. 私人獨立尊榮診療室 (Private Suite)</span>
+                            <i class="fa-solid fa-chevron-right text-xs text-morandi-gold"></i>
+                        </button>
+                        <button onclick="switchSpaceTab(1)" id="tab-1" class="space-tab w-full p-4 rounded-xl bg-white/5 border border-white/10 text-left transition flex items-center justify-between hover:bg-white/10">
+                            <span class="font-medium text-sm">02. 禪意氧療與高壓氧水療室 (Zen Hydrotherapy)</span>
+                            <i class="fa-solid fa-chevron-right text-xs text-morandi-gold"></i>
+                        </button>
+                        <button onclick="switchSpaceTab(2)" id="tab-2" class="space-tab w-full p-4 rounded-xl bg-white/5 border border-white/10 text-left transition flex items-center justify-between hover:bg-white/10">
+                            <span class="font-medium text-sm">03. 無毒星級健康米其林茶寮 (Wellness Lounge)</span>
+                            <i class="fa-solid fa-chevron-right text-xs text-morandi-gold"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Dynamic Space Display -->
+                <div class="lg:col-span-7 parallax-element" data-speed="-0.08">
+                    <div class="relative rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl">
+                        <img id="space-img" src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80" 
+                             alt="Luxury Clinic Interior" 
+                             class="w-full h-[450px] object-cover transition-all duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 right-6">
+                            <h3 id="space-title" class="text-xl font-heading font-bold text-white mb-1">私人獨立尊榮診療室</h3>
+                            <p id="space-desc" class="text-xs text-morandi-sand/80">配備最高規隔音牆與自動降噪設備，診療全程一對一服務，給予最高隱私尊重。</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ ACCORDION SECTION -->
+    <section class="py-20 bg-morandi-sand">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12">
+                <span class="text-morandi-clay text-xs font-semibold tracking-widest uppercase">Frequently Asked Questions</span>
+                <h2 class="text-3xl font-heading font-bold text-morandi-graydark mt-2">常見問題與貴賓須知</h2>
+            </div>
+
+            <div class="space-y-4" id="faq-accordion">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-xl border border-morandi-gray/50 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(1)" class="w-full p-5 text-left font-medium text-morandi-graydark flex justify-between items-center focus:outline-none">
+                        <span class="text-base font-semibold">請問如何預約「安心康健」的診療或健檢服務？</span>
+                        <i class="fa-solid fa-plus text-morandi-blue transition-transform duration-300" id="faq-icon-1"></i>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-xs text-morandi-graydark/80 leading-relaxed border-t border-morandi-sand" id="faq-ans-1">
+                        為確保每位貴賓均享有無干擾的隱私空間，本診所採全預約制。您可以點擊網站上的「預約專屬諮詢」按鈕填寫線上表格，或直接撥打 VIP 專線 +886 (2) 2898-8888，我們將安排專屬健康管家為您安排診程。
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-xl border border-morandi-gray/50 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(2)" class="w-full p-5 text-left font-medium text-morandi-graydark flex justify-between items-center focus:outline-none">
+                        <span class="text-base font-semibold">診所是否提供專屬停車位與隱密通道？</span>
+                        <i class="fa-solid fa-plus text-morandi-blue transition-transform duration-300" id="faq-icon-2"></i>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-xs text-morandi-graydark/80 leading-relaxed border-t border-morandi-sand" id="faq-ans-2">
+                        是的，診所設有地下VIP專用獨立車庫與專用升降梯，車牌經系統預先核對後直接引導至私密通道，直達您的專屬預約診間，確保全程絕不與其他顧客交會。
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-xl border border-morandi-gray/50 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(3)" class="w-full p-5 text-left font-medium text-morandi-graydark flex justify-between items-center focus:outline-none">
+                        <span class="text-base font-semibold">健檢報告的諮詢與後續追蹤如何進行？</span>
+                        <i class="fa-solid fa-plus text-morandi-blue transition-transform duration-300" id="faq-icon-3"></i>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-xs text-morandi-graydark/80 leading-relaxed border-t border-morandi-sand" id="faq-ans-3">
+                        所有檢查數據皆經由權威醫師親自判讀。報告完成後，我們將邀請您至會所享用營養餐點並進行至少60分鐘的深度一對一解讀，同時提供一整年的微營養與生活型態追蹤服務。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT & LOCATION SECTION -->
+    <section id="location" class="py-20 bg-white border-t border-morandi-gray/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12">
+
+                <!-- Left Details -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <span class="text-morandi-blue text-xs font-semibold tracking-widest uppercase">Visit Our Sanctuary</span>
+                        <h2 class="text-3xl font-heading font-bold text-morandi-graydark mt-1">尊榮會所位置</h2>
+                        <div class="w-10 h-0.5 bg-morandi-clay my-3"></div>
+                    </div>
+
+                    <p class="text-sm text-morandi-graydark/80 leading-relaxed">
+                        坐落於台北精華綠意地段，交通便利同時兼具清幽靜謐環境，讓您的每次到訪都宛如一場小旅行。
+                    </p>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-morandi-sand flex items-center justify-center text-morandi-bluedark shrink-0 border border-morandi-gray/50">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-morandi-graydark">會所地址</h4>
+                                <p class="text-xs text-morandi-graydark/70">台北市大安區敦化南路二段 88 號 18 樓 (安心康健大樓)</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-morandi-sand flex items-center justify-center text-morandi-clay shrink-0 border border-morandi-gray/50">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-morandi-graydark">貴賓專線</h4>
+                                <p class="text-xs text-morandi-graydark/70">+886 (2) 2898-8888 / +886 912-345-678</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-morandi-sand flex items-center justify-center text-morandi-sage shrink-0 border border-morandi-gray/50">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-morandi-graydark">電子郵件</h4>
+                                <p class="text-xs text-morandi-graydark/70">concierge@anxinhealth.com.tw</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-morandi-sand border border-morandi-gray/50">
+                        <div class="text-xs font-semibold text-morandi-bluedark mb-1"><i class="fa-solid fa-car mr-1"></i> 代客泊車服務</div>
+                        <div class="text-[11px] text-morandi-graydark/70">抵達大樓前門，專屬禮賓人員將引導您的座駕至室內地下專用停車位。</div>
+                    </div>
+                </div>
+
+                <!-- Right Custom Morandi Styled Interactive Visual Map -->
+                <div class="lg:col-span-7">
+                    <div class="w-full h-full min-h-[380px] rounded-3xl overflow-hidden border border-morandi-gray/60 shadow-md relative bg-morandi-gray/20 flex flex-col justify-between p-6" style="background-image: linear-gradient(120deg, #e0dcd3 0%, #f7f5f0 100%);">
+                        <!-- Stylized Mock Map Graphic -->
+                        <div class="absolute inset-0 opacity-40 pointer-events-none" style="background-image: radial-gradient(#7B8FA1 1px, transparent 1px); background-size: 16px 16px;"></div>
+
+                        <div class="relative z-10 flex justify-between items-start">
+                            <span class="bg-morandi-bluedark text-white text-xs px-3 py-1.5 rounded-full font-medium shadow">
+                                <i class="fa-solid fa-map-pin mr-1 text-morandi-gold"></i> ANXIN HEALTH MAP
+                            </span>
+                            <a href="https://maps.google.com" target="_blank" class="bg-white hover:bg-morandi-sand text-morandi-graydark text-xs px-3 py-1.5 rounded-full font-medium shadow border border-morandi-gray/50 flex items-center gap-1">
+                                <span>開啟 Google 地圖</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+
+                        <!-- Map Center Marker Graphic -->
+                        <div class="relative z-10 my-auto text-center py-10">
+                            <div class="inline-flex flex-col items-center">
+                                <div class="w-16 h-16 rounded-full bg-morandi-bluedark text-morandi-gold flex items-center justify-center text-2xl shadow-2xl animate-bounce border-4 border-white">
+                                    <i class="fa-solid fa-hospital-user"></i>
+                                </div>
+                                <div class="mt-3 bg-white/95 backdrop-blur px-4 py-2 rounded-xl shadow-lg border border-morandi-gray/50">
+                                    <div class="text-sm font-bold text-morandi-graydark">安心康健 Anxin Health</div>
+                                    <div class="text-[10px] text-morandi-clay">大安區敦化南路二段88號18樓</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative z-10 text-xs text-morandi-graydark/60 bg-white/80 backdrop-blur p-3 rounded-xl flex justify-between items-center">
+                            <span>捷運信義安和站 2 號出口步行約 5 分鐘</span>
+                            <span class="text-morandi-bluedark font-semibold">隱密車道入口位於後巷</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-morandi-graydark text-morandi-sand pt-16 pb-8 border-t border-morandi-gray/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+
+                <!-- Col 1: Brand Info -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-morandi-clay text-white flex items-center justify-center font-serif font-bold text-lg">安</div>
+                        <span class="font-heading text-xl tracking-widest font-bold">安心康健 ANXIN HEALTH</span>
+                    </div>
+                    <p class="text-xs text-morandi-sand/70 leading-relaxed max-w-sm">
+                        安心康健為您守護生命最高品質。融合國際前端預防醫學與個人化極致隱私體驗，打造安心無虞的專屬健康殿堂。
+                    </p>
+                    <div class="flex space-x-3 pt-2">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 hover:bg-morandi-blue flex items-center justify-center text-xs transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 hover:bg-morandi-blue flex items-center justify-center text-xs transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/10 hover:bg-morandi-blue flex items-center justify-center text-xs transition"><i class="fa-brands fa-line"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation -->
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-4 tracking-wider uppercase">快捷導覽</h4>
+                    <ul class="space-y-2 text-xs text-morandi-sand/70">
+                        <li><a href="#about" class="hover:text-morandi-sage transition">品牌哲學</a></li>
+                        <li><a href="#services" class="hover:text-morandi-sage transition">精準健檢與診療</a></li>
+                        <li><a href="#team" class="hover:text-morandi-sage transition">權威醫師團隊</a></li>
+                        <li><a href="#experience" class="hover:text-morandi-sage transition">會所奢華空間</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Legal & Privacy -->
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-4 tracking-wider uppercase">法律與條款</h4>
+                    <ul class="space-y-2 text-xs text-morandi-sand/70">
+                        <li><a href="#" onclick="alert('隱私權保護政策：本診所嚴格遵守個人資料保護法，所有醫療紀錄與諮詢資料均經由加密保存，絕不向第三方洩漏。'); return false;" class="hover:text-morandi-sage transition">隱私權保護政策</a></li>
+                        <li><a href="#" onclick="alert('服務條款：所有醫療處置與療程均需經由醫師親自諮詢並簽署知情同意書後方可執行。'); return false;" class="hover:text-morandi-sage transition">醫療服務條款</a></li>
+                        <li><a href="#" onclick="alert('免責聲明：本網站內容僅供健康資訊參考，不可取代專業醫師之現場診斷。'); return false;" class="hover:text-morandi-sage transition">醫療免責聲明</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Newsletter -->
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-4 tracking-wider uppercase">訂閱健康通訊</h4>
+                    <p class="text-xs text-morandi-sand/70 mb-3">定期獲取最新預防醫學知訊與會所專屬活動邀約。</p>
+                    <form onsubmit="subscribeNewsletter(event)" class="space-y-2">
+                        <input type="email" required placeholder="輸入您的電子郵件" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-xs text-white placeholder-morandi-sand/50 focus:outline-none focus:border-morandi-gold">
+                        <button type="submit" class="w-full bg-morandi-clay hover:bg-morandi-blue text-white py-2 rounded-lg text-xs font-semibold transition">
+                            訂閱通訊
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Bottom Legal Bar -->
+            <div class="pt-8 text-center md:flex md:justify-between text-[11px] text-morandi-sand/50">
+                <p>© 2026 安心康健診所 Anxin Health Clinic Co., Ltd. All Rights Reserved.</p>
+                <p class="mt-2 md:mt-0">衛署醫字第 1098888888 號 | 廣告審字第 11209001 號</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MULTI-STEP APPOINTMENT BOOKING MODAL -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-morandi-graydark/70 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-morandi-gray/40 relative animate-fadeIn">
+            
+            <!-- Modal Header -->
+            <div class="bg-morandi-bluedark p-6 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-heading font-bold">預約 VIP 專屬諮詢</h3>
+                    <p class="text-xs text-morandi-sand/80 mt-1">安心康健全預約制團隊將於 24 小時之內與您聯繫確認</p>
+                </div>
+                <button onclick="closeBookingModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Progress Step Bar -->
+            <div class="bg-morandi-sand px-8 py-3 border-b border-morandi-gray/40 flex justify-between text-xs">
+                <div class="flex items-center gap-2" id="step-indicator-1">
+                    <span class="w-6 h-6 rounded-full bg-morandi-bluedark text-white flex items-center justify-center font-bold">1</span>
+                    <span class="font-semibold text-morandi-bluedark">選擇療程與醫師</span>
+                </div>
+                <div class="flex items-center gap-2 opacity-50" id="step-indicator-2">
+                    <span class="w-6 h-6 rounded-full bg-morandi-gray text-morandi-graydark flex items-center justify-center font-bold">2</span>
+                    <span>預約時間</span>
+                </div>
+                <div class="flex items-center gap-2 opacity-50" id="step-indicator-3">
+                    <span class="w-6 h-6 rounded-full bg-morandi-gray text-morandi-graydark flex items-center justify-center font-bold">3</span>
+                    <span>貴賓資料</span>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <form id="booking-form" onsubmit="handleFormSubmit(event)" class="p-6 sm:p-8 space-y-6">
+                
+                <!-- STEP 1: Service & Doctor -->
+                <div id="booking-step-1" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-morandi-graydark mb-2">請選擇您感興趣的醫療服務項目 *</label>
+                        <select id="booking-service" required class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:ring-2 focus:ring-morandi-blue focus:outline-none">
+                            <option value="">-- 請選擇服務療程 --</option>
+                            <option value="VIP 精準全方位健檢">VIP 精準全方位健檢 (一日/兩日)</option>
+                            <option value="抗衰老與再生醫學">抗衰老與再生醫學諮詢</option>
+                            <option value="身心整合與腦神經保健">身心整合與腦神經保健</option>
+                            <option value="私人御用營養與代謝管理">私人御用營養與代謝管理</option>
+                            <option value="一般VIP門診諮詢">一般 VIP 門診健康諮詢</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-morandi-graydark mb-2">偏好諮詢醫師 (選填)</label>
+                        <select id="booking-doctor" class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:ring-2 focus:ring-morandi-blue focus:outline-none">
+                            <option value="不指定（由會所安排最適專家）">不指定（由會所安排最適專家）</option>
+                            <option value="陳震宇 醫學博士 (院長)">陳震宇 醫學博士 (院長)</option>
+                            <option value="林思涵 醫師 (副院長)">林思涵 醫師 (副院長)</option>
+                            <option value="黃尚德 醫師 (主任)">黃尚德 醫師 (主任)</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4 flex justify-end">
+                        <button type="button" onclick="goToStep(2)" class="bg-morandi-bluedark text-white px-6 py-2.5 rounded-xl text-xs font-semibold hover:bg-morandi-clay transition">
+                            下一步：選擇時間 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Date & Time -->
+                <div id="booking-step-2" class="space-y-4 hidden">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-morandi-graydark mb-2">希望預約日期 *</label>
+                            <input type="date" id="booking-date" required class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:ring-2 focus:ring-morandi-blue focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-morandi-graydark mb-2">偏好的時段 *</label>
+                            <select id="booking-time" required class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:ring-2 focus:ring-morandi-blue focus:outline-none">
+                                <option value="">請選擇時段</option>
+                                <option value="上午 (09:00 - 12:00)">上午 (09:00 - 12:00)</option>
+                                <option value="下午 (14:00 - 17:00)">下午 (14:00 - 17:00)</option>
+                                <option value="傍晚 (17:00 - 20:00)">傍晚 (17:00 - 20:00)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-between">
+                        <button type="button" onclick="goToStep(1)" class="border border-morandi-gray text-morandi-graydark px-6 py-2.5 rounded-xl text-xs font-semibold">
+                            返回上一步
+                        </button>
+                        <button type="button" onclick="goToStep(3)" class="bg-morandi-bluedark text-white px-6 py-2.5 rounded-xl text-xs font-semibold hover:bg-morandi-clay transition">
+                            下一步：填寫資料 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Contact Info -->
+                <div id="booking-step-3" class="space-y-4 hidden">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-morandi-graydark mb-1">貴賓姓名 *</label>
+                            <input type="text" id="booking-name" required placeholder="如：張先生 / 王小姐" class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-morandi-graydark mb-1">聯絡電話 *</label>
+                            <input type="tel" id="booking-phone" required placeholder="0912-345-678" class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-morandi-graydark mb-1">電子郵件 *</label>
+                        <input type="email" id="booking-email" required placeholder="example@domain.com" class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-morandi-graydark mb-1">特殊需求或備註 (選填)</label>
+                        <textarea id="booking-notes" rows="2" placeholder="如：停車位需求、飲食禁忌或特定健康訴求..." class="w-full p-3 rounded-xl bg-morandi-sand border border-morandi-gray/60 text-xs text-morandi-graydark focus:outline-none"></textarea>
+                    </div>
+
+                    <div class="pt-4 flex justify-between">
+                        <button type="button" onclick="goToStep(2)" class="border border-morandi-gray text-morandi-graydark px-6 py-2.5 rounded-xl text-xs font-semibold">
+                            返回上一步
+                        </button>
+                        <button type="submit" class="bg-morandi-clay text-white px-8 py-2.5 rounded-xl text-xs font-semibold hover:bg-morandi-bluedark transition shadow-md">
+                            確認並送出預約
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- GENERAL GENERIC MODAL FOR DETAILS -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-morandi-graydark/70 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative border border-morandi-gray/40 space-y-4">
+            <button onclick="closeDetailModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-morandi-sand hover:bg-morandi-gray flex items-center justify-center text-morandi-graydark transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-12 h-12 rounded-full bg-morandi-sagelight flex items-center justify-center text-morandi-sage text-xl" id="detail-modal-icon">
+                <i class="fa-solid fa-stethoscope"></i>
+            </div>
+            <h3 class="text-xl font-heading font-bold text-morandi-graydark" id="detail-modal-title">標題</h3>
+            <div class="text-xs text-morandi-clay font-medium" id="detail-modal-subtitle">副標題</div>
+            <p class="text-xs text-morandi-graydark/80 leading-relaxed" id="detail-modal-body">
+                內容...
+            </p>
+            <div class="pt-4 border-t border-morandi-sand flex justify-end">
+                <button onclick="closeDetailModal(); openBookingModal();" class="bg-morandi-bluedark text-white px-5 py-2 rounded-xl text-xs font-semibold">
+                    直接預約此項目
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI CHATBOT / CUSTOMER SERVICE WIDGET -->
+    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        
+        <!-- Chatbot Window -->
+        <div id="chat-window" class="hidden w-[90vw] sm:w-[380px] h-[520px] bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-morandi-gray/60 flex-col overflow-hidden mb-4 transition-all duration-300 transform scale-95 origin-bottom-right">
+            <!-- Header -->
+            <div class="bg-morandi-bluedark p-4 text-white flex justify-between items-center shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-9 h-9 rounded-full bg-morandi-clay/30 flex items-center justify-center text-morandi-gold font-serif font-bold text-base border border-morandi-gold/40">
+                            安
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-morandi-bluedark"></span>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold font-heading tracking-wider">安心康健 尊榮健康管家</h4>
+                        <p class="text-[10px] text-morandi-sand/70">Anxin AI Concierge • 線上服務中</p>
+                    </div>
+                </div>
+                <button onclick="toggleChatbot()" class="text-morandi-sand/80 hover:text-white p-1 rounded-lg transition">
+                    <i class="fa-solid fa-chevron-down text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Chat Messages Log -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-morandi-sand/40 text-xs">
+                <!-- Welcome Bot Bubble -->
+                <div class="flex items-start gap-2 max-w-[88%]">
+                    <div class="w-7 h-7 rounded-full bg-morandi-bluedark text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5 font-serif font-bold">
+                        安
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-morandi-gray/40 text-morandi-graydark leading-relaxed">
+                        尊敬的貴賓您好，我是「安心康健」線上尊榮管家。請問今天有什麼我可以為您服務的嗎？
+                    </div>
+                </div>
+
+                <!-- Quick Prompt Suggestions -->
+                <div class="pt-2 flex flex-wrap gap-1.5" id="chat-quick-prompts">
+                    <button onclick="sendQuickPrompt('請問如何預約 VIP 診所諮詢？')" class="px-2.5 py-1.5 bg-white hover:bg-morandi-sage/20 border border-morandi-gray/50 rounded-full text-[11px] text-morandi-bluedark transition text-left">
+                        <i class="fa-regular fa-calendar-check mr-1 text-morandi-clay"></i> 預約診所諮詢
+                    </button>
+                    <button onclick="sendQuickPrompt('貴所提供哪些高階健檢與抗衰老療程？')" class="px-2.5 py-1.5 bg-white hover:bg-morandi-sage/20 border border-morandi-gray/50 rounded-full text-[11px] text-morandi-bluedark transition text-left">
+                        <i class="fa-solid fa-dna mr-1 text-morandi-sage"></i> 了解健檢與抗衰老
+                    </button>
+                    <button onclick="sendQuickPrompt('診所有提供專屬泊車與獨立隱私通道嗎？')" class="px-2.5 py-1.5 bg-white hover:bg-morandi-sage/20 border border-morandi-gray/50 rounded-full text-[11px] text-morandi-bluedark transition text-left">
+                        <i class="fa-solid fa-user-shield mr-1 text-morandi-blue"></i> 隱私與泊車服務
+                    </button>
+                </div>
+            </div>
+
+            <!-- Typing Indicator (Hidden by default) -->
+            <div id="chat-typing" class="hidden px-4 py-2 bg-morandi-sand/40 flex items-center gap-2 text-[11px] text-morandi-graydark/60">
+                <span class="w-2 h-2 rounded-full bg-morandi-blue animate-ping"></span>
+                <span>健康管家正為您整理資料中...</span>
+            </div>
+
+            <!-- Input Bar -->
+            <form onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-morandi-gray/40 flex items-center gap-2">
+                <input type="text" id="chat-input" placeholder="輸入您的疑問，如：健檢項目、費用諮詢..." required class="flex-1 bg-morandi-sand/60 px-3 py-2 rounded-xl text-xs text-morandi-graydark focus:outline-none focus:ring-1 focus:ring-morandi-blue border border-morandi-gray/30">
+                <button type="submit" class="w-9 h-9 rounded-xl bg-morandi-bluedark hover:bg-morandi-clay text-white flex items-center justify-center transition shrink-0 shadow">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Floating Trigger Button -->
+        <button onclick="toggleChatbot()" id="chat-trigger" class="group relative flex items-center justify-center w-14 h-14 rounded-full bg-morandi-bluedark hover:bg-morandi-clay text-white shadow-hover transition-all duration-300 border-2 border-morandi-gold/50">
+            <i class="fa-solid fa-comments text-xl group-hover:scale-110 transition-transform"></i>
+            <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-morandi-clay opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-morandi-gold"></span>
+            </span>
+            <!-- Tooltip Hover Bubble -->
+            <div class="absolute right-16 top-1/2 -translate-y-1/2 bg-morandi-graydark text-white text-xs px-3 py-1.5 rounded-xl whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block">
+                安心康健 AI 尊榮客服
+            </div>
+        </button>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 0. Banner Carousel Logic
+        let currentSlideIndex = 0;
+        let heroSlideInterval = null;
+
+        function updateHeroSlides() {
+            const slides = document.querySelectorAll('.hero-slide');
+            const dots = document.querySelectorAll('.hero-dot');
+
+            slides.forEach((slide, idx) => {
+                if (idx === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            dots.forEach((dot, idx) => {
+                if (idx === currentSlideIndex) {
+                    dot.classList.remove('bg-white/40');
+                    dot.classList.add('bg-white', 'w-6');
+                } else {
+                    dot.classList.remove('bg-white', 'w-6');
+                    dot.classList.add('bg-white/40');
+                }
+            });
+        }
+
+        function nextHeroSlide() {
+            const slides = document.querySelectorAll('.hero-slide');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            updateHeroSlides();
+        }
+
+        function prevHeroSlide() {
+            const slides = document.querySelectorAll('.hero-slide');
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            updateHeroSlides();
+        }
+
+        function setHeroSlide(index) {
+            currentSlideIndex = index;
+            updateHeroSlides();
+            restartHeroAutoplay();
+        }
+
+        function startHeroAutoplay() {
+            heroSlideInterval = setInterval(nextHeroSlide, 5000);
+        }
+
+        function restartHeroAutoplay() {
+            if (heroSlideInterval) clearInterval(heroSlideInterval);
+            startHeroAutoplay();
+        }
+
+        // Initialize Carousel Event Listeners
+        window.addEventListener('DOMContentLoaded', () => {
+            updateHeroSlides();
+            startHeroAutoplay();
+
+            const container = document.getElementById('hero-slider-container');
+            if (container) {
+                container.addEventListener('mouseenter', () => clearInterval(heroSlideInterval));
+                container.addEventListener('mouseleave', startHeroAutoplay);
+            }
+        });
+
+        // 0.1 Parallax Scrolling Effect Logic
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+
+            parallaxElements.forEach((el) => {
+                const speed = parseFloat(el.getAttribute('data-speed')) || 0.1;
+                const yPos = -(scrolled * speed);
+                el.style.transform = `translate3d(0, ${yPos}px, 0)`;
+            });
+        });
+
+        // 1. Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // 2. Space Gallery Interactive Switcher
+        const spaceData = [
+            {
+                title: "私人獨立尊榮診療室 (Private Suite)",
+                desc: "配備最高規隔音牆與自動降噪設備，診療全程一對一服務，給予最高隱私尊重與無壓力空間。",
+                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "禪意氧療與高壓氧水療室 (Zen Hydrotherapy)",
+                desc: "導入高純度高壓氧艙與沉浸式自然音律響應，促進細胞快速自我修復與深度放鬆。",
+                img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                title: "無毒星級健康米其林茶寮 (Wellness Lounge)",
+                desc: "專屬星級主廚與專業營養師精心研製有機草本膳食與機能茶飲，讓看診後亦是一場味蕾與自然的饗宴。",
+                img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=80"
+            }
+        ];
+
+        function switchSpaceTab(index) {
+            const tabs = document.querySelectorAll('.space-tab');
+            tabs.forEach((t, i) => {
+                if (i === index) {
+                    t.classList.add('bg-white/10');
+                    t.classList.remove('bg-white/5');
+                } else {
+                    t.classList.remove('bg-white/10');
+                    t.classList.add('bg-white/5');
+                }
+            });
+
+            const space = spaceData[index];
+            const img = document.getElementById('space-img');
+            img.style.opacity = '0.3';
+            setTimeout(() => {
+                img.src = space.img;
+                document.getElementById('space-title').textContent = space.title;
+                document.getElementById('space-desc').textContent = space.desc;
+                img.style.opacity = '1';
+            }, 200);
+        }
+
+        // 3. FAQ Accordion Logic
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faq-ans-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            if (ans.classList.contains('hidden')) {
+                ans.classList.remove('hidden');
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            } else {
+                ans.classList.add('hidden');
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            }
+        }
+
+        // 4. Booking Modal Step Logic
+        let currentStep = 1;
+
+        function openBookingModal() {
+            document.getElementById('booking-modal').classList.remove('hidden');
+            document.getElementById('booking-modal').classList.add('flex');
+            // Set min date to today
+            const dateInput = document.getElementById('booking-date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+            }
+            goToStep(1);
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+            document.getElementById('booking-modal').classList.remove('flex');
+        }
+
+        function goToStep(step) {
+            // Basic validation before step 2 and 3
+            if (step === 2) {
+                const service = document.getElementById('booking-service').value;
+                if (!service) {
+                    alert('請先選擇您欲諮詢的服務項目');
+                    return;
+                }
+            }
+            if (step === 3) {
+                const date = document.getElementById('booking-date').value;
+                const time = document.getElementById('booking-time').value;
+                if (!date || !time) {
+                    alert('請選擇預約日期與偏好時段');
+                    return;
+                }
+            }
+
+            currentStep = step;
+
+            // Hide all steps
+            document.getElementById('booking-step-1').classList.add('hidden');
+            document.getElementById('booking-step-2').classList.add('hidden');
+            document.getElementById('booking-step-3').classList.add('hidden');
+
+            // Show selected step
+            document.getElementById(`booking-step-${step}`).classList.remove('hidden');
+
+            // Update Indicators
+            for (let i = 1; i <= 3; i++) {
+                const ind = document.getElementById(`step-indicator-${i}`);
+                if (i <= step) {
+                    ind.classList.remove('opacity-50');
+                } else {
+                    ind.classList.add('opacity-50');
+                }
+            }
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('booking-name').value;
+            const phone = document.getElementById('booking-phone').value;
+            const service = document.getElementById('booking-service').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+
+            alert(`【安心康健 預約成功】\n\n尊敬的 ${name} 貴賓：\n我們已收到您的《${service}》預約申請！\n\n預約時間：${date} ${time}\n我們的尊榮健康管家將於 24 小時內以電話 (${phone}) 與您確認詳細細節。`);
+
+            closeBookingModal();
+            document.getElementById('booking-form').reset();
+        }
+
+        // 5. Generic Detail Modal
+        function openServiceDetail(title, description) {
+            document.getElementById('detail-modal-title').textContent = title;
+            document.getElementById('detail-modal-subtitle').textContent = '安心康健 尊榮客製療程';
+            document.getElementById('detail-modal-body').textContent = description;
+            document.getElementById('detail-modal').classList.remove('hidden');
+            document.getElementById('detail-modal').classList.add('flex');
+        }
+
+        function openDoctorModal(name, title, bio) {
+            document.getElementById('detail-modal-title').textContent = name;
+            document.getElementById('detail-modal-subtitle').textContent = title;
+            document.getElementById('detail-modal-body').textContent = bio;
+            document.getElementById('detail-modal').classList.remove('hidden');
+            document.getElementById('detail-modal').classList.add('flex');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            document.getElementById('detail-modal').classList.remove('flex');
+        }
+
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            alert('感謝您的訂閱！安心康健的最新健康知訊與尊榮活動消息將定期寄送至您的信箱。');
+            e.target.reset();
+        }
+
+        // 6. Chatbot Interactive Logic
+        function toggleChatbot() {
+            const chatWin = document.getElementById('chat-window');
+            if (chatWin.classList.contains('hidden')) {
+                chatWin.classList.remove('hidden');
+                chatWin.classList.add('flex');
+                setTimeout(() => {
+                    chatWin.classList.remove('scale-95');
+                    chatWin.classList.add('scale-100');
+                }, 10);
+            } else {
+                chatWin.classList.remove('scale-100');
+                chatWin.classList.add('scale-95');
+                setTimeout(() => {
+                    chatWin.classList.add('hidden');
+                    chatWin.classList.remove('flex');
+                }, 200);
+            }
+        }
+
+        function appendChatMessage(sender, text) {
+            const chatLog = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                msgDiv.className = 'flex items-start justify-end gap-2 max-w-[88%] ml-auto';
+                msgDiv.innerHTML = `
+                    <div class="bg-morandi-bluedark text-white p-3 rounded-2xl rounded-tr-none shadow-sm text-xs leading-relaxed">
+                        ${escapeHtml(text)}
+                    </div>
+                `;
+            } else {
+                msgDiv.className = 'flex items-start gap-2 max-w-[88%]';
+                msgDiv.innerHTML = `
+                    <div class="w-7 h-7 rounded-full bg-morandi-bluedark text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5 font-serif font-bold">
+                        安
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-morandi-gray/40 text-morandi-graydark leading-relaxed">
+                        ${text}
+                    </div>
+                `;
+            }
+            chatLog.appendChild(msgDiv);
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        function escapeHtml(string) {
+            return String(string).replace(/[&<>"']/g, function (s) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s];
+            });
+        }
+
+        function sendQuickPrompt(promptText) {
+            document.getElementById('chat-input').value = promptText;
+            handleChatSubmit(new Event('submit'));
+        }
+
+        async function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            // Display user message
+            appendChatMessage('user', userText);
+            input.value = '';
+
+            // Hide initial quick prompts after first interaction
+            const quickPrompts = document.getElementById('chat-quick-prompts');
+            if (quickPrompts) quickPrompts.style.display = 'none';
+
+            // Show typing status
+            const typingInd = document.getElementById('chat-typing');
+            typingInd.classList.remove('hidden');
+
+            try {
+                // Call Gemini 3 Flash Preview API
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const systemPrompt = `你現在是「安心康健 (Anxin Health)」頂級私人醫療診所的專屬 AI 尊榮健康管家。
+請以極具禮貌、溫柔、優雅且專業的語氣回答顧客問題。
+診所重點資訊：
+1. 本診所採全預約制，注重極致隱私，有專屬地下車庫與私人獨立診療室。
+2. 服務包括：VIP精準全方位健檢、抗衰老與再生醫學、身心整合與腦神經保健、私人御用營養管理。
+3. 專家團隊：陳震宇博士（院長/預防醫學）、林思涵醫師（副院長/抗衰老）、黃尚德醫師（腦神經主任）。
+4. 會所地址：台北市大安區敦化南路二段88號18樓，VIP專線 +886 (2) 2898-8888。
+請以繁體中文簡潔優雅地回答，並在適當時候引導顧客點擊預約按鈕或留聯絡方式。`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userText }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const data = await response.json();
+                typingInd.classList.add('hidden');
+
+                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                    const replyText = data.candidates[0].content.parts[0].text;
+                    appendChatMessage('bot', replyText.replace(/\n/g, '<br>'));
+                } else {
+                    fallbackLocalReply(userText);
+                }
+            } catch (err) {
+                typingInd.classList.add('hidden');
+                fallbackLocalReply(userText);
+            }
+        }
+
+        // Smart Local Knowledge Base Fallback
+        function fallbackLocalReply(text) {
+            let reply = "感謝您的詢問。安心康健致力於為您提供最尊榮且私密的健康管理服務。";
+            
+            if (text.includes("預約") || text.includes("諮詢") || text.includes("時間")) {
+                reply = "本診所採【全預約制】，確保全程獨立隱私。您可以點擊頁面上方的 <button onclick='openBookingModal()' class='text-morandi-clay underline font-bold'>預約 VIP 專屬諮詢</button> 填寫表單，或撥打專線 <b>+886 (2) 2898-8888</b>，專屬管家將為您服務。";
+            } else if (text.includes("健檢") || text.includes("抗衰老") || text.includes("療程") || text.includes("服務")) {
+                reply = "安心康健提供包含<b>VIP精準全方位健檢</b>、<b>抗衰老再生醫學</b>、<b>身心整合與腦神經保健</b>以及<b>私人御用營養餐單管理</b>。所有療程皆由權威名醫團隊一對一量身定制。";
+            } else if (text.includes("泊車") || text.includes("停車") || text.includes("隱私") || text.includes("地址")) {
+                reply = "診所位於<b>台北市大安區敦化南路二段88號18樓</b>。設有地下 VIP 專屬獨立車庫與禮賓代客泊車服務，後巷隱密車道直接連接私密電梯，保障您的全程隱私。";
+            } else {
+                reply = `尊敬的貴賓，關於「${escapeHtml(text)}」，已為您記錄此訴求。歡迎您留下聯絡方式或直接預約諮詢，我們的首席醫師團隊將親自為您詳細解答。`;
+            }
+
+            appendChatMessage('bot', reply);
+        }
+    </script>
+</body>
+</html>
