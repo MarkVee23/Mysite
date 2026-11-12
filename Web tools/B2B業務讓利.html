@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B 專案讓利交換條件 (Give & Get) ＆ 錨定報價產生器</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Vibe Themes */
+        /* ⚡ 科技戰情暗黑 (Default Dark) */
+        body.theme-dark {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .theme-dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .theme-dark .input-dark {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: #f8fafc;
+        }
+        .theme-dark .header-bg { background-color: rgba(15, 23, 42, 0.9); border-color: #1e293b; }
+        .theme-dark .card-inner { background-color: rgba(15, 23, 42, 0.9); border-color: #1e293b; }
+
+        /* ✨ 現代極簡 SaaS (Clean Light) */
+        body.theme-saas {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .theme-saas .glass-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        .theme-saas .input-dark {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+        .theme-saas .header-bg { background-color: #ffffff; border-color: #e2e8f0; }
+        .theme-saas .text-slate-200, .theme-saas .text-slate-300 { color: #1e293b; }
+        .theme-saas .text-slate-400 { color: #475569; }
+        .theme-saas .card-inner { background-color: #f8fafc; border-color: #e2e8f0; }
+
+        /* ☕ 溫暖人文紙感 (Warm Paper) */
+        body.theme-paper {
+            background-color: #fbf7f0;
+            color: #292524;
+        }
+        .theme-paper .glass-panel {
+            background: #f5efe6;
+            border: 1px solid #e7e0d3;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+        }
+        .theme-paper .input-dark {
+            background-color: #fffdf9;
+            border: 1px solid #d6cebf;
+            color: #292524;
+        }
+        .theme-paper .header-bg { background-color: #f5efe6; border-color: #e7e0d3; }
+        .theme-paper .text-slate-200, .theme-paper .text-slate-300 { color: #292524; }
+        .theme-paper .text-slate-400 { color: #57534e; }
+        .theme-paper .card-inner { background-color: #fffdf9; border-color: #e7e0d3; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col theme-dark" id="bodyRoot">
+
+    <!-- Header Bar with Theme Switcher -->
+    <header class="border-b header-bg backdrop-blur sticky top-0 z-50 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-blue-600/20 text-blue-400 rounded-lg border border-blue-500/30">
+                    <i data-lucide="calculator" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">B2B 讓利交換 (Give & Get) ＆ 錨定報價產生器</h1>
+                    <p class="text-xs text-slate-400">Enterprise AM Strategic Negotiation & Margin Shield Workbench</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <!-- Vibe 氛圍切換器 -->
+                <div class="flex items-center bg-slate-800/80 p-1 rounded-lg border border-slate-700 text-xs gap-1">
+                    <button onclick="setTheme('saas')" id="btnThemeSaas" class="px-2.5 py-1 rounded transition text-slate-400 hover:text-white flex items-center gap-1">
+                        ✨ 極簡 SaaS
+                    </button>
+                    <button onclick="setTheme('dark')" id="btnThemeDark" class="px-2.5 py-1 rounded transition bg-blue-600 text-white font-medium flex items-center gap-1 shadow-sm">
+                        ⚡ 暗黑戰情
+                    </button>
+                    <button onclick="setTheme('paper')" id="btnThemePaper" class="px-2.5 py-1 rounded transition text-slate-400 hover:text-white flex items-center gap-1">
+                        ☕ 人文紙感
+                    </button>
+                </div>
+
+                <div class="h-4 w-px bg-slate-800"></div>
+
+                <button onclick="resetToDefaults()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-md border border-slate-700 transition flex items-center gap-1.5">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> 重置數據
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace - 3 Column Layout -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT COLUMN: 🔵 資料輸入端 (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-5">
+            <!-- 輸入卡片 -->
+            <div class="glass-panel rounded-xl p-5 border border-slate-800 shadow-xl flex-1 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-700/60 pb-3">
+                        <h2 class="font-semibold text-slate-200 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>
+                            左欄：🔵 資料輸入端
+                        </h2>
+                        <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono">Input Engine</span>
+                    </div>
+
+                    <div class="space-y-4 text-sm">
+                        <!-- 1. 專案名稱 -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1 flex items-center gap-1">
+                                <i data-lucide="building-2" class="w-3.5 h-3.5 text-blue-400"></i>
+                                B2B 企業客戶與專案標的名稱
+                            </label>
+                            <input type="text" id="projectName" value="精密科技集團・全廠智慧能源監控系統導入案" oninput="calculateNegotiation()" class="w-full input-dark rounded-lg px-3 py-2 text-sm font-medium">
+                        </div>
+
+                        <!-- 2. 交付硬成本 (萬元) -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1 flex items-center justify-between">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-400"></i>
+                                    專案交付軟硬體底線硬成本 (萬元)
+                                </span>
+                                <span class="text-[11px] text-slate-500">底線門檻</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="hardCost" value="120" min="0" step="10" oninput="calculateNegotiation()" class="w-full input-dark rounded-lg px-3 py-2 text-sm font-mono text-rose-400 font-bold pr-12">
+                                <span class="absolute right-3 top-2.5 text-xs text-slate-500">萬元</span>
+                            </div>
+                        </div>
+
+                        <!-- 3. 標準牌價總額 (萬元) -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1 flex items-center justify-between">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="tag" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    方案標準牌價總額 (萬元)
+                                </span>
+                                <span class="text-[11px] text-slate-500">建議原價</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="listPrice" value="220" min="0" step="10" oninput="calculateNegotiation()" class="w-full input-dark rounded-lg px-3 py-2 text-sm font-mono text-emerald-400 font-bold pr-12">
+                                <span class="absolute right-3 top-2.5 text-xs text-slate-500">萬元</span>
+                            </div>
+                        </div>
+
+                        <!-- 4. 動態控制桿：客戶交換條件配合度 -->
+                        <div class="pt-4 border-t border-slate-800/80">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+                                    <i data-lucide="sliders" class="w-4 h-4 text-purple-400"></i>
+                                    客戶交換條件配合度 (Get Value)
+                                </label>
+                                <span id="cooperationVal" class="text-xs font-bold font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">80 %</span>
+                            </div>
+                            <input type="range" id="cooperationSlider" min="20" max="100" value="80" step="5" oninput="calculateNegotiation()" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-500 my-2">
+                            <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                                <span>20% (低配合/純要折扣)</span>
+                                <span>60%</span>
+                                <span>80% (預設)</span>
+                                <span>100% (全面配合)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-2 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/80 leading-relaxed">
+                                <span class="text-purple-400 font-semibold">配合度對應條件：</span>
+                                包含高首期預付比例、簽訂 2~3 年長約、品牌 Logo 與 Case Study 授權、Quick Close 快簽條款。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 讓利目標折算預覽 -->
+                <div class="mt-4 p-3 bg-slate-900/80 border border-slate-800 rounded-lg text-xs space-y-1.5">
+                    <div class="flex justify-between text-slate-400">
+                        <span>預估給予讓利折讓：</span>
+                        <span id="calculatedDiscountPct" class="font-mono text-amber-400 font-bold">12.0% Off</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>讓利折讓總額 (Give)：</span>
+                        <span id="calculatedGiveAmount" class="font-mono text-rose-400 font-bold">-26.4 萬元</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MIDDLE COLUMN: 中欄：風險紅綠燈診斷與談判健康度 (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-5">
+            <div class="glass-panel rounded-xl p-5 border border-slate-800 shadow-xl flex-1 flex flex-col justify-between">
+                <div>
+                    <!-- 中欄 Header -->
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-700/60 pb-3">
+                        <h2 class="font-semibold text-slate-200 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                            中欄：談判健康度與風險紅綠燈
+                        </h2>
+                        <span id="healthBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            健康 (Healthy)
+                        </span>
+                    </div>
+
+                    <!-- 核心指標數據展現 -->
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800 text-center">
+                            <div class="text-[11px] text-slate-400">專案談判綜合評分</div>
+                            <div id="negotiationScoreDisp" class="text-xl font-bold font-mono text-emerald-400 mt-1">78 分</div>
+                            <div class="text-[10px] text-slate-500 mt-0.5">安全線 &ge; 45 分</div>
+                        </div>
+                        <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800 text-center">
+                            <div class="text-[11px] text-slate-400">報價對成本倍數</div>
+                            <div id="costMultipleDisp" class="text-xl font-bold font-mono text-blue-400 mt-1">1.50x</div>
+                            <div class="text-[10px] text-slate-500 mt-0.5">成交價 / 硬成本</div>
+                        </div>
+                    </div>
+
+                    <!-- 紅綠燈警告面板 -->
+                    <div id="statusAlertBox" class="p-3.5 rounded-lg bg-emerald-950/40 border border-emerald-800/50 flex items-start gap-3 transition-all duration-300">
+                        <div id="statusLight" class="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)] shrink-0 mt-0.5"></div>
+                        <div>
+                            <h4 id="statusTitle" class="text-xs font-bold text-emerald-300">綠燈：談判結構極具優勢</h4>
+                            <p id="statusDesc" class="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                                客戶配合度達 80%，換回的預付現金流與品牌戰略價值完全覆蓋折扣。建議直接推進簽約。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 雷達圖視覺化 -->
+                    <div class="mt-4 pt-3 border-t border-slate-800">
+                        <div class="text-xs font-medium text-slate-400 mb-2 flex justify-between">
+                            <span>談判五大維度健康度</span>
+                            <span class="text-[10px] text-slate-500">Radar Score</span>
+                        </div>
+                        <div class="h-44 w-full flex items-center justify-center">
+                            <canvas id="dealRadarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AM 談判攻防戰略卡 -->
+                <div class="mt-4 p-3 rounded-lg bg-blue-950/30 border border-blue-900/40 text-[11px] text-blue-300/90 leading-relaxed">
+                    <span class="font-bold flex items-center gap-1 text-blue-300 mb-1">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-400"></i> AM 談判攻防戰略指引
+                    </span>
+                    <span id="amTip">
+                        客戶配合度良好！切勿進行單向無條件降價，向客戶說明：正是因為貴司承諾 80% 條件配合（預付與案例授權），方能享有方案 B 特批價。
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: 右欄：多渠道文案輸出 (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-5">
+            <div class="glass-panel rounded-xl p-5 border shadow-xl flex-1 flex flex-col justify-between overflow-y-auto max-h-[85vh]">
+                <div class="space-y-6">
+                    <!-- 右欄 Header -->
+                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+                        <h2 class="font-semibold text-slate-200 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                            右欄：🟢 成果交付端 (專業溝通範本)
+                        </h2>
+                        <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">Templates</span>
+                    </div>
+
+                    <!-- 範本 1: 致客戶高層：三方案價值錨定提案信 -->
+                    <div class="card-inner rounded-xl border p-4 relative group transition-colors">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+                                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                                致客戶高層：三方案價值錨定提案信
+                            </h3>
+                            <div class="flex items-center gap-1">
+                                <button onclick="copyCardContent('emailOutput', 'copyBtn1')" id="copyBtn1" class="px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition flex items-center gap-1">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> <span>複製</span>
+                                </button>
+                                <button onclick="addToSchedule('致客戶高層提案信')" class="px-2 py-1 text-[11px] bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded border border-blue-500/30 transition flex items-center gap-1">
+                                    <i data-lucide="plus" class="w-3 h-3"></i> 排程
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="emailOutput" readonly class="w-full input-dark rounded-lg p-3 font-mono text-[11px] leading-relaxed resize-none h-48 focus:ring-0"></textarea>
+                    </div>
+
+                    <!-- 範本 2: 致採購：Give & Get 專案特批條件確認函 -->
+                    <div class="card-inner rounded-xl border p-4 relative group transition-colors">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xs font-bold text-purple-400 flex items-center gap-1.5">
+                                <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
+                                致採購：Give & Get 專案特批條件確認函
+                            </h3>
+                            <div class="flex items-center gap-1">
+                                <button onclick="copyCardContent('procurementOutput', 'copyBtn2')" id="copyBtn2" class="px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition flex items-center gap-1">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> <span>複製</span>
+                                </button>
+                                <button onclick="addToSchedule('致採購 Give & Get 確認函')" class="px-2 py-1 text-[11px] bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 rounded border border-purple-500/30 transition flex items-center gap-1">
+                                    <i data-lucide="plus" class="w-3 h-3"></i> 排程
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="procurementOutput" readonly class="w-full input-dark rounded-lg p-3 font-mono text-[11px] leading-relaxed resize-none h-44 focus:ring-0"></textarea>
+                    </div>
+
+                    <!-- 範本 3: 對內：業務處長讓利簽核單 -->
+                    <div class="card-inner rounded-xl border p-4 relative group transition-colors">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                                <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i>
+                                對內：業務處長讓利簽核單
+                            </h3>
+                            <div class="flex items-center gap-1">
+                                <button onclick="copyCardContent('memoOutput', 'copyBtn3')" id="copyBtn3" class="px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition flex items-center gap-1">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> <span>複製</span>
+                                </button>
+                                <button onclick="addToSchedule('對內業務處長簽核單')" class="px-2 py-1 text-[11px] bg-amber-600/20 hover:bg-amber-600/30 text-amber-400 rounded border border-amber-500/30 transition flex items-center gap-1">
+                                    <i data-lucide="plus" class="w-3 h-3"></i> 排程
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="memoOutput" readonly class="w-full input-dark rounded-lg p-3 font-mono text-[11px] leading-relaxed resize-none h-48 focus:ring-0"></textarea>
+                    </div>
+
+                    <!-- 今日決策排程紀錄匯總清單 -->
+                    <div class="pt-4 border-t border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                                <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                今日決策排程紀錄匯總
+                            </h4>
+                            <span id="scheduleCount" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono">0 項</span>
+                        </div>
+                        <div id="scheduleList" class="space-y-1.5 min-h-[60px] max-h-36 overflow-y-auto bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/80 text-xs text-slate-400">
+                            <p id="emptyScheduleText" class="text-slate-500 text-[11px] text-center py-2">尚未加入任何排程項目</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Logic Script -->
+    <script>
+        let radarChart = null;
+        let scheduleItems = [];
+
+        // 初始化雷達圖
+        function initChart() {
+            const ctx = document.getElementById('dealRadarChart').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['談判健康度', '客戶配合度', '成本倍數', '戰略價值', '付款安全'],
+                    datasets: [{
+                        label: '專案指標得分',
+                        data: [80, 80, 80, 80, 80],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3b82f6',
+                        pointBackgroundColor: '#60a5fa',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: {
+                                color: '#94a3b8',
+                                font: { size: 10 }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        window.onload = function() {
+            lucide.createIcons();
+            initChart();
+            calculateNegotiation();
+        };
+
+        // 主題切換邏輯
+        function setTheme(theme) {
+            const body = document.getElementById('bodyRoot');
+            const bSaas = document.getElementById('btnThemeSaas');
+            const bDark = document.getElementById('btnThemeDark');
+            const bPaper = document.getElementById('btnThemePaper');
+
+            body.className = `min-h-screen flex flex-col theme-${theme}`;
+
+            [bSaas, bDark, bPaper].forEach(btn => {
+                btn.className = "px-2.5 py-1 rounded transition text-slate-400 hover:text-white flex items-center gap-1";
+            });
+
+            if (theme === 'saas') bSaas.className = "px-2.5 py-1 rounded transition bg-blue-600 text-white font-medium flex items-center gap-1 shadow-sm";
+            if (theme === 'dark') bDark.className = "px-2.5 py-1 rounded transition bg-blue-600 text-white font-medium flex items-center gap-1 shadow-sm";
+            if (theme === 'paper') bPaper.className = "px-2.5 py-1 rounded transition bg-amber-700 text-white font-medium flex items-center gap-1 shadow-sm";
+
+            if (radarChart) {
+                const isDark = theme === 'dark';
+                radarChart.options.scales.r.grid.color = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                radarChart.options.scales.r.pointLabels.color = isDark ? '#94a3b8' : '#475569';
+                radarChart.update();
+            }
+        }
+
+        // 談判計算核心（防護硬成本為 0 之情境）
+        function calculateNegotiation() {
+            const projectName = document.getElementById('projectName').value || '精密科技集團・全廠智慧能源監控系統導入案';
+            const hardCostInput = parseFloat(document.getElementById('hardCost').value);
+            const hardCost = isNaN(hardCostInput) || hardCostInput < 0 ? 0 : hardCostInput; // 容錯 0
+            const listPriceInput = parseFloat(document.getElementById('listPrice').value);
+            const listPrice = isNaN(listPriceInput) || listPriceInput < 0 ? 0 : listPriceInput;
+            const cooperationPct = parseFloat(document.getElementById('cooperationSlider').value) || 80;
+
+            document.getElementById('cooperationVal').innerText = `${cooperationPct} %`;
+
+            const discountPct = (cooperationPct / 100) * 15;
+            const giveAmount = listPrice * (discountPct / 100);
+            const finalPrice = listPrice - giveAmount;
+            
+            const grossMargin = finalPrice - hardCost;
+            const marginPct = finalPrice > 0 ? (grossMargin / finalPrice) * 100 : 0;
+
+            // 成本為 0 時的防呆處理
+            let costMultiple = 0;
+            let multipleScore = 0;
+
+            if (hardCost > 0) {
+                costMultiple = finalPrice / hardCost;
+                multipleScore = Math.min(100, Math.max(0, (costMultiple - 1) * 100));
+            } else {
+                costMultiple = finalPrice > 0 ? 99.9 : 0;
+                multipleScore = 100; // 純軟體/0成本情況下倍數得分設為滿分
+            }
+            
+            const negotiationScore = Math.round((multipleScore * 0.5) + (cooperationPct * 0.5));
+
+            document.getElementById('calculatedDiscountPct').innerText = `${discountPct.toFixed(1)}% Off`;
+            document.getElementById('calculatedGiveAmount').innerText = `-${giveAmount.toFixed(1)} 萬元`;
+            document.getElementById('costMultipleDisp').innerText = hardCost === 0 ? 'N/A (無硬成本)' : `${costMultiple.toFixed(2)}x`;
+            document.getElementById('negotiationScoreDisp').innerText = `${negotiationScore} 分`;
+
+            // 風險紅綠燈診斷更新
+            const statusLight = document.getElementById('statusLight');
+            const statusAlertBox = document.getElementById('statusAlertBox');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusDesc = document.getElementById('statusDesc');
+            const healthBadge = document.getElementById('healthBadge');
+            const amTip = document.getElementById('amTip');
+            const negotiationScoreDisp = document.getElementById('negotiationScoreDisp');
+
+            if (negotiationScore < 45) {
+                statusLight.className = "w-4 h-4 rounded-full bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.8)] shrink-0 mt-0.5 animate-pulse";
+                statusAlertBox.className = "p-3.5 rounded-lg bg-rose-950/60 border border-rose-800/80 flex items-start gap-3";
+                statusTitle.className = "text-xs font-bold text-rose-300 flex items-center gap-1";
+                statusTitle.innerText = "🚨 單方讓利過大：嚴禁裸降，必須要求客戶改為年約或提高頭款至 50%";
+                statusDesc.innerText = `談判綜合評分僅 ${negotiationScore} 分（低於 45 分安全線）。當前報價成本倍數為 ${hardCost === 0 ? 'N/A' : costMultiple.toFixed(2) + 'x'}，且客戶配合度低至 ${cooperationPct}%！`;
+                healthBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                healthBadge.innerText = "高風險 (Critical)";
+                negotiationScoreDisp.className = "text-xl font-bold font-mono text-rose-400 mt-1";
+                amTip.innerText = `強烈防守話術：「若貴司預算無法支援方案 A，為協助取得特批，請貴司配合改簽年約，或將頭期款提升至 50%，否則無法核發此價格。」`;
+            } else if (negotiationScore < 70) {
+                statusLight.className = "w-4 h-4 rounded-full bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.8)] shrink-0 mt-0.5";
+                statusAlertBox.className = "p-3.5 rounded-lg bg-amber-950/40 border border-amber-800/50 flex items-start gap-3";
+                statusTitle.className = "text-xs font-bold text-amber-300";
+                statusTitle.innerText = "⚠️ 談判結構平庸：交換條件不足，建議拉高配合度";
+                statusDesc.innerText = `談判綜合評分為 ${negotiationScore} 分。建議要求客戶增加預付比例或提供 Logo/Case Study 授權以充實 Get 價值。`;
+                healthBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                healthBadge.innerText = "待優化 (Warning)";
+                negotiationScoreDisp.className = "text-xl font-bold font-mono text-amber-400 mt-1";
+                amTip.innerText = `談判話術：向客戶表明：「目前折讓幅度需要搭配貴司的 Logo 授權與快簽條款，才能維持特批方案 B。」`;
+            } else {
+                statusLight.className = "w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)] shrink-0 mt-0.5";
+                statusAlertBox.className = "p-3.5 rounded-lg bg-emerald-950/40 border border-emerald-800/50 flex items-start gap-3";
+                statusTitle.className = "text-xs font-bold text-emerald-300";
+                statusTitle.innerText = "✅ 綠燈：談判結構極具優勢";
+                statusDesc.innerText = `談判綜合評分達 ${negotiationScore} 分。客戶配合度 ${cooperationPct}%，成功取得高現金流與品牌戰略價值。`;
+                healthBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                healthBadge.innerText = "健康 (Healthy)";
+                negotiationScoreDisp.className = "text-xl font-bold font-mono text-emerald-400 mt-1";
+                amTip.innerText = `推進話術：強調「正是因為貴司提供了 ${cooperationPct}% 的條件配合，我們方能為您鎖定方案 B 的大客戶特批優惠。」`;
+            }
+
+            if (radarChart) {
+                radarChart.data.datasets[0].data = [
+                    Math.min(100, Math.max(10, negotiationScore)),
+                    cooperationPct,
+                    hardCost === 0 ? 100 : Math.min(100, costMultiple * 40),
+                    Math.min(100, cooperationPct * 1.1),
+                    Math.max(20, 100 - (100 - cooperationPct) * 0.8)
+                ];
+                radarChart.update();
+            }
+
+            generateOutputs({
+                projectName,
+                hardCost,
+                listPrice,
+                cooperationPct,
+                finalPrice,
+                giveAmount,
+                discountPct,
+                marginPct,
+                grossMargin,
+                negotiationScore
+            });
+        }
+
+        function generateOutputs(d) {
+            // 三方案金額試算 (萬元)
+            const optionAPrice = (d.listPrice * 1.1).toFixed(1); // 方案 A 錨定高價
+            const optionBPrice = d.finalPrice.toFixed(1);         // 方案 B 當前目標讓利價
+            const optionCPrice = (d.finalPrice * 0.82).toFixed(1); // 方案 C 基礎精簡價
+
+            const upfrontRatioB = Math.round(d.cooperationPct * 0.7);
+            
+            let logoAuthText = "";
+            if (d.cooperationPct >= 80) {
+                logoAuthText = "同意專案上線後作為業界智慧能源標竿案例 (Case Study) 授權與新聞稿發表";
+            } else if (d.cooperationPct >= 50) {
+                logoAuthText = "同意授權公司品牌 Logo 於我司官網作為客戶成功案例展示";
+            } else {
+                logoAuthText = "需提供基於本案之客戶滿意度推薦信函 (Reference Letter)";
+            }
+
+            let contractTermText = "";
+            if (d.cooperationPct >= 75) {
+                contractTermText = "簽署 2~3 年期戰略合作與長約維護合約";
+            } else if (d.cooperationPct >= 45) {
+                contractTermText = "簽署 1~2 年期標準服務合約";
+            } else {
+                contractTermText = "簽署 1 年期標準服務合約 (無長約綁定優惠)";
+            }
+
+            // 1. 【致客戶決策者】高/中/低三階價值錨定提案信
+            const emailContent = 
+`主旨：【專案合作提案】${d.projectName} - 三階段架構與特批戰略報價
+
+Dear ${d.projectName} 決策團隊：
+
+感謝貴司對我司專業服務的信任。針對本次「${d.projectName}」，我們為貴司特別規劃三項彈性方案：
+
+【方案 A：旗艦完整方案 (Flagship Master)】
+• 專案總價：NT$ ${optionAPrice} 萬元 (標準牌價)
+• 服務範疇：涵蓋全廠智慧能源監控、高階 AI 節能預測模組、7x24 專人維運支援。
+
+【方案 B：大客戶戰略合作特批方案 (Recommended ★)】
+• 專案特批價：NT$ ${optionBPrice} 萬元 (享有約 ${d.discountPct.toFixed(1)}% 特批折讓，現省 ${d.giveAmount.toFixed(1)} 萬)
+• 達成條件 (配合條件)：
+  1. 首期預付比例：${upfrontRatioB}%
+  2. 合約年限：${contractTermText}
+  3. 戰略授權：${logoAuthText}
+  4. Quick-Close 快簽條款鎖定本季資源
+
+【方案 C：基礎模組精簡方案 (Essential Lite)】
+• 專案經濟價：NT$ ${optionCPrice} 萬元
+• 服務調整：保留核心能源監控，扣除 AI 預測維運模組；條款為 100% 預付。
+
+期待本週與您進一步討論最終細節！`;
+
+            // 2. 【致客戶採購部門】Give & Get 優惠折扣交換確認條款
+            const procurementContent = 
+`致：${d.projectName} 採購代表 / 議價團隊
+
+關於貴司申請之專案讓利折讓，經內部評估後提供【 Give & Get 條件對等交換協議】：
+
+一、 價格讓利承諾 (Our Give)
+• 方案標準牌價：NT$ ${d.listPrice.toFixed(1)} 萬元
+• 專案優惠金額：NT$ ${d.finalPrice.toFixed(1)} 萬元 (折讓 NT$ ${d.giveAmount.toFixed(1)} 萬元)
+
+二、 採購配合要求 (Your Get Requirements)
+為維持上述特批優惠，貴司需同意配合以下商業條款：
+1. 【付款天數與預付】首期預付比例需為 ${upfrontRatioB}%，尾款於交付驗收後 30 天內付清。
+2. 【合約年期】${contractTermText}。
+3. 【品牌授權】${logoAuthText}。
+4. 【時效鎖定】本優惠條款需於 14 日內完成合約簽署，逾期將恢復標準牌價。`;
+
+            // 3. 【呈報業務處長】專案毛利空間與特批報價簽核單
+            const memoContent = 
+`【業務特批簽核單】專案讓利與毛利分析報告
+
+呈：業務處長 / VP / CFO
+專案名稱：${d.projectName}
+
+一、 財務與毛利評估
+• 標準牌價：NT$ ${d.listPrice.toFixed(1)} 萬元
+• 底線硬成本：NT$ ${d.hardCost.toFixed(1)} 萬元
+• 擬特批成交價：NT$ ${d.finalPrice.toFixed(1)} 萬元 (折讓 ${d.discountPct.toFixed(1)}%)
+• 我方讓利總額：NT$ ${d.giveAmount.toFixed(1)} 萬元
+• 預估專案毛利：NT$ ${d.grossMargin.toFixed(1)} 萬元 (毛利率：${d.marginPct.toFixed(1)}%)
+• 談判健康評分：${d.negotiationScore} 分
+
+二、 交換條件 (Give & Get)
+1. 預付現金流：獲得 ${upfrontRatioB}% 首期頭款，降低墊付款風險。
+2. 長期效益：${contractTermText}。
+3. 品牌戰略：${logoAuthText}。
+
+三、 AM 建議：毛利率 ${d.marginPct.toFixed(1)}% 達標且 Get 價值明確，建請 准予簽發。`;
+
+            document.getElementById('emailOutput').value = emailContent;
+            document.getElementById('procurementOutput').value = procurementContent;
+            document.getElementById('memoOutput').value = memoContent;
+        }
+
+        // 一鍵複製（具備綠色勾勾與動畫回饋）
+        function copyCardContent(elementId, btnId) {
+            const textarea = document.getElementById(elementId);
+            const btn = document.getElementById(btnId);
+
+            const textInput = document.createElement('textarea');
+            textInput.value = textarea.value;
+            document.body.appendChild(textInput);
+            textInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(textInput);
+
+            // 按鈕動態回饋
+            const originalHTML = btn.innerHTML;
+            btn.className = "px-2 py-1 text-[11px] bg-emerald-600 text-white rounded border border-emerald-500 transition flex items-center gap-1 font-bold";
+            btn.innerHTML = `<i data-lucide="check" class="w-3 h-3"></i> <span>已複製！</span>`;
+            lucide.createIcons();
+
+            setTimeout(() => {
+                btn.className = "px-2 py-1 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition flex items-center gap-1";
+                btn.innerHTML = originalHTML;
+                lucide.createIcons();
+            }, 1800);
+        }
+
+        // 加入今日決策排程紀錄
+        function addToSchedule(templateName) {
+            const projectName = document.getElementById('projectName').value || '未命名專案';
+            const finalPrice = document.getElementById('calculatedGiveAmount').innerText;
+            const score = document.getElementById('negotiationScoreDisp').innerText;
+            const timeStr = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+
+            const newItem = {
+                id: Date.now(),
+                time: timeStr,
+                project: projectName,
+                template: templateName,
+                score: score
+            };
+
+            scheduleItems.unshift(newItem);
+            renderScheduleList();
+        }
+
+        function renderScheduleList() {
+            const container = document.getElementById('scheduleList');
+            const countBadge = document.getElementById('scheduleCount');
+
+            countBadge.innerText = `${scheduleItems.length} 項`;
+
+            if (scheduleItems.length === 0) {
+                container.innerHTML = `<p id="emptyScheduleText" class="text-slate-500 text-[11px] text-center py-2">尚未加入任何排程項目</p>`;
+                return;
+            }
+
+            container.innerHTML = scheduleItems.map(item => `
+                <div class="flex items-center justify-between p-2 rounded bg-slate-800/70 border border-slate-700/60 text-[11px]">
+                    <div class="truncate max-w-[200px]">
+                        <span class="text-slate-300 font-medium">${item.template}</span>
+                        <div class="text-[10px] text-slate-500 truncate">${item.project} • 評分 ${item.score}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-emerald-400 font-mono">${item.time}</span>
+                        <button onclick="removeSchedule(${item.id})" class="text-slate-500 hover:text-rose-400 transition">
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function removeSchedule(id) {
+            scheduleItems = scheduleItems.filter(item => item.id !== id);
+            renderScheduleList();
+        }
+
+        function resetToDefaults() {
+            document.getElementById('projectName').value = "精密科技集團・全廠智慧能源監控系統導入案";
+            document.getElementById('hardCost').value = 120;
+            document.getElementById('listPrice').value = 220;
+            document.getElementById('cooperationSlider').value = 80;
+            scheduleItems = [];
+            renderScheduleList();
+            calculateNegotiation();
+        }
+    </script>
+</body>
+</html>

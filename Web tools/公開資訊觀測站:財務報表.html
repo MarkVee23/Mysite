@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOPS 財報數據智慧解析 Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}body{font-family:Inter,"Noto Sans TC","Microsoft JhengHei",sans-serif;background:#f3f6fb;color:#17243a}
+.glass{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid #e4eaf2;box-shadow:0 8px 28px rgba(18,38,63,.055)}
+.hero{background:radial-gradient(circle at 85% 15%,rgba(55,117,190,.35),transparent 28%),linear-gradient(120deg,#0c1e38,#15385e 58%,#1b4a72)}
+.dropzone{border:1.5px dashed #9eb3cc;transition:.2s}.dropzone.drag{border-color:#2875c7;background:#eef6ff;transform:translateY(-2px)}
+.kpi{position:relative;overflow:hidden}.kpi:after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;right:-38px;top:-48px;background:rgba(42,116,190,.07)}
+.metric{font-variant-numeric:tabular-nums;letter-spacing:-.04em}.tag{font-size:11px;padding:4px 8px;border-radius:999px;font-weight:700}.up{background:#fff0f0;color:#c43c43}.down{background:#eaf8f0;color:#16834b}.neutral{background:#edf1f6;color:#64748b}
+table{border-collapse:separate;border-spacing:0;width:100%}th{position:sticky;top:0;background:#f5f8fc;z-index:1}td,th{padding:12px 14px;border-bottom:1px solid #edf1f5;font-size:13px}tbody tr:hover{background:#f8fbff}.major-row{background:#f1f6fc;font-weight:700}.major-row td:first-child{color:#173e68}.child-name{padding-left:30px;color:#52647a}.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.toast{position:fixed;right:24px;top:24px;z-index:50;padding:13px 18px;border-radius:12px;background:#a9323c;color:white;box-shadow:0 12px 35px #10233c33;opacity:0;transform:translateY(-10px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{height:8px;width:8px}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:9px}
+</style>
+</head>
+<body>
+<header class="hero text-white">
+ <div class="max-w-7xl mx-auto px-5 md:px-8 py-7">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+   <div><div class="text-xs tracking-[.22em] text-blue-200 mb-2">FINANCIAL INTELLIGENCE · TAIWAN MOPS</div>
+    <h1 class="text-2xl md:text-3xl font-bold tracking-tight">公開資訊觀測站 <span class="text-blue-200">／</span> 財報數據智慧解析</h1>
+    <p class="text-blue-100/80 text-sm mt-2">將財務報表轉化為可比較、可追蹤的現金流洞察</p>
+   </div>
+   <div class="flex items-center gap-3"><span id="modeBadge" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-white/15 border border-white/20">DEMO MODE</span>
+    <div class="text-xs text-blue-100 text-right">支援 MOPS Excel / CSV<br>資料僅於此瀏覽器端解析</div></div>
+  </div>
+ </div>
+</header>
+<main class="max-w-7xl mx-auto px-5 md:px-8 py-7 space-y-6">
+ <section class="grid lg:grid-cols-[1.5fr_1fr] gap-5">
+  <div class="glass rounded-2xl p-5 md:p-6">
+   <div class="flex items-center justify-between mb-4"><div><h2 class="font-bold text-lg">匯入財務報表</h2><p class="text-xs text-slate-500 mt-1">上傳 MOPS 標準格式，或直接貼上 Excel 複製內容</p></div><span class="text-xs text-slate-400">STEP 01</span></div>
+   <div id="dropzone" class="dropzone rounded-xl p-6 text-center cursor-pointer">
+    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 grid place-items-center mx-auto mb-3 text-2xl">⇧</div>
+    <div class="font-semibold text-slate-700">拖曳檔案至此，或 <span class="text-blue-700 underline">選擇檔案</span></div>
+    <p class="text-xs text-slate-400 mt-2">支援 .xlsx、.xls、.csv（建議使用 MOPS 匯出原始檔）</p>
+    <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden">
+   </div>
+   <details class="mt-4">
+    <summary class="text-sm font-semibold text-blue-800 cursor-pointer select-none">＋ 直接貼上 Excel / TSV 資料</summary>
+    <div class="mt-3"><textarea id="pasteArea" rows="5" class="w-full rounded-xl border border-slate-200 p-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="將 Excel 選取範圍複製後，直接貼在這裡（需包含「會計項目」與金額欄）"></textarea>
+     <div class="flex justify-end mt-2"><button id="pasteBtn" class="px-4 py-2 rounded-lg bg-blue-700 text-white text-xs font-semibold hover:bg-blue-800">解析貼上資料</button></div></div>
+   </details>
+  </div>
+  <div class="glass rounded-2xl p-5 md:p-6 flex flex-col justify-between">
+   <div><div class="flex justify-between items-center"><h2 class="font-bold text-lg">報表資訊</h2><span class="text-xs text-slate-400">METADATA</span></div>
+    <div class="mt-4 space-y-3">
+     <div class="bg-slate-50 rounded-xl p-3"><div class="text-[11px] text-slate-400 mb-1">公司名稱</div><div id="companyMeta" class="font-semibold text-sm">示範科技股份有限公司</div></div>
+     <div class="grid grid-cols-2 gap-3"><div class="bg-slate-50 rounded-xl p-3"><div class="text-[11px] text-slate-400 mb-1">報表類型</div><div id="reportMeta" class="font-semibold text-sm">合併現金流量表</div></div><div class="bg-slate-50 rounded-xl p-3"><div class="text-[11px] text-slate-400 mb-1">報告期間</div><div id="periodMeta" class="font-semibold text-sm">115 年第 2 季</div></div></div>
+    </div></div>
+   <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4"><div><div class="text-xs text-slate-500">顯示金額單位</div><div class="text-[11px] text-slate-400">1 億元 = 100,000 千元</div></div>
+    <div class="flex rounded-lg bg-slate-100 p-1"><button data-unit="thousand" class="unitBtn px-3 py-1.5 rounded-md text-xs font-bold bg-white shadow text-blue-800">千元</button><button data-unit="hundredMillion" class="unitBtn px-3 py-1.5 rounded-md text-xs font-bold text-slate-500">億元</button></div></div>
+  </div>
+ </section>
+
+ <section>
+  <div class="flex items-end justify-between mb-3"><div><div class="text-xs text-blue-700 font-bold tracking-widest">KEY FINANCIAL INDICATORS</div><h2 class="text-xl font-bold mt-1">核心現金流指標</h2></div><div class="text-xs text-slate-400">本期 vs. 同期</div></div>
+  <div id="kpiGrid" class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+ </section>
+
+ <section class="grid lg:grid-cols-5 gap-5">
+  <div class="glass rounded-2xl p-5 lg:col-span-3"><div class="flex justify-between items-center mb-4"><div><h3 class="font-bold">三大現金流比較</h3><p class="text-xs text-slate-400 mt-1">營業、投資、籌資活動淨現金流量</p></div><span class="text-xs text-slate-400">CHART A</span></div><div class="h-72"><canvas id="cashChart"></canvas></div></div>
+  <div class="glass rounded-2xl p-5 lg:col-span-2"><div class="flex justify-between items-center mb-4"><div><h3 class="font-bold">主要現金流項目 TOP 5</h3><p class="text-xs text-slate-400 mt-1">依本期絕對金額排序，排除小計與合計</p></div><span class="text-xs text-slate-400">CHART B</span></div><div class="h-72"><canvas id="topChart"></canvas></div></div>
+ </section>
+
+ <section class="glass rounded-2xl overflow-hidden">
+  <div class="p-5 md:p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+   <div><div class="text-xs text-blue-700 font-bold tracking-widest">STATEMENT EXPLORER</div><h2 class="text-xl font-bold mt-1">財務明細檢視</h2><p id="tableSub" class="text-xs text-slate-400 mt-1">顯示所有已解析會計項目</p></div>
+   <div class="relative w-full md:w-72"><span class="absolute left-3 top-2.5 text-slate-400">⌕</span><input id="searchInput" type="search" placeholder="搜尋會計項目…" class="w-full rounded-lg border border-slate-200 py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100"></div>
+  </div>
+  <div class="overflow-auto max-h-[560px]"><table><thead><tr><th class="text-left min-w-[260px]">會計項目</th><th class="num">本期金額</th><th class="num">同期金額</th><th class="num">增減金額</th><th class="num">變動比例 %</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+  <div class="px-5 py-3 bg-slate-50 text-[11px] text-slate-400 flex justify-between"><span>※ 金額依報表原始單位解析；成長率以同期絕對值為分母。</span><span id="rowCount">0 筆</span></div>
+ </section>
+ <footer class="text-center text-xs text-slate-400 py-2">MOPS Financial Dashboard · 財務數據為報表解析與估算結果，投資決策前請核對原始公告。</footer>
+</main>
+<div id="toast" class="toast">格式不符，請確認是否為公開資訊觀測站下載之表格</div>
+<script>
+const $=s=>document.querySelector(s);
+let state={rows:[],company:'示範科技股份有限公司',report:'合併現金流量表',period:'115 年第 2 季',unit:'thousand',demo:true,periodNames:['115年01月01日至115年06月30日 金額','114年01月01日至114年06月30日 金額']};
+let cashChart=null,topChart=null;
+const demoRows=[
+ ['營業活動之現金流量',null,null,'major'],
+ ['本期稅前淨利',185000,162000],['折舊費用',72000,68000],['利息費用',8500,9200],['營業活動之現金流入（流出）',268000,231000,'major'],
+ ['投資活動之現金流量',null,null,'major'],['取得不動產、廠房及設備',-112000,-98000],['處分不動產、廠房及設備',4500,2100],['取得金融資產',-28000,-35000],['投資活動之現金流出',-138000,-131000,'major'],
+ ['籌資活動之現金流量',null,null,'major'],['短期借款增加（減少）',18000,-12000],['發放現金股利',-52000,-46000],['償還長期借款',-24000,-18000],['籌資活動之現金流入（流出）',-58000,-76000,'major'],
+ ['本期現金及約當現金增加（減少）數',72000,24000,'major'],['期初現金及約當現金餘額',310000,286000],['期末現金及約當現金餘額',382000,310000,'major']
+].map(([name,current,prior,type])=>({name,current,prior,type:type||'child'}));
+function cleanName(v){return String(v??'').replace(/[\u3000\s]+/g,' ').trim()}
+function num(v){
+ if(v===null||v===undefined||v==='')return null;
+ if(typeof v==='number')return Number.isFinite(v)?v:null;
+ let s=String(v).trim().replace(/[,\s，]/g,'');
+ if(!s||s==='-')return null;
+ let neg=/^\(.*\)$/.test(s);s=s.replace(/[()]/g,'').replace(/％/g,'%').replace(/%$/,'');
+ const n=Number(s);return Number.isFinite(n)?(neg?-Math.abs(n):n):null;
+}
+function normalizeRows(raw){
+ const matrix=raw.map(r=>Array.isArray(r)?r:Object.values(r));
+ let header=-1,itemCol=-1,amountCols=[];
+ for(let i=0;i<Math.min(matrix.length,30);i++){
+  const cells=(matrix[i]||[]).map(x=>cleanName(x));
+  const idx=cells.findIndex(x=>/會計項目|科目名稱|項目名稱/.test(x));
+  if(idx>=0){header=i;itemCol=idx;amountCols=cells.map((x,j)=>({x,j})).filter(o=>/金額|本期|同期|當期|去年同期/.test(o.x));break;}
+ }
+ if(header<0){
+  // TSV / CSV fallback: locate row with an accounting-item heading
+  for(let i=0;i<matrix.length;i++){let joined=(matrix[i]||[]).join(' ');if(/會計項目|科目名稱/.test(joined)){header=i;itemCol=(matrix[i]||[]).findIndex(x=>/會計項目|科目名稱/.test(cleanName(x)));break;}}
+ }
+ if(header<0||itemCol<0)throw new Error('no-header');
+ const head=matrix[header]||[];
+ let cols=amountCols.map(o=>o.j);
+ if(cols.length<2){
+  cols=[];for(let j=itemCol+1;j<Math.max(...matrix.map(r=>r.length));j++){if(matrix.slice(header+1).some(r=>num(r[j])!==null))cols.push(j);if(cols.length===2)break;}
+ }
+ if(!cols.length)throw new Error('no-amount');
+ const rows=[];
+ for(let i=header+1;i<matrix.length;i++){
+  const r=matrix[i]||[],name=cleanName(r[itemCol]);if(!name)continue;
+  if(/合計|總計|期末餘額/.test(name) && cols.every(c=>num(r[c])===null))continue;
+  const current=num(r[cols[0]]),prior=cols[1]!==undefined?num(r[cols[1]]):null;
+  if(current===null&&prior===null)continue;
+  const major=/現金流量|現金及約當現金增加|淨增加/.test(name)||/^[一二三四五六七八九十]+、/.test(name);
+  rows.push({name,current,prior,type:major?'major':'child'});
+ }
+ if(!rows.length)throw new Error('no-rows');
+ const textAll=matrix.slice(0,Math.min(header+1,8)).flat().map(cleanName).join(' ');
+ const company=(textAll.match(/(?:本資料由|公司名稱[:：]?)\s*([^，,。]+)/)||[])[1];
+ const report=(textAll.match(/合併?[^，,。]{0,12}(?:現金流量表|損益表|資產負債表)/)||[])[0];
+ const period=(textAll.match(/民國?\s*\d{2,3}\s*年[^，,。]*/)||[])[0];
+ return {rows,company:company||'已匯入報表',report:report||'財務報表',period:period||'依匯入檔案',periodNames:cols.map(c=>cleanName(head[c]))};
+}
+function aliases(patterns){return state.rows.find(r=>(r.current!==null||r.prior!==null)&&patterns.some(p=>p.test(r.name)))}
+function val(patterns){return aliases(patterns)?.current??null}
+const P={
+ ocf:[/營業活動.*淨現金流量/,/營業活動之現金流量/,/營業活動之現金流入（流出）/,/營業活動.*現金流入.*流出/],
+ icf:[/投資活動.*淨現金流量/,/投資活動之現金流量/,/投資活動.*現金流入.*流出/],
+ fin:[/籌資活動.*淨現金流量/,/籌資活動之現金流量/,/籌資活動.*現金流入.*流出/],
+ capex:[/購置不動產.*廠房.*設備/,/取得不動產.*廠房.*設備/,/購買不動產.*廠房.*設備/,/購置固定資產/],
+ net:[/本期現金及約當現金增加（減少）數/,/現金及約當現金.*淨增加/,/現金及現金等價物淨增加/,/期末現金.*期初現金/]
+};
+function metric(patterns,key){
+ const row=aliases(patterns);if(!row)return null;
+ return {current:row.current,prior:row.prior,name:row.name};
+}
+function calc(){
+ const ocf=metric(P.ocf),icf=metric(P.icf),fin=metric(P.fin),cap=metric(P.capex),net=metric(P.net);
+ const fcf=ocf&&cap?{current:ocf.current-Math.abs(cap.current||0),prior:ocf.prior!==null&&cap.prior!==null?ocf.prior-Math.abs(cap.prior):null}:null;
+ return [
+  {label:'營業現金流 OCF',icon:'↗',data:ocf},
+  {label:'自由現金流 FCF',icon:'⌁',data:fcf},
+  {label:'資本支出 CapEx',icon:'▤',data:cap?{current:Math.abs(cap.current||0),prior:cap.prior===null?null:Math.abs(cap.prior)}:null},
+  {label:'淨現金增加額',icon:'◈',data:net}
+ ];
+}
+function yoy(a,b){if(a===null||b===null||b===0)return null;return (a-b)/Math.abs(b)*100}
+function fmt(n){if(n===null||n===undefined||!Number.isFinite(n))return '—';let v=state.unit==='hundredMillion'?n/100000:n;return v.toLocaleString('zh-TW',{maximumFractionDigits:2})}
+function pct(n){return n===null?'—':(n>0?'+':'')+n.toFixed(1)+'%'}
+function renderKPIs(){
+ const cards=calc();$('#kpiGrid').innerHTML=cards.map((c,i)=>{
+  const d=c.data,cur=d?.current??null,prior=d?.prior??null,g=yoy(cur,prior);
+  const tone=g===null?'neutral':g>=0?'up':'down',arrow=g===null?'–':g>=0?'↑':'↓';
+  return `<article class="glass kpi rounded-2xl p-5"><div class="flex justify-between items-start"><div class="text-xs font-semibold text-slate-500">${c.label}</div><div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-800 grid place-items-center">${c.icon}</div></div><div class="metric text-2xl font-bold text-slate-900 mt-4">${fmt(cur)} <span class="text-xs font-medium text-slate-400">${state.unit==='thousand'?'千元':'億元'}</span></div><div class="flex justify-between items-center mt-3"><div class="text-xs text-slate-400">同期 ${fmt(prior)}</div><span class="tag ${tone}">${arrow} ${pct(g)}</span></div></article>`;
+ }).join('');
+}
+function renderCharts(){
+ const get=(patterns)=>{let d=metric(patterns);return d?d.current:null};
+ const labels=['營業活動','投資活動','籌資活動'];
+ const current=[get(P.ocf),get(P.icf),get(P.fin)];
+ const prior=[metric(P.ocf)?.prior??null,metric(P.icf)?.prior??null,metric(P.fin)?.prior??null];
+ const scale=v=>v===null?null:state.unit==='hundredMillion'?v/100000:v;
+ if(cashChart)cashChart.destroy();
+ cashChart=new Chart($('#cashChart'),{type:'bar',data:{labels,datasets:[{label:'本期',data:current.map(scale),backgroundColor:'#2869a8',borderRadius:6},{label:'同期',data:prior.map(scale),backgroundColor:'#a9bfd5',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,font:{size:11}}}},scales:{x:{grid:{display:false}},y:{grid:{color:'#edf1f5'},ticks:{font:{size:10}}}}}});
+ const excluded=/現金流量|合計|總計|期初|期末|本期淨利|營業活動|投資活動|籌資活動/;
+ const top=state.rows.filter(r=>r.current!==null&&!excluded.test(r.name)).sort((a,b)=>Math.abs(b.current)-Math.abs(a.current)).slice(0,5);
+ if(topChart)topChart.destroy();
+ topChart=new Chart($('#topChart'),{type:'doughnut',data:{labels:top.map(r=>r.name),datasets:[{data:top.map(r=>Math.abs(scale(r.current))),backgroundColor:['#245d91','#4f88b8','#82a9ca','#b4cadd','#d6e2ec'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{boxWidth:9,usePointStyle:true,font:{size:10},padding:12}},tooltip:{callbacks:{label:c=>`${c.label}: ${fmt(top[c.dataIndex].current)} ${state.unit==='thousand'?'千元':'億元'}`}}}}});
+}
+function renderTable(){
+ const q=$('#searchInput').value.trim().toLowerCase();
+ const rows=state.rows.filter(r=>r.name.toLowerCase().includes(q));
+ $('#tableBody').innerHTML=rows.map(r=>{
+  const diff=r.current!==null&&r.prior!==null?r.current-r.prior:null,g=yoy(r.current,r.prior);
+  const major=r.type==='major';
+  return `<tr class="${major?'major-row':''}"><td class="${major?'':'child-name'}">${r.name}</td><td class="num">${fmt(r.current)}</td><td class="num">${fmt(r.prior)}</td><td class="num ${diff>0?'text-rose-600':diff<0?'text-emerald-700':''}">${fmt(diff)}</td><td class="num">${pct(g)}</td></tr>`;
+ }).join('')||'<tr><td colspan="5" class="text-center text-slate-400 py-10">沒有符合的會計項目</td></tr>';
+ $('#rowCount').textContent=`${rows.length} / ${state.rows.length} 筆`;
+}
+function render(){
+ $('#companyMeta').textContent=state.company;$('#reportMeta').textContent=state.report;$('#periodMeta').textContent=state.period;
+ $('#modeBadge').textContent=state.demo?'DEMO MODE':'LIVE DATA';$('#modeBadge').className='px-3 py-1.5 rounded-full text-xs font-semibold '+(state.demo?'bg-white/15 border border-white/20':'bg-emerald-400/20 border border-emerald-200/30 text-emerald-100');
+ $('#tableSub').textContent=`${state.periodNames?.[0]||'本期'}　｜　${state.periodNames?.[1]||'同期'}`;
+ renderKPIs();renderCharts();renderTable();
+}
+function toast(){const t=$('#toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500)}
+function loadParsed(parsed){
+ state={...state,...parsed,demo:false};render();
+}
+async function parseFile(file){
+ try{
+  let raw;
+  if(/\.csv$/i.test(file.name)){
+   const text=await file.text();raw=XLSX.utils.sheet_to_json(XLSX.read(text,{type:'string'}).Sheets[XLSX.read(text,{type:'string'}).SheetNames[0]],{header:1,defval:''});
+  }else{
+   const buf=await file.arrayBuffer(),wb=XLSX.read(buf,{type:'array',cellDates:false});raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});
+  }
+  loadParsed(normalizeRows(raw));
+ }catch(e){console.error(e);toast()}
+}
+$('#fileInput').addEventListener('change',e=>{if(e.target.files[0])parseFile(e.target.files[0]);e.target.value=''});
+const dz=$('#dropzone');dz.addEventListener('click',()=>$('#fileInput').click());
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag')});
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files[0])parseFile(e.dataTransfer.files[0])});
+$('#pasteBtn').addEventListener('click',()=>{
+ try{const text=$('#pasteArea').value.trim();if(!text)throw 0;const raw=text.split(/\r?\n/).map(line=>line.split('\t'));loadParsed(normalizeRows(raw));}
+ catch(e){toast()}
+});
+$('#searchInput').addEventListener('input',renderTable);
+document.querySelectorAll('.unitBtn').forEach(b=>b.addEventListener('click',()=>{state.unit=b.dataset.unit;document.querySelectorAll('.unitBtn').forEach(x=>x.className='unitBtn px-3 py-1.5 rounded-md text-xs font-bold '+(x===b?'bg-white shadow text-blue-800':'text-slate-500'));render()}));
+render();
+</script>
+</body></html>
