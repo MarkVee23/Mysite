@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸運大抽獎 - 精品尊榮版</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;600;800&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0d0d0d 100%);
+            color: #f3f4f6;
+            min-height: 100vh;
+        }
+        .luxury-border {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .luxury-text {
+            background: linear-gradient(to right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Wheel pointer styling for luxury theme */
+        .wheel-pointer {
+            width: 0;
+            height: 0;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-bottom: 32px solid #ffffff;
+            filter: drop-shadow(0 4px 10px rgba(255,255,255,0.4));
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="py-6 text-center bg-black bg-opacity-80 backdrop-blur-md border-b border-neutral-800 shadow-2xl">
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-widest luxury-text uppercase">
+            <i class="fa-solid fa-gem mr-2 text-white"></i> 幸運大抽獎 <i class="fa-solid fa-award ml-2 text-white"></i>
+        </h1>
+        <p class="text-neutral-400 mt-2 text-xs md:text-sm tracking-widest uppercase font-light">Haute Horlogerie & Luxury Lucky Draw</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow container mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Left Column: Settings & Control Panel (5 cols) -->
+        <section class="lg:col-span-5 bg-neutral-900 bg-opacity-90 rounded-2xl p-6 luxury-border backdrop-blur-md flex flex-col gap-6">
+            <div class="flex items-center justify-between border-b border-neutral-800 pb-4">
+                <h2 class="text-xl font-semibold text-white tracking-wide flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-neutral-400"></i> 控制面板
+                </h2>
+                <button id="reload-data-btn" class="bg-neutral-800 hover:bg-neutral-700 text-white font-medium px-3 py-1.5 rounded-lg text-xs transition active:scale-95 border border-neutral-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate"></i> 重新載入資料
+                </button>
+            </div>
+
+            <!-- Prize Selection -->
+            <div class="space-y-2">
+                <label for="prize-select" class="block text-xs uppercase tracking-wider text-neutral-400 font-semibold">選擇當前抽獎獎項：</label>
+                <div class="relative">
+                    <select id="prize-select" class="w-full bg-black border border-neutral-700 rounded-xl p-3 text-white font-medium appearance-none focus:outline-none focus:border-white shadow-inner cursor-pointer transition">
+                        <option value="">載入獎項中...</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-neutral-400">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+                <div id="prize-info" class="text-xs text-neutral-400 mt-1 pl-1">
+                    金額/說明：請先選擇獎項
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 gap-4 bg-black bg-opacity-60 p-4 rounded-xl border border-neutral-800">
+                <div class="text-center border-r border-neutral-800 pr-2">
+                    <span class="block text-xs text-neutral-500 uppercase tracking-wider font-medium">剩餘名單</span>
+                    <span id="remaining-count" class="text-3xl font-light text-white">0</span>
+                </div>
+                <div class="text-center pl-2">
+                    <span class="block text-xs text-neutral-500 uppercase tracking-wider font-medium">已中獎人數</span>
+                    <span id="winner-count" class="text-3xl font-light text-neutral-300">0</span>
+                </div>
+            </div>
+
+            <!-- Spin Button -->
+            <button id="spin-btn" disabled class="w-full py-4 bg-white text-black font-extrabold text-xl tracking-widest rounded-xl shadow-2xl hover:bg-neutral-200 transition-all transform active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed uppercase flex items-center justify-center gap-3">
+                <i class="fa-solid fa-circle-play text-black"></i> 開始抽獎
+            </button>
+
+            <!-- Audio Toggle & Reset -->
+            <div class="flex gap-4 pt-2 border-t border-neutral-800">
+                <button id="sound-toggle-btn" class="flex-1 bg-black hover:bg-neutral-900 border border-neutral-800 text-neutral-300 py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow">
+                    <i id="sound-icon" class="fa-solid fa-volume-high"></i> <span id="sound-text">音效：已開啟</span>
+                </button>
+                <button id="reset-winners-btn" class="bg-black hover:bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow">
+                    <i class="fa-solid fa-trash-can"></i> 清除紀錄
+                </button>
+            </div>
+        </section>
+
+        <!-- Right Column: Wheel & Interactive Display (7 cols) -->
+        <section class="lg:col-span-7 flex flex-col items-center justify-center bg-neutral-900 bg-opacity-90 rounded-2xl p-6 luxury-border backdrop-blur-md min-h-[500px]">
+            
+            <!-- Wheel Container -->
+            <div class="relative w-full max-w-[420px] aspect-square flex items-center justify-center my-4">
+                <!-- Top Pointer -->
+                <div class="absolute -top-3 z-30 wheel-pointer"></div>
+                
+                <!-- Wheel Canvas -->
+                <div class="w-full h-full relative rounded-full overflow-hidden border-4 border-neutral-700 shadow-[0_0_40px_rgba(255,255,255,0.1)] bg-black">
+                    <canvas id="wheel-canvas" class="w-full h-full block"></canvas>
+                    <!-- Center Hub -->
+                    <div class="absolute inset-0 m-auto w-14 h-14 bg-white text-black rounded-full border-2 border-neutral-400 shadow-2xl flex items-center justify-center z-20">
+                        <i class="fa-solid fa-gem text-lg"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Winner Announcement Banner -->
+            <div id="winner-banner" class="w-full mt-4 bg-white text-black rounded-xl p-4 text-center shadow-2xl border border-neutral-300 hidden transform transition-all animate-pulse">
+                <span class="block text-xs font-bold uppercase tracking-widest text-neutral-600">CONGRATULATIONS</span>
+                <span id="winner-name-display" class="text-2xl md:text-3xl font-extrabold tracking-wide mt-1 block">得獎者姓名</span>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Bottom Section: Winners History Table -->
+    <section class="container mx-auto px-4 pb-12">
+        <div class="bg-neutral-900 bg-opacity-90 rounded-2xl p-6 luxury-border backdrop-blur-md">
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-4 border-b border-neutral-800 pb-4 gap-4">
+                <h3 class="text-xl font-semibold text-white tracking-wide flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-neutral-400"></i> 中獎名單紀錄
+                </h3>
+                <button id="export-btn" class="bg-neutral-800 hover:bg-neutral-700 text-white font-medium px-4 py-2 rounded-xl text-xs transition shadow flex items-center gap-2 border border-neutral-700">
+                    <i class="fa-solid fa-download"></i> 匯出中獎名單 (CSV)
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto rounded-xl border border-neutral-800 bg-black bg-opacity-60">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-neutral-950 text-neutral-400 border-b border-neutral-800 text-xs md:text-sm uppercase tracking-wider">
+                            <th class="p-3 font-semibold">獎項名稱</th>
+                            <th class="p-3 font-semibold">金額/說明</th>
+                            <th class="p-3 font-semibold">得獎者</th>
+                            <th class="p-3 font-semibold text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="winners-table-body" class="divide-y divide-neutral-900 text-sm md:text-base">
+                        <tr>
+                            <td colspan="4" class="p-6 text-center text-neutral-500 font-light">目前尚無中獎紀錄</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center text-neutral-500 text-xs bg-black border-t border-neutral-900 mt-auto uppercase tracking-widest">
+        <p>幸運大抽獎 &copy; 2026 Luxury Edition</p>
+    </footer>
+
+    <!-- Custom Modal for Notifications -->
+    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm hidden">
+        <div class="bg-neutral-900 border border-neutral-700 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl text-center">
+            <div id="modal-icon" class="text-3xl text-white mb-3">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h4 id="modal-title" class="text-lg font-bold text-white mb-2 tracking-wide">提示訊息</h4>
+            <p id="modal-message" class="text-neutral-300 text-xs md:text-sm mb-6 leading-relaxed">請輸入訊息內容</p>
+            <button id="modal-close-btn" class="w-full bg-white hover:bg-neutral-200 text-black font-bold py-2.5 rounded-xl transition shadow text-sm tracking-wider uppercase">
+                確定
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // CSV Publication URL provided
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRm95tFpRsosbLpeprYL8y3N6tU2tvdqyWYWlWfaYPZNaTj4jjaVeMlTFzyWeH-XrRZ67--mvuyogIu/pub?output=csv";
+
+        let participants = []; // 名單 (工作表1)
+        let prizes = [];       // 獎項 (工作表2)
+        let winners = JSON.parse(localStorage.getItem('luxury_lucky_draw_winners') || '[]'); // 中獎紀錄
+        let soundEnabled = true;
+
+        // Web Audio API Sound Generator
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'tick') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+                    gainNode.gain.setValueAtTime(0.05, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    osc.start(now);
+                    osc.stop(now + 0.04);
+                } else if (type === 'win') {
+                    // Elegant chime sequence
+                    const notes = [440, 554.37, 659.25, 880]; // A4, C#5, E5, A5
+                    notes.forEach((freq, index) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.type = 'triangle';
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+                        o.frequency.setValueAtTime(freq, now + index * 0.15);
+                        g.gain.setValueAtTime(0.15, now + index * 0.15);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + index * 0.15 + 0.5);
+                        o.start(now + index * 0.15);
+                        o.stop(now + index * 0.15 + 0.5);
+                    });
+                }
+            } catch (e) {
+                console.warn("Audio playback error:", e);
+            }
+        }
+
+        // Custom Modal helper
+        function showModal(title, message, isError = false) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            const iconEl = document.getElementById('modal-icon');
+            if (isError) {
+                iconEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-neutral-300"></i>';
+            } else {
+                iconEl.innerHTML = '<i class="fa-solid fa-circle-check text-white"></i>';
+            }
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        document.getElementById('modal-close-btn').addEventListener('click', () => {
+            document.getElementById('modal').classList.add('hidden');
+        });
+
+        // CSV Parser utility
+        function parseCSV(text) {
+            let lines = [];
+            let row = [''];
+            let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i];
+                let nextC = text[i+1];
+                if (c === '"') {
+                    if (inQuotes && nextC === '"') {
+                        row[row.length - 1] += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (c === ',' && !inQuotes) {
+                    row.push('');
+                } else if ((c === '\r' || c === '\n') && !inQuotes) {
+                    if (c === '\r' && nextC === '\n') { i++; }
+                    lines.push(row);
+                    row = [''];
+                } else {
+                    row[row.length - 1] += c;
+                }
+            }
+            if (row.length > 1 || row[0] !== '') {
+                lines.push(row);
+            }
+            return lines;
+        }
+
+        // Fetch Google Sheet CSV data supporting multi-sheet published CSV or structured layout
+        async function loadData() {
+            try {
+                const res = await fetch(CSV_URL + '&t=' + new Date().getTime());
+                if (!res.ok) throw new Error('無法連線至 Google 試算表');
+                const csvText = await res.text();
+                const rows = parseCSV(csvText);
+                parseSpreadsheetData(rows);
+            } catch (err) {
+                console.error(err);
+                loadSampleData();
+                showModal("提示", "無法自動載入線上試算表（跨域或網路限制），已載入精品範例資料供您測試！", true);
+            }
+        }
+
+        function parseSpreadsheetData(rows) {
+            participants = [];
+            prizes = [];
+            let currentSheet = 1; // 預設為工作表1 (名單)
+
+            for (let i = 0; i < rows.length; i++) {
+                let r = rows[i];
+                if (!r || r.length === 0) continue;
+
+                // 檢查是否含有工作表標籤或區段標題
+                let rowJoined = r.join(',').toLowerCase();
+                if (rowJoined.includes('工作表2') || rowJoined.includes('獎項') && rowJoined.includes('金額')) {
+                    currentSheet = 2;
+                    continue;
+                }
+                if (rowJoined.includes('工作表1') || rowJoined.includes('名單') || rowJoined.includes('姓名')) {
+                    if (rowJoined.includes('工作表1')) {
+                        currentSheet = 1;
+                        continue;
+                    }
+                }
+
+                if (currentSheet === 1) {
+                    // 工作表1：名單 (通常在第一欄或前幾欄)
+                    r.forEach(cell => {
+                        let val = cell.trim();
+                        if (val && val !== '姓名' && val !== '名單' && val !== '工作表1' && !participants.includes(val)) {
+                            participants.push(val);
+                        }
+                    });
+                } else if (currentSheet === 2) {
+                    // 工作表2：獎項與金額
+                    // 假設格式為：欄位0 = 獎項名稱, 欄位1 = 金額, 欄位2 = 名額(選填)
+                    let pName = r[0] ? r[0].trim() : '';
+                    let pAmount = r[1] ? r[1].trim() : '';
+                    let pCount = r[2] ? parseInt(r[2].trim()) : 1;
+
+                    if (pName && pName !== '獎項' && pName !== '工作表2' && pName !== '金額') {
+                        prizes.push({
+                            name: pName,
+                            amount: pAmount || '精品大獎',
+                            count: isNaN(pCount) || pCount <= 0 ? 1 : pCount
+                        });
+                    }
+                }
+            }
+
+            // 如果自動偵測不到工作表切換，嘗試依據資料結構自動對半或智慧拆分
+            if (participants.length === 0 || prizes.length === 0) {
+                smartSplitParser(rows);
+            }
+
+            updateUI();
+        }
+
+        function smartSplitParser(rows) {
+            participants = [];
+            prizes = [];
+            let isSheet2 = false;
+
+            for (let r of rows) {
+                let col0 = r[0] ? r[0].trim() : '';
+                let col1 = r[1] ? r[1].trim() : '';
+                let col2 = r[2] ? r[2].trim() : '';
+
+                if (!col0 && !col1 && !col2) continue;
+
+                let combined = (col0 + col1 + col2).toLowerCase();
+                if (combined.includes('工作表2') || (col0.includes('獎') && (col1.includes('元') || col1.includes('NT') || col1.includes('$') || !isNaN(col1)))) {
+                    isSheet2 = true;
+                }
+
+                if (isSheet2) {
+                    if (col0 && col0 !== '獎項' && col0 !== '工作表2' && col0 !== '工作表1') {
+                        prizes.push({
+                            name: col0,
+                            amount: col1 || '精品大獎',
+                            count: parseInt(col2) || 1
+                        });
+                    }
+                } else {
+                    if (col0 && col0 !== '姓名' && col0 !== '名單' && col0 !== '工作表1') {
+                        participants.push(col0);
+                    }
+                    if (col1 && col1 !== '姓名' && col1 !== '名單' && col1 !== '工作表1' && !col1.includes('元') && !col1.includes('$')) {
+                        // 若第二欄也是名字
+                        if (!participants.includes(col1)) {
+                            participants.push(col1);
+                        }
+                    }
+                }
+            }
+
+            if (participants.length === 0 || prizes.length === 0) {
+                loadSampleData();
+            }
+        }
+
+        function loadSampleData() {
+            participants = ['陳冠廷', '林怡君', '張雅婷', '黃志豪', '李佳玲', '王建宏', '吳佩珊', '周家豪', '鄭淑芬', '蔡宗翰', '謝佳穎', '劉冠宇'];
+            prizes = [
+                { name: '特獎', amount: 'NT$ 100,000', count: 1 },
+                { name: '總裁大獎', amount: 'NT$ 50,000', count: 1 },
+                { name: '白金尊榮獎', amount: 'NT$ 30,000', count: 2 },
+                { name: '黃金幸運獎', amount: 'NT$ 10,000', count: 3 },
+                { name: '精選吉祥獎', amount: '精美精品禮盒', count: 5 }
+            ];
+            updateUI();
+        }
+
+        function updateUI() {
+            const wonNames = winners.map(w => w.name);
+            const availableParticipants = participants.filter(p => !wonNames.includes(p));
+
+            document.getElementById('remaining-count').textContent = availableParticipants.length;
+            document.getElementById('winner-count').textContent = winners.length;
+
+            const prizeSelect = document.getElementById('prize-select');
+            prizeSelect.innerHTML = '';
+            
+            if (prizes.length === 0) {
+                prizeSelect.innerHTML = '<option value="">無可用獎項</option>';
+            } else {
+                prizes.forEach((p, idx) => {
+                    const wonCount = winners.filter(w => w.prizeName === p.name).length;
+                    const remainingPrizeCount = (p.count || 1) - wonCount;
+                    
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.textContent = `${p.name} (${p.amount}) - 剩餘: ${remainingPrizeCount}`;
+                    if (remainingPrizeCount <= 0) {
+                        opt.disabled = true;
+                        opt.textContent += ' (已抽完)';
+                    }
+                    prizeSelect.appendChild(opt);
+                });
+            }
+
+            updatePrizeInfo();
+            updateWinnersTable();
+            drawWheel();
+
+            const spinBtn = document.getElementById('spin-btn');
+            if (availableParticipants.length > 0 && prizes.length > 0) {
+                spinBtn.disabled = false;
+            } else {
+                spinBtn.disabled = true;
+            }
+        }
+
+        function updatePrizeInfo() {
+            const prizeSelect = document.getElementById('prize-select');
+            const idx = prizeSelect.value;
+            const infoEl = document.getElementById('prize-info');
+            if (idx !== '' && prizes[idx]) {
+                infoEl.textContent = `獎項：${prizes[idx].name} | 價值：${prizes[idx].amount}`;
+            } else {
+                infoEl.textContent = '請選擇要抽取的獎項';
+            }
+        }
+
+        document.getElementById('prize-select').addEventListener('change', () => {
+            updatePrizeInfo();
+            drawWheel();
+        });
+
+        function updateWinnersTable() {
+            const tbody = document.getElementById('winners-table-body');
+            tbody.innerHTML = '';
+
+            if (winners.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-neutral-500 font-light">目前尚無中獎紀錄</td></tr>';
+                return;
+            }
+
+            winners.forEach((w, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-neutral-900 transition border-b border-neutral-900';
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${w.prizeName}</td>
+                    <td class="p-3 text-neutral-400 font-light">${w.amount}</td>
+                    <td class="p-3 font-bold text-white tracking-wide">${w.name}</td>
+                    <td class="p-3 text-right">
+                        <button onclick="removeWinner(${index})" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 px-3 py-1 rounded-lg text-xs transition border border-neutral-700">
+                            <i class="fa-solid fa-trash"></i> 撤銷
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.removeWinner = function(index) {
+            winners.splice(index, 1);
+            localStorage.setItem('luxury_lucky_draw_winners', JSON.stringify(winners));
+            updateUI();
+            document.getElementById('winner-banner').classList.add('hidden');
+        };
+
+        const canvas = document.getElementById('wheel-canvas');
+        const ctx = canvas.getContext('2d');
+        let currentAngle = 0;
+
+        function getActiveParticipants() {
+            const wonNames = winners.map(w => w.name);
+            return participants.filter(p => !wonNames.includes(p));
+        }
+
+        function drawWheel(angle = 0) {
+            const active = getActiveParticipants();
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width * window.devicePixelRatio;
+            canvas.height = height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(centerX, centerY) - 10;
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (active.length === 0) {
+                ctx.fillStyle = '#111111';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '300 16px "Noto Sans TC", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('所有名單皆已中獎', centerX, centerY);
+                return;
+            }
+
+            const sliceAngle = (2 * Math.PI) / active.length;
+            // High-end black, charcoal, silver monochrome palette
+            const colors = ['#111111', '#262626', '#3b3b3b', '#1c1c1c', '#333333'];
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+
+            for (let i = 0; i < active.length; i++) {
+                const startAngle = i * sliceAngle;
+                const endAngle = (i + 1) * sliceAngle;
+
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = '#525252';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.rotate(startAngle + sliceAngle / 2);
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#f3f4f6';
+                ctx.font = '600 14px "Noto Sans TC", sans-serif';
+                
+                let name = active[i];
+                if (name.length > 8) name = name.substring(0, 8) + '...';
+                
+                ctx.fillText(name, radius - 25, 0);
+                ctx.restore();
+            }
+
+            ctx.restore();
+        }
+
+        window.addEventListener('resize', () => {
+            drawWheel(currentAngle);
+        });
+
+        let isSpinning = false;
+
+        document.getElementById('spin-btn').addEventListener('click', () => {
+            if (isSpinning) return;
+
+            const prizeSelect = document.getElementById('prize-select');
+            const prizeIdx = prizeSelect.value;
+            if (prizeIdx === '' || !prizes[prizeIdx]) {
+                showModal("提示", "請先選擇有效的獎項！", true);
+                return;
+            }
+
+            const active = getActiveParticipants();
+            if (active.length === 0) {
+                showModal("提示", "目前沒有可抽獎的名單！", true);
+                return;
+            }
+
+            isSpinning = true;
+            document.getElementById('spin-btn').disabled = true;
+            document.getElementById('prize-select').disabled = true;
+            document.getElementById('winner-banner').classList.add('hidden');
+
+            const winningIndex = Math.floor(Math.random() * active.length);
+            const sliceAngle = (2 * Math.PI) / active.length;
+
+            const targetSliceCenter = winningIndex * sliceAngle + sliceAngle / 2;
+            const extraSpins = 6 + Math.floor(Math.random() * 3);
+            const finalAngle = currentAngle + (2 * Math.PI * extraSpins) + (3 * Math.PI / 2 - targetSliceCenter) - currentAngle % (2 * Math.PI);
+            
+            const startAngle = currentAngle;
+            const distance = finalAngle - startAngle;
+            const duration = 4000;
+            let startTime = null;
+            let lastTickSlice = -1;
+
+            function animateSpin(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                currentAngle = startAngle + distance * easeOut;
+
+                drawWheel(currentAngle);
+
+                const currentSlice = Math.floor(((currentAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI) / sliceAngle);
+                if (currentSlice !== lastTickSlice) {
+                    playSound('tick');
+                    lastTickSlice = currentSlice;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateSpin);
+                } else {
+                    isSpinning = false;
+                    document.getElementById('prize-select').disabled = false;
+                    
+                    const winnerName = active[winningIndex];
+                    const selectedPrize = prizes[prizeIdx];
+
+                    winners.push({
+                        prizeName: selectedPrize.name,
+                        amount: selectedPrize.amount,
+                        name: winnerName,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    localStorage.setItem('luxury_lucky_draw_winners', JSON.stringify(winners));
+
+                    const banner = document.getElementById('winner-banner');
+                    document.getElementById('winner-name-display').textContent = `${winnerName} — 獲得 ${selectedPrize.name} (${selectedPrize.amount})`;
+                    banner.classList.remove('hidden');
+
+                    playSound('win');
+                    triggerConfetti();
+
+                    updateUI();
+                }
+            }
+
+            requestAnimationFrame(animateSpin);
+        });
+
+        // Luxury monochrome & gold minimalist confetti
+        function triggerConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ffffff', '#a3a3a3', '#525252', '#d4d4d4', '#e5e5e5']
+            });
+        }
+
+        const soundToggleBtn = document.getElementById('sound-toggle-btn');
+        soundToggleBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            const text = document.getElementById('sound-text');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high';
+                text.textContent = '音效：已開啟';
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark';
+                text.textContent = '音效：已關閉';
+            }
+        });
+
+        document.getElementById('reset-winners-btn').addEventListener('click', () => {
+            if (window.confirm("確定要清除所有中獎紀錄嗎？")) {
+                winners = [];
+                localStorage.removeItem('luxury_lucky_draw_winners');
+                updateUI();
+                document.getElementById('winner-banner').classList.add('hidden');
+                showModal("提示", "已成功清除所有中獎紀錄。");
+            }
+        });
+
+        document.getElementById('reload-data-btn').addEventListener('click', () => {
+            loadData();
+            showModal("提示", "正在重新載入名單與獎項資料...");
+        });
+
+        document.getElementById('export-btn').addEventListener('click', () => {
+            if (winners.length === 0) {
+                showModal("提示", "目前沒有中獎紀錄可供匯出！", true);
+                return;
+            }
+
+            let csvContent = "\uFEFF獎項名稱,金額說明,得獎者,抽獎時間\n";
+            winners.forEach(w => {
+                csvContent += `"${w.prizeName}","${w.amount}","${w.name}","${w.timestamp}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `中獎名單_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+
+        window.onload = function() {
+            loadData();
+        };
+    </script>
+</body>
+</html>

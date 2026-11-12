@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>楊大大飲料店 - 高精品線上訂購系統</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-gold': '#D4AF37',
+                        'brand-amber': '#B8860B',
+                        'brand-dark': '#1C1917',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Noto Sans TC', 'sans-serif'],
+                        serif: ['Noto Serif TC', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FAFAFA;
+            color: #1C1917;
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #8B6508 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/90 border-b border-amber-200/60 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-4 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                <div class="relative w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-amber-300 to-amber-600 shadow-md">
+                    <img src="https://i.pinimg.com/736x/9e/7b/a9/9e7ba9bee6686831831925dfac7e7cfb.jpg" 
+                         alt="楊大大頭像" 
+                         onerror="this.src='https://placehold.co/100x100/D4AF37/ffffff?text=楊大大'"
+                         class="w-full h-full object-cover rounded-full">
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-widest font-serif gold-gradient-text">楊大大飲料店</h1>
+                    <p class="text-xs text-stone-500 tracking-wider">用心泡好茶，大大最堅持！</p>
+                </div>
+            </div>
+
+            <!-- Quick Info & Cart Toggle -->
+            <div class="flex items-center space-x-4">
+                <a href="#store-info" class="hidden md:flex items-center text-xs text-amber-900 hover:text-amber-700 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/80 transition">
+                    <i class="fa-solid fa-location-dot mr-1.5 text-amber-600"></i>
+                    <span>台北市大安區和平路123號</span>
+                </a>
+                
+                <button onclick="toggleCartModal()" class="relative bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-4 py-2.5 rounded-full shadow-md shadow-amber-500/10 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-basket-shopping text-lg"></i>
+                    <span class="hidden sm:inline">購物車</span>
+                    <span id="cart-badge-count" class="bg-stone-900 text-amber-300 text-xs px-2 py-0.5 rounded-full font-black">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner & Promo Header -->
+    <section class="relative bg-gradient-to-b from-amber-50/80 via-white to-stone-50 py-10 border-b border-amber-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Hero Announcement -->
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-amber-200/70 shadow-xl shadow-amber-900/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-6">
+                    <div class="hidden sm:block relative w-24 h-24 rounded-2xl overflow-hidden border-2 border-amber-300 flex-shrink-0 shadow-md">
+                        <img src="https://i.pinimg.com/736x/9e/7b/a9/9e7ba9bee6686831831925dfac7e7cfb.jpg" alt="楊大大特寫" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <div class="inline-flex items-center bg-amber-100/80 text-amber-900 border border-amber-300 text-xs font-semibold px-3 py-1 rounded-full mb-2">
+                            <i class="fa-solid fa-bullhorn mr-1.5 animate-pulse text-amber-600"></i> 開幕限時狂歡
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-stone-900 font-serif tracking-wide">
+                            全品項 <span class="text-amber-600 font-extrabold text-3xl md:text-4xl">買 5 送 1</span> 優惠實施中！
+                        </h2>
+                        <p class="text-stone-500 text-sm mt-1">滿額即享免費贈飲（以低價品項折抵），外送專線專人熱烈預訂中。</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <a href="tel:0212345678" class="flex items-center justify-center space-x-2 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-5 py-3 rounded-xl transition text-sm font-semibold">
+                        <i class="fa-solid fa-phone text-amber-600"></i>
+                        <span>02-1234-5678</span>
+                    </a>
+                    <a href="#menu-section" class="flex items-center justify-center space-x-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl transition text-sm font-bold shadow-md shadow-amber-500/20">
+                        <span>立即點餐</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main id="menu-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center space-x-2 sm:space-x-4 overflow-x-auto pb-4 custom-scrollbar mb-8 border-b border-stone-200">
+            <button onclick="filterCategory('all')" class="cat-btn active px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition bg-stone-900 text-white shadow">
+                全部飲品
+            </button>
+            <button onclick="filterCategory('招牌')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+                <i class="fa-solid fa-crown text-amber-500 mr-1.5"></i>大大招牌推薦
+            </button>
+            <button onclick="filterCategory('原茶')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+                <i class="fa-solid fa-leaf text-emerald-600 mr-1.5"></i>經典原茶系列
+            </button>
+            <button onclick="filterCategory('奶茶')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+                <i class="fa-solid fa-glass-water text-amber-700 mr-1.5"></i>濃郁奶茶與鮮奶
+            </button>
+            <button onclick="filterCategory('冰沙')" class="cat-btn px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition bg-stone-100 text-stone-700 hover:bg-stone-200">
+                <i class="fa-solid fa-snowflake text-sky-500 mr-1.5"></i>消暑冰沙與果茶
+            </button>
+        </div>
+
+        <!-- Menu Grid -->
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered by JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Footer & Store Information -->
+    <footer id="store-info" class="bg-stone-900 border-t border-stone-800 pt-12 pb-8 text-stone-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-stone-800">
+                <!-- Brand Intro -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="https://i.pinimg.com/736x/9e/7b/a9/9e7ba9bee6686831831925dfac7e7cfb.jpg" alt="楊大大" class="w-10 h-10 rounded-full border border-amber-500">
+                        <span class="text-xl font-bold font-serif text-white tracking-widest">楊大大飲料店</span>
+                    </div>
+                    <p class="text-sm text-stone-400 leading-relaxed mb-4">
+                        嚴選頂級高山茶葉與新鮮特調原料，傳承經典古早風味與現代創新口感。堅持每一杯飲料都要用心沖泡，獻給追求高品質茶飲的您。
+                    </p>
+                    <div class="inline-flex items-center text-xs text-amber-300 bg-amber-950/60 px-3 py-1.5 rounded-lg border border-amber-800/50">
+                        <i class="fa-solid fa-circle-check mr-2"></i>開幕慶：全品項買五送一
+                    </div>
+                </div>
+
+                <!-- Info & Hours -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-4 border-l-2 border-amber-500 pl-3">門市資訊</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-location-dot text-amber-500 mt-1 mr-2.5"></i>
+                            <span>台北市大安區和平路123號</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-phone text-amber-500 mr-2.5"></i>
+                            <span>外送專線：<a href="tel:0212345678" class="text-amber-400 hover:underline">02-1234-5678</a></span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa-solid fa-clock text-amber-500 mr-2.5"></i>
+                            <span>營業時間：10:00 - 22:00</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Customization Guide -->
+                <div>
+                    <h3 class="text-white font-bold text-base mb-4 border-l-2 border-amber-500 pl-3">調飲甜度冰量說明</h3>
+                    <div class="bg-stone-800/80 p-4 rounded-xl border border-stone-700 text-xs space-y-2">
+                        <div>
+                            <span class="text-amber-400 font-semibold">甜度：</span>
+                            <span class="text-stone-300">微糖 (30%) / 半糖 (50%) / 少糖 (70%) / 全糖 (100%)</span>
+                        </div>
+                        <hr class="border-stone-700">
+                        <div>
+                            <span class="text-amber-400 font-semibold">冰量：</span>
+                            <span class="text-stone-300">去冰 / 微冰 / 少冰 / 正常冰</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500">
+                <p>&copy; 2026 楊大大飲料店 Boss Yang Tea. All Rights Reserved.</p>
+                <p class="mt-2 sm:mt-0">高精品飲料線上訂購系統</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Customization Modal -->
+    <div id="item-modal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white border border-stone-200 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- Modal Header -->
+            <div class="relative bg-gradient-to-r from-amber-500 to-amber-600 p-5 text-white">
+                <button onclick="closeItemModal()" class="absolute top-4 right-4 text-white/80 hover:text-white w-8 h-8 rounded-full bg-black/10 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span id="modal-category" class="text-xs font-semibold text-amber-950 bg-white/80 px-2.5 py-1 rounded-full"></span>
+                <h3 id="modal-title" class="text-2xl font-bold text-white font-serif mt-2"></h3>
+                <p id="modal-desc" class="text-xs text-amber-100 mt-1"></p>
+            </div>
+
+            <!-- Modal Options Form -->
+            <div class="p-6 overflow-y-auto space-y-6 custom-scrollbar text-sm text-stone-800">
+                <!-- Size Selector -->
+                <div>
+                    <label class="block font-bold text-amber-900 mb-2.5">1. 選擇規格大小</label>
+                    <div id="modal-size-options" class="grid grid-cols-3 gap-3"></div>
+                </div>
+
+                <!-- Sweetness Selector -->
+                <div>
+                    <label class="block font-bold text-amber-900 mb-2.5">2. 選擇甜度</label>
+                    <div id="modal-sweetness-options" class="grid grid-cols-4 gap-2"></div>
+                </div>
+
+                <!-- Ice Level Selector -->
+                <div>
+                    <label class="block font-bold text-amber-900 mb-2.5">3. 選擇冰量</label>
+                    <div id="modal-ice-options" class="grid grid-cols-4 gap-2"></div>
+                </div>
+
+                <!-- Extra Toppings -->
+                <div>
+                    <label class="block font-bold text-amber-900 mb-2.5">4. 加購配料 (可複選)</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="flex items-center justify-between p-3 rounded-xl bg-stone-50 border border-stone-200 cursor-pointer text-xs">
+                            <span class="text-stone-700">黑糖波霸 (+10)</span>
+                            <input type="checkbox" value="黑糖波霸" data-price="10" onchange="updateModalPrice()" class="topping-input rounded text-amber-600">
+                        </label>
+                        <label class="flex items-center justify-between p-3 rounded-xl bg-stone-50 border border-stone-200 cursor-pointer text-xs">
+                            <span class="text-stone-700">椰果 (+10)</span>
+                            <input type="checkbox" value="椰果" data-price="10" onchange="updateModalPrice()" class="topping-input rounded text-amber-600">
+                        </label>
+                        <label class="flex items-center justify-between p-3 rounded-xl bg-stone-50 border border-stone-200 cursor-pointer text-xs">
+                            <span class="text-stone-700">嫩仙草 (+10)</span>
+                            <input type="checkbox" value="嫩仙草" data-price="10" onchange="updateModalPrice()" class="topping-input rounded text-amber-600">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Special Note -->
+                <div>
+                    <label class="block font-bold text-stone-700 mb-1.5">備註需求</label>
+                    <input type="text" id="modal-note" placeholder="例如：茶濃一點、少冰塊" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2 text-stone-800 focus:outline-none focus:border-amber-500">
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-stone-50 border-t border-stone-200 flex items-center justify-between gap-4">
+                <div class="flex items-center bg-white rounded-xl border border-stone-300">
+                    <button onclick="changeModalQty(-1)" class="w-10 h-10 text-stone-700 font-bold hover:bg-stone-100 rounded-l-xl flex items-center justify-center">-</button>
+                    <span id="modal-qty" class="w-10 text-center font-bold text-stone-900">1</span>
+                    <button onclick="changeModalQty(1)" class="w-10 h-10 text-stone-700 font-bold hover:bg-stone-100 rounded-r-xl flex items-center justify-center">+</button>
+                </div>
+                <button onclick="confirmAddToCart()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-extrabold py-3 rounded-xl shadow-md flex items-center justify-center space-x-2">
+                    <span>加入購物車</span>
+                    <span id="modal-total-price" class="bg-black/10 px-2 py-0.5 rounded text-xs">NT$ 0</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer/Modal -->
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-sm flex justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col border-l border-stone-200">
+            <!-- Header -->
+            <div class="p-5 bg-stone-900 text-white flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-basket-shopping text-amber-400 text-xl"></i>
+                    <h3 class="text-lg font-bold">您的選購清單</h3>
+                </div>
+                <button onclick="toggleCartModal()" class="text-stone-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Cart Promo Notice -->
+            <div class="bg-amber-50 px-5 py-3 border-b border-amber-200 flex items-center space-x-3">
+                <i class="fa-solid fa-tags text-amber-600"></i>
+                <p id="cart-promo-text" class="text-xs text-amber-900 font-medium">
+                    優惠：全品項「買五送一」自動計算中！
+                </p>
+            </div>
+
+            <!-- Items List -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar"></div>
+
+            <!-- Checkout Summary & Action -->
+            <div class="p-5 bg-stone-50 border-t border-stone-200 space-y-3">
+                <div class="flex justify-between text-sm text-stone-600">
+                    <span>商品小計</span>
+                    <span id="cart-subtotal" class="text-stone-900 font-medium">NT$ 0</span>
+                </div>
+                <div class="flex justify-between text-sm text-emerald-600 font-semibold">
+                    <span>買五送一優惠折抵</span>
+                    <span id="cart-discount">- NT$ 0</span>
+                </div>
+                <hr class="border-stone-200">
+                <div class="flex justify-between items-baseline">
+                    <span class="text-base font-bold text-stone-900">應付總金額</span>
+                    <span id="cart-final-total" class="text-2xl font-black text-amber-600">NT$ 0</span>
+                </div>
+
+                <button onclick="openCheckoutModal()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-3.5 rounded-xl shadow-md text-center transition">
+                    填寫收件資訊並結帳
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white border border-stone-200 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
+            <div class="relative bg-stone-900 p-5 text-white">
+                <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white w-8 h-8 rounded-full bg-stone-800 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3 class="text-xl font-bold font-serif">填寫訂購與外送資訊</h3>
+                <p class="text-xs text-stone-400 mt-1">資料將直接送至楊大大試算表紀錄</p>
+            </div>
+
+            <form id="order-form" onsubmit="submitOrderToGoogleSheets(event)" class="p-6 space-y-4 text-sm text-stone-800">
+                <div>
+                    <label class="block font-bold text-stone-800 mb-1">訂購人姓名 *</label>
+                    <input type="text" id="order-name" required placeholder="例如：王小明" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-stone-800 focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block font-bold text-stone-800 mb-1">連絡電話 *</label>
+                    <input type="tel" id="order-phone" required placeholder="例如：0912345678" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-stone-800 focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block font-bold text-stone-800 mb-1">外送地址 / 自取備註 *</label>
+                    <textarea id="order-address" required rows="2" placeholder="請輸入外送地址，或填寫「店面自取」" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2 text-stone-800 focus:outline-none focus:border-amber-500"></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-stone-700 mb-1">整體訂單備註</label>
+                    <input type="text" id="order-note" placeholder="例如：請盡快送達、需要發票" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-2 text-stone-800 focus:outline-none focus:border-amber-500">
+                </div>
+
+                <button type="submit" id="checkout-submit-btn" class="w-full mt-4 bg-amber-500 hover:bg-amber-600 text-white font-extrabold py-3.5 rounded-xl shadow-md flex items-center justify-center space-x-2 transition">
+                    <span>確認送出訂單</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-stone-900 text-white font-bold px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-2 border border-stone-700">
+        <i class="fa-solid fa-circle-check text-amber-400"></i>
+        <span id="toast-message">成功加入購物車！</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbyKPWjwFrBLRcF5GdihHQ9GjfqXWBzyOZUXix8Tb4AQTeG2KC2lmQ0wVaRaH7VsP-P1/exec';
+
+        const menuData = [
+            { id: 'm1', name: '老大波霸奶茶', category: '招牌', recommended: true, prices: { S: 35, M: 45, L: 55 }, desc: '經典濃郁奶茶搭配Q彈黑糖波霸，楊大大首推靈魂作品。' },
+            { id: 'm2', name: '楊大大特調水果茶', category: '招牌', recommended: true, prices: { S: 45, M: 55, L: 65 }, desc: '嚴選多種新鮮水果切片搭配清爽綠茶底，酸甜滿分。' },
+            { id: 'm3', name: '濃郁手作黑糖鮮奶', category: '招牌', recommended: true, prices: { S: 50, M: 60, L: 70 }, desc: '每日現炒濃醇黑糖，融入優質小農鮮乳與黑糖珍珠。' },
+            { id: 'm4', name: '炭焙鐵觀音', category: '原茶', recommended: false, prices: { S: 25, M: 30, L: 35 }, desc: '古法重火炭焙，茶湯琥珀透亮，韻味悠長甘甜。' },
+            { id: 'm5', name: '茉莉綠茶', category: '原茶', recommended: false, prices: { S: 20, M: 25, L: 30 }, desc: '天然茉莉花薰製，回甘清香不苦澀，清爽消暑首選。' },
+            { id: 'm6', name: '熟成阿薩姆紅茶', category: '原茶', recommended: false, prices: { S: 20, M: 25, L: 30 }, desc: '經典英倫熟成風味，帶有獨特麥芽茶香與柑橘後韻。' },
+            { id: 'm7', name: '頂級高山金萱', category: '原茶', recommended: true, prices: { S: 25, M: 35, L: 40 }, desc: '高海拔特選金萱，自帶天然淡淡奶香與高山清氣。' },
+            { id: 'm8', name: '英式奶茶', category: '奶茶', recommended: false, prices: { S: 35, M: 45, L: 50 }, desc: '正統阿薩姆紅茶為底，黃金比例條配濃郁香醇奶香。' },
+            { id: 'm9', name: '茉香奶綠', category: '奶茶', recommended: false, prices: { S: 35, M: 45, L: 50 }, desc: '茉莉清香與優質奶精完美結合，優雅絲滑好滋味。' },
+            { id: 'm10', name: '觀音拿鐵', category: '奶茶', recommended: true, prices: { S: 45, M: 55, L: 65 }, desc: '深焙鐵觀音遇上優質小農鮮奶，極致濃郁交響曲。' },
+            { id: 'm11', name: '鮮奶紅茶', category: '奶茶', recommended: false, prices: { S: 45, M: 55, L: 65 }, desc: '熟成阿薩姆與100%純鮮奶完美相融，經典厚實。' },
+            { id: 'm12', name: '爆爽檸檬青茶', category: '冰沙', recommended: true, prices: { S: 35, M: 45, L: 55 }, desc: '現榨屏東檸檬果汁遇上特選高山青茶，爆爽透心涼。' },
+            { id: 'm13', name: '芒果冰沙 (季節限定)', category: '冰沙', recommended: true, prices: { S: 50, M: 60, L: 70 }, desc: '當季優質愛文芒果打製細緻冰沙，果香爆棚。' },
+            { id: 'm14', name: '翡翠百香雙響炮', category: '冰沙', recommended: true, prices: { S: 40, M: 50, L: 60 }, desc: '百香果特調配上Q彈波霸與椰果，口感豐富滿分。' }
+        ];
+
+        const sweetnessOptions = ['微糖', '半糖', '少糖', '全糖', '無糖'];
+        const iceOptions = ['去冰', '微冰', '少冰', '正常冰'];
+
+        let cart = [];
+        let currentSelectedItem = null;
+        let modalState = {
+            size: 'L',
+            sweetness: '微糖',
+            ice: '微冰',
+            quantity: 1
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(menuData);
+            updateCartUI();
+        });
+
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-white border border-stone-200/80 rounded-2xl overflow-hidden hover:border-amber-400 transition-all duration-300 flex flex-col justify-between group shadow-sm hover:shadow-xl p-5';
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-stone-900 font-serif tracking-wide group-hover:text-amber-600 transition">${item.name}</h3>
+                            ${item.recommended ? `<span class="bg-amber-100 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-star text-amber-500 mr-1"></i>推薦</span>` : ''}
+                        </div>
+                        <p class="text-xs text-stone-500 leading-relaxed mb-4">${item.desc}</p>
+                        
+                        <div class="flex items-center justify-between text-xs bg-stone-50 p-2.5 rounded-xl border border-stone-200 mb-4">
+                            <div class="text-center flex-1 border-r border-stone-200">
+                                <span class="text-stone-400 block">S</span>
+                                <span class="font-bold text-stone-800">NT$ ${item.prices.S}</span>
+                            </div>
+                            <div class="text-center flex-1 border-r border-stone-200">
+                                <span class="text-stone-400 block">M</span>
+                                <span class="font-bold text-stone-800">NT$ ${item.prices.M}</span>
+                            </div>
+                            <div class="text-center flex-1">
+                                <span class="text-stone-400 block">L</span>
+                                <span class="font-bold text-amber-600">NT$ ${item.prices.L}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="openItemModal('${item.id}')" class="w-full bg-stone-900 hover:bg-amber-500 text-white font-bold py-2.5 rounded-xl transition flex items-center justify-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>客製化選購</span>
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-stone-900', 'text-white', 'shadow');
+                btn.classList.add('bg-stone-100', 'text-stone-700');
+            });
+
+            event.target.closest('button').classList.remove('bg-stone-100', 'text-stone-700');
+            event.target.closest('button').classList.add('bg-stone-900', 'text-white', 'shadow');
+
+            if (cat === 'all') {
+                renderProducts(menuData);
+            } else {
+                const filtered = menuData.filter(item => item.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        function openItemModal(itemId) {
+            currentSelectedItem = menuData.find(i => i.id === itemId);
+            modalState = { size: 'L', sweetness: '微糖', ice: '微冰', quantity: 1 };
+
+            document.getElementById('modal-title').innerText = currentSelectedItem.name;
+            document.getElementById('modal-category').innerText = currentSelectedItem.category;
+            document.getElementById('modal-desc').innerText = currentSelectedItem.desc;
+            document.getElementById('modal-note').value = '';
+
+            document.querySelectorAll('.topping-input').forEach(cb => cb.checked = false);
+
+            renderModalOptions();
+            updateModalPrice();
+            document.getElementById('item-modal').classList.remove('hidden');
+        }
+
+        function closeItemModal() {
+            document.getElementById('item-modal').classList.add('hidden');
+        }
+
+        function renderModalOptions() {
+            const sizeContainer = document.getElementById('modal-size-options');
+            sizeContainer.innerHTML = '';
+            ['S', 'M', 'L'].forEach(size => {
+                const price = currentSelectedItem.prices[size];
+                const btn = document.createElement('button');
+                btn.className = `p-3 rounded-xl border font-bold text-center transition ${modalState.size === size ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-stone-400'}`;
+                btn.onclick = () => { modalState.size = size; renderModalOptions(); updateModalPrice(); };
+                btn.innerHTML = `<span class="block">${size} 杯</span><span class="text-xs font-normal">NT$ ${price}</span>`;
+                sizeContainer.appendChild(btn);
+            });
+
+            const sweetContainer = document.getElementById('modal-sweetness-options');
+            sweetContainer.innerHTML = '';
+            sweetnessOptions.forEach(sw => {
+                const btn = document.createElement('button');
+                btn.className = `py-2 rounded-xl border text-xs font-semibold text-center transition ${modalState.sweetness === sw ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-stone-400'}`;
+                btn.onclick = () => { modalState.sweetness = sw; renderModalOptions(); };
+                btn.innerText = sw;
+                sweetContainer.appendChild(btn);
+            });
+
+            const iceContainer = document.getElementById('modal-ice-options');
+            iceContainer.innerHTML = '';
+            iceOptions.forEach(ic => {
+                const btn = document.createElement('button');
+                btn.className = `py-2 rounded-xl border text-xs font-semibold text-center transition ${modalState.ice === ic ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-stone-50 text-stone-700 border-stone-200 hover:border-stone-400'}`;
+                btn.onclick = () => { modalState.ice = ic; renderModalOptions(); };
+                btn.innerText = ic;
+                iceContainer.appendChild(btn);
+            });
+
+            document.getElementById('modal-qty').innerText = modalState.quantity;
+        }
+
+        function changeModalQty(delta) {
+            modalState.quantity = Math.max(1, modalState.quantity + delta);
+            document.getElementById('modal-qty').innerText = modalState.quantity;
+            updateModalPrice();
+        }
+
+        function calculateModalUnitPrice() {
+            if (!currentSelectedItem) return 0;
+            let basePrice = currentSelectedItem.prices[modalState.size];
+            let toppingTotal = 0;
+            document.querySelectorAll('.topping-input:checked').forEach(cb => {
+                toppingTotal += parseInt(cb.getAttribute('data-price') || '0');
+            });
+            return basePrice + toppingTotal;
+        }
+
+        function updateModalPrice() {
+            const unitPrice = calculateModalUnitPrice();
+            const totalPrice = unitPrice * modalState.quantity;
+            document.getElementById('modal-total-price').innerText = `NT$ ${totalPrice}`;
+        }
+
+        function confirmAddToCart() {
+            const selectedToppings = [];
+            document.querySelectorAll('.topping-input:checked').forEach(cb => {
+                selectedToppings.push(cb.value);
+            });
+
+            const unitPrice = calculateModalUnitPrice();
+            const note = document.getElementById('modal-note').value.trim();
+
+            const cartItem = {
+                id: Date.now().toString(),
+                productId: currentSelectedItem.id,
+                name: currentSelectedItem.name,
+                size: modalState.size,
+                sweetness: modalState.sweetness,
+                ice: modalState.ice,
+                toppings: selectedToppings,
+                unitPrice: unitPrice,
+                quantity: modalState.quantity,
+                note: note
+            };
+
+            cart.push(cartItem);
+            updateCartUI();
+            closeItemModal();
+            showToast(`已成功將 ${currentSelectedItem.name} 加入購物車！`);
+        }
+
+        function toggleCartModal() {
+            document.getElementById('cart-modal').classList.toggle('hidden');
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-badge-count');
+            
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            badge.innerText = totalCount;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-stone-400">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3 opacity-40"></i>
+                        <p class="text-sm">購物車目前是空的</p>
+                        <p class="text-xs text-stone-500 mt-1">快去選擇您想喝的飲料吧！</p>
+                    </div>
+                `;
+                document.getElementById('cart-subtotal').innerText = 'NT$ 0';
+                document.getElementById('cart-discount').innerText = '- NT$ 0';
+                document.getElementById('cart-final-total').innerText = 'NT$ 0';
+                return;
+            }
+
+            container.innerHTML = '';
+            let subtotal = 0;
+            let allIndividualCups = [];
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.unitPrice * item.quantity;
+                subtotal += itemTotal;
+
+                for(let i = 0; i < item.quantity; i++) {
+                    allIndividualCups.push(item.unitPrice);
+                }
+
+                const itemEl = document.createElement('div');
+                itemEl.className = 'bg-stone-50 p-4 rounded-xl border border-stone-200 relative space-y-2';
+                
+                itemEl.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-stone-900">${item.name}</h4>
+                            <div class="text-xs text-amber-700 font-medium mt-0.5">
+                                [${item.size}杯] ${item.sweetness} / ${item.ice}
+                            </div>
+                        </div>
+                        <button onclick="removeCartItem(${index})" class="text-stone-400 hover:text-red-500 p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+
+                    ${item.toppings.length > 0 ? `<div class="text-xs text-stone-500">加料：${item.toppings.join(', ')}</div>` : ''}
+                    ${item.note ? `<div class="text-xs text-stone-500 italic">備註：${item.note}</div>` : ''}
+
+                    <div class="flex justify-between items-center pt-2 border-t border-stone-200">
+                        <div class="flex items-center space-x-2 bg-white px-2 py-1 rounded-lg border border-stone-200">
+                            <button onclick="updateCartQty(${index}, -1)" class="text-stone-700 font-bold px-1.5">-</button>
+                            <span class="text-xs font-bold text-stone-900 px-1">${item.quantity}</span>
+                            <button onclick="updateCartQty(${index}, 1)" class="text-stone-700 font-bold px-1.5">+</button>
+                        </div>
+                        <span class="font-bold text-stone-900 text-sm">NT$ ${itemTotal}</span>
+                    </div>
+                `;
+                container.appendChild(itemEl);
+            });
+
+            allIndividualCups.sort((a, b) => a - b);
+            const freeCupsCount = Math.floor(allIndividualCups.length / 6);
+            let discountTotal = 0;
+
+            for (let i = 0; i < freeCupsCount; i++) {
+                discountTotal += allIndividualCups[i];
+            }
+
+            const finalTotal = subtotal - discountTotal;
+
+            document.getElementById('cart-subtotal').innerText = `NT$ ${subtotal}`;
+            document.getElementById('cart-discount').innerText = `- NT$ ${discountTotal}`;
+            document.getElementById('cart-final-total').innerText = `NT$ ${finalTotal}`;
+
+            const promoText = document.getElementById('cart-promo-text');
+            if (freeCupsCount > 0) {
+                promoText.innerText = `已符合買五送一！已為您折抵 ${freeCupsCount} 杯（共 -$${discountTotal}）`;
+            } else {
+                const cupsNeeded = 6 - (allIndividualCups.length % 6);
+                promoText.innerText = `買五送一優惠：再湊 ${cupsNeeded} 杯即可享 1 杯免費折抵！`;
+            }
+        }
+
+        function updateCartQty(index, delta) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                alert('您的購物車是空的，請先挑選商品！');
+                return;
+            }
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        async function submitOrderToGoogleSheets(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('order-name').value.trim();
+            const phone = document.getElementById('order-phone').value.trim();
+            const address = document.getElementById('order-address').value.trim();
+            const note = document.getElementById('order-note').value.trim();
+
+            const submitBtn = document.getElementById('checkout-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>處理中，請稍候...</span>`;
+
+            let subtotal = 0;
+            let allCups = [];
+            cart.forEach(item => {
+                subtotal += item.unitPrice * item.quantity;
+                for (let i = 0; i < item.quantity; i++) allCups.push(item.unitPrice);
+            });
+
+            allCups.sort((a, b) => a - b);
+            const freeCupsCount = Math.floor(allCups.length / 6);
+            let discount = 0;
+            for (let i = 0; i < freeCupsCount; i++) discount += allCups[i];
+            const totalPrice = subtotal - discount;
+
+            const payload = {
+                customerName: name,
+                phone: phone,
+                address: address + (note ? ` (備註: ${note})` : ''),
+                subtotal: subtotal,
+                discount: discount,
+                totalPrice: totalPrice,
+                items: cart.map(item => ({
+                    name: item.name,
+                    size: item.size,
+                    sweetness: item.sweetness,
+                    ice: item.ice,
+                    toppings: item.toppings,
+                    unitPrice: item.unitPrice,
+                    quantity: item.quantity
+                }))
+            };
+
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                showToast('🎉 訂單已成功送到試算表！');
+                cart = [];
+                updateCartUI();
+                closeCheckoutModal();
+                toggleCartModal();
+                document.getElementById('order-form').reset();
+
+            } catch (err) {
+                console.error(err);
+                alert('傳送失敗，請重試或撥打門市電話訂購！');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span>確認送出訂單</span>`;
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

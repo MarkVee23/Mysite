@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珍珠奶茶經營大亨 - MVP</title>
+
+    <!-- Tailwind CSS (樣式庫) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js (輕量級前端狀態管理庫) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- FontAwesome (圖示庫) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* 自訂細節與動畫微調 */
+        [x-cloak] { display: none !important; }
+        
+        /* 浮動文字特效動畫 */
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-35px) scale(1.15); }
+        }
+        .animate-float {
+            animation: floatUp 1.2s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-200">
+
+    <!-- Alpine.js 主組件與狀態宣告 -->
+    <div x-data="bobaGame()" x-init="initGame()" class="max-w-4xl mx-auto w-full p-4 md:p-6 flex-grow flex flex-col justify-between relative overflow-hidden">
+
+        <!-- 畫面浮動提示文字 (Floating Effects) -->
+        <div class="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
+            <template x-for="item in floatingTexts" :key="item.id">
+                <div class="absolute font-black text-2xl drop-shadow-md animate-float"
+                     :class="item.type === 'gain' ? 'text-emerald-500' : 'text-rose-500'"
+                     :style="`top: ${item.y}%; left: ${item.x}%;`"
+                     x-text="item.text"></div>
+            </template>
+        </div>
+
+        <!-- Header: 遊戲標題與頂部數據面板 -->
+        <header class="bg-white rounded-2xl shadow-sm border border-amber-100 p-4 mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl">🧋</span>
+                    <div>
+                        <h1 class="font-bold text-xl text-amber-900 leading-tight">珍珠奶茶經營大亨</h1>
+                        <p class="text-xs text-amber-600">Day <span x-text="day"></span> / 目標 $1000 <span class="ml-2 text-slate-400">(最高營收: $<span x-text="highScore"></span>)</span></p>
+                    </div>
+                </div>
+
+                <!-- 玩家核心狀態數據 (State Display) -->
+                <div class="flex items-center gap-4 bg-amber-50/80 px-4 py-2 rounded-xl border border-amber-200 text-sm font-semibold">
+                    <!-- 金錢 -->
+                    <div class="flex items-center gap-1.5 text-emerald-600">
+                        <i class="fa-solid fa-coins"></i>
+                        <span>$<span x-text="money"></span></span>
+                    </div>
+                    <div class="w-px h-4 bg-amber-200"></div>
+                    <!-- 商譽 -->
+                    <div class="flex items-center gap-1.5 text-rose-500">
+                        <i class="fa-solid fa-heart"></i>
+                        <span><span x-text="reputation"></span>%</span>
+                    </div>
+                    <div class="w-px h-4 bg-amber-200"></div>
+                    <!-- 時間倒數 -->
+                    <div class="flex items-center gap-1.5 text-amber-700" :class="{'text-red-500 animate-pulse': timeLeft <= 10}">
+                        <i class="fa-solid fa-clock"></i>
+                        <span><span x-text="timeLeft"></span>s</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content: 依據遊戲狀態切換畫面 (State-driven UI) -->
+        <main class="flex-grow flex flex-col justify-center">
+
+            <!-- 1. 開始遊戲/歡迎畫面 (Start Screen) -->
+            <div x-show="gameState === 'START'" class="bg-white rounded-3xl p-6 md:p-8 text-center border border-amber-100 shadow-sm my-auto max-w-lg mx-auto w-full">
+                <div class="text-6xl mb-4">🧋</div>
+                <h2 class="text-2xl font-bold text-amber-900 mb-2">歡迎來到珍奶小店！</h2>
+                <p class="text-sm text-slate-600 mb-6 leading-relaxed">
+                    請在 <span class="font-bold text-amber-700">7 天內</span>賺取 <span class="font-bold text-emerald-600">$1000</span>！<br>
+                    仔細看清顧客的需求，並快速調製出對應的珍珠奶茶！
+                </p>
+                <button @click="startGame()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg transition-all text-base flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play"></i> 開始營運 (Day 1)
+                </button>
+            </div>
+
+            <!-- 2. 營運進行中畫面 (Playing Screen) -->
+            <div x-show="gameState === 'PLAYING'" x-cloak class="space-y-4">
+                
+                <!-- 每日事件提示列 -->
+                <div class="bg-amber-100/70 border border-amber-300 text-amber-900 px-4 py-2 rounded-xl text-xs flex items-center justify-between">
+                    <span class="font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-bullhorn text-amber-600"></i> 今日情報：<span x-text="dailyEvent.title"></span>
+                    </span>
+                    <span class="text-amber-700" x-text="dailyEvent.description"></span>
+                </div>
+
+                <!-- 顧客區域 (Customer Area) -->
+                <div class="bg-white rounded-2xl p-4 md:p-5 border border-amber-100 shadow-sm relative">
+                    <div class="flex items-start gap-4">
+                        <div class="text-4xl md:text-5xl bg-amber-50 p-3 rounded-2xl border border-amber-100 shrink-0" x-text="currentCustomer.avatar"></div>
+                        
+                        <div class="flex-grow min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <h3 class="font-bold text-amber-900 text-base" x-text="currentCustomer.name"></h3>
+                                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold">耐心度</span>
+                            </div>
+
+                            <!-- 耐心條 -->
+                            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-3 border border-slate-200">
+                                <div class="h-full transition-all duration-300" 
+                                     :class="currentCustomer.patience > 50 ? 'bg-emerald-500' : (currentCustomer.patience > 20 ? 'bg-amber-500' : 'bg-rose-500')"
+                                     :style="`width: ${currentCustomer.patience}%`"></div>
+                            </div>
+
+                            <!-- 顧客點餐內容卡片 -->
+                            <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-200/80">
+                                <div class="text-xs text-amber-800 font-bold mb-1.5 flex items-center gap-1">
+                                    <i class="fa-solid fa-receipt"></i> 點餐需求：
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 text-xs">
+                                    <span class="bg-white px-2 py-1 rounded-lg border border-amber-200 font-medium text-amber-900" x-text="currentCustomer.order.base"></span>
+                                    <span class="bg-white px-2 py-1 rounded-lg border border-amber-200 font-medium text-amber-900" x-text="currentCustomer.order.topping"></span>
+                                    <span class="bg-white px-2 py-1 rounded-lg border border-amber-200 font-medium text-amber-900" x-text="currentCustomer.order.sugar"></span>
+                                    <span class="bg-white px-2 py-1 rounded-lg border border-amber-200 font-medium text-amber-900" x-text="currentCustomer.order.ice"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 工作台與配料選擇 (Crafting Workspace) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    <!-- 左兩欄：選擇配料選項面板 -->
+                    <div class="md:col-span-2 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm space-y-3">
+                        
+                        <!-- 1. 茶底選擇 -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">1. 選擇茶底</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <template x-for="item in recipeOptions.bases" :key="item">
+                                    <button @click="currentDrink.base = item"
+                                            :class="currentDrink.base === item ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'"
+                                            class="py-1.5 rounded-xl border text-xs font-semibold transition-all">
+                                        <span x-text="item"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- 2. 配料選擇 (動態解鎖) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-xs font-bold text-slate-500">2. 選擇配料</label>
+                                <span x-show="upgrades.unlockedPudding" class="text-[10px] text-amber-600 font-bold">✨ 已解鎖高級布丁</span>
+                            </div>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <template x-for="item in recipeOptions.toppings" :key="item">
+                                    <button @click="currentDrink.topping = item"
+                                            :class="currentDrink.topping === item ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'"
+                                            class="py-1.5 rounded-xl border text-xs font-semibold transition-all">
+                                        <span x-text="item"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- 3. 甜度選擇 -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">3. 選擇甜度</label>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <template x-for="item in recipeOptions.sugarLevels" :key="item">
+                                    <button @click="currentDrink.sugar = item"
+                                            :class="currentDrink.sugar === item ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'"
+                                            class="py-1.5 rounded-xl border text-xs font-semibold transition-all">
+                                        <span x-text="item"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- 4. 冰量選擇 -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">4. 選擇冰量</label>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <template x-for="item in recipeOptions.iceLevels" :key="item">
+                                    <button @click="currentDrink.ice = item"
+                                            :class="currentDrink.ice === item ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'"
+                                            class="py-1.5 rounded-xl border text-xs font-semibold transition-all">
+                                        <span x-text="item"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右一欄：飲料預覽與操作按鈕 -->
+                    <div class="bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col justify-between items-center">
+                        <div class="text-center w-full">
+                            <h4 class="text-xs font-bold text-slate-400 mb-2">調製中的飲料</h4>
+                            <!-- 杯子視覺預覽 -->
+                            <div class="w-20 h-28 mx-auto bg-amber-50 border-2 border-amber-200 rounded-b-2xl rounded-t-sm flex flex-col justify-end items-center p-2 relative overflow-hidden shadow-inner">
+                                <span class="text-2xl mb-1" x-text="currentDrink.base ? '🧋' : '🥤'"></span>
+                                <div class="text-[10px] text-amber-800 font-bold truncate w-full text-center" x-text="currentDrink.topping || '空'"></div>
+                            </div>
+                            <p class="text-xs text-amber-900 font-bold mt-2 h-8 flex items-center justify-center px-1" x-text="currentDrinkSummaryText"></p>
+                        </div>
+
+                        <div class="w-full space-y-2 mt-2">
+                            <button @click="serveDrink()" 
+                                    :disabled="!isDrinkComplete"
+                                    :class="isDrinkComplete ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md' : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
+                                    class="w-full py-2.5 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-bell"></i> 製作完成出餐
+                            </button>
+                            
+                            <button @click="resetDrink()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 rounded-xl font-bold text-xs transition-all">
+                                清空杯子
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 系統即時回饋提示訊息 (Notification Toast) -->
+                <div x-show="message" 
+                     x-transition 
+                     :class="messageType === 'success' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'"
+                     class="p-3 rounded-xl text-center text-xs font-bold shadow-md">
+                    <span x-text="message"></span>
+                </div>
+            </div>
+
+            <!-- 3. 每日結算畫面 (Day End Settlement) + 升級商城 -->
+            <div x-show="gameState === 'DAY_END'" x-cloak class="bg-white rounded-3xl p-6 text-center border border-amber-100 shadow-md my-auto max-w-lg mx-auto w-full">
+                <div class="text-4xl mb-2">🌙</div>
+                <h2 class="text-xl font-bold text-amber-900 mb-1">Day <span x-text="day"></span> 打烊結算</h2>
+                <p class="text-xs text-slate-500 mb-3">今天辛苦了！以下是今天的營業成績：</p>
+
+                <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 space-y-1.5 mb-4 text-xs">
+                    <div class="flex justify-between text-slate-600">
+                        <span>當日營收：</span>
+                        <span class="font-bold text-emerald-600">+$<span x-text="dailyStats.earnings"></span></span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>完成訂單數：</span>
+                        <span class="font-bold text-amber-900" x-text="dailyStats.servedCount"></span> 杯
+                    </div>
+                    <div class="border-t border-amber-200 pt-1.5 flex justify-between font-bold text-amber-900 text-sm">
+                        <span>目前可用資金：</span>
+                        <span class="text-emerald-600">$<span x-text="money"></span></span>
+                    </div>
+                </div>
+
+                <!-- 🛒 店面升級商城 -->
+                <div class="mb-5 text-left border-t border-slate-100 pt-3">
+                    <h3 class="text-xs font-bold text-amber-900 mb-2 flex items-center gap-1">
+                        <i class="fa-solid fa-store text-amber-600"></i> 店面升級與擴建商城
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <!-- 升級 1：自動封口機 -->
+                        <div class="p-2.5 rounded-xl border border-slate-200 flex flex-col justify-between"
+                             :class="upgrades.hasAutoSealer ? 'bg-slate-50 opacity-75' : 'bg-white'">
+                            <div>
+                                <div class="font-bold text-slate-800">⚡ 自動封口機</div>
+                                <div class="text-[10px] text-slate-400 leading-tight">每杯出餐額外獲得 +$15 效率津貼</div>
+                            </div>
+                            <button @click="buyUpgrade('hasAutoSealer', 150)"
+                                    :disabled="upgrades.hasAutoSealer || money < 150"
+                                    :class="upgrades.hasAutoSealer ? 'bg-slate-300 text-slate-600' : (money >= 150 ? 'bg-amber-500 text-white hover:bg-amber-600' : 'bg-slate-200 text-slate-400')"
+                                    class="mt-2 py-1 px-2 rounded-lg font-bold text-[11px] transition-all">
+                                <span x-text="upgrades.hasAutoSealer ? '已擁有' : '購買 $150'"></span>
+                            </button>
+                        </div>
+
+                        <!-- 升級 2：解鎖布丁 -->
+                        <div class="p-2.5 rounded-xl border border-slate-200 flex flex-col justify-between"
+                             :class="upgrades.unlockedPudding ? 'bg-slate-50 opacity-75' : 'bg-white'">
+                            <div>
+                                <div class="font-bold text-slate-800">🍮 解鎖布丁配料</div>
+                                <div class="text-[10px] text-slate-400 leading-tight">新增特調布丁配料，顧客利潤提升</div>
+                            </div>
+                            <button @click="buyUpgrade('unlockedPudding', 200)"
+                                    :disabled="upgrades.unlockedPudding || money < 200"
+                                    :class="upgrades.unlockedPudding ? 'bg-slate-300 text-slate-600' : (money >= 200 ? 'bg-amber-500 text-white hover:bg-amber-600' : 'bg-slate-200 text-slate-400')"
+                                    class="mt-2 py-1 px-2 rounded-lg font-bold text-[11px] transition-all">
+                                <span x-text="upgrades.unlockedPudding ? '已解鎖' : '購買 $200'"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button @click="nextDay()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-2xl shadow-md transition-all text-sm">
+                    開始第 <span x-text="day + 1"></span> 天營業 <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- 4. 遊戲失敗畫面 (Game Over) -->
+            <div x-show="gameState === 'GAME_OVER'" x-cloak class="bg-white rounded-3xl p-6 md:p-8 text-center border border-rose-100 shadow-sm my-auto max-w-lg mx-auto w-full">
+                <div class="text-5xl mb-3">💸</div>
+                <h2 class="text-2xl font-bold text-rose-600 mb-2">店面不幸倒閉了...</h2>
+                <p class="text-xs text-slate-600 mb-6 leading-relaxed" x-text="gameOverReason"></p>
+                
+                <button @click="initGame()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-2xl shadow-md transition-all text-sm">
+                    重新開張再接再厲 <i class="fa-solid fa-rotate-right ml-1"></i>
+                </button>
+            </div>
+
+            <!-- 5. 遊戲勝利畫面 (Victory) -->
+            <div x-show="gameState === 'VICTORY'" x-cloak class="bg-white rounded-3xl p-6 md:p-8 text-center border border-emerald-100 shadow-sm my-auto max-w-lg mx-auto w-full">
+                <div class="text-5xl mb-3">🎉</div>
+                <h2 class="text-2xl font-bold text-emerald-600 mb-2">恭喜！經營成功！</h2>
+                <p class="text-xs text-slate-600 mb-6 leading-relaxed">
+                    你成功在 <span x-text="day"></span> 天內賺取了 $<span x-text="money"></span>！<br>
+                    你的珍奶店已經成為這條街上最熱門的名店！
+                </p>
+                
+                <button @click="initGame()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-2xl shadow-md transition-all text-sm">
+                    開啟新經營賽局 <i class="fa-solid fa-trophy ml-1"></i>
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Footer: 說明提示 -->
+        <footer class="text-center text-[11px] text-amber-700/60 mt-4">
+            Vibe Coding 實作範例 - 珍珠奶茶經營小遊戲
+        </footer>
+    </div>
+
+    <!-- 遊戲邏輯 Javascript -->
+    <script>
+        const GAME_CONFIG = {
+            INITIAL_MONEY: 100,
+            INITIAL_REPUTATION: 80,
+            TARGET_MONEY: 1000,
+            MAX_DAYS: 7,
+            DAY_DURATION_SECONDS: 60,
+            BASE_DRINK_PRICE: 50,
+            REPUTATION_GAIN_MATCH: 2,
+            REPUTATION_LOSS_MISMATCH: 4,
+            REPUTATION_LOSS_TIMEOUT: 5,
+            PATIENCE_DECAY_RATE: 3,
+            MESSAGE_DURATION_MS: 2500
+        };
+
+        function bobaGame() {
+            return {
+                // --- 核心狀態 ---
+                gameState: 'START',
+                money: GAME_CONFIG.INITIAL_MONEY,
+                reputation: GAME_CONFIG.INITIAL_REPUTATION,
+                day: 1,
+                timeLeft: GAME_CONFIG.DAY_DURATION_SECONDS,
+                highScore: 0,
+                
+                isProcessingOrder: false,
+                timerInterval: null,
+                patienceInterval: null,
+                messageTimeoutHandle: null,
+                gameOverReason: '',
+
+                // 浮動文字特效 State
+                floatingTexts: [],
+
+                // 升級項目狀態
+                upgrades: {
+                    hasAutoSealer: false,
+                    unlockedPudding: false
+                },
+
+                dailyStats: { earnings: 0, servedCount: 0 },
+                dailyEvent: { title: '', description: '', priceMultiplier: 1.0 },
+
+                message: '',
+                messageType: 'success',
+
+                // 菜單選項
+                recipeOptions: {
+                    bases: ['紅茶', '綠茶', '烏龍茶'],
+                    toppings: ['無配料', '珍珠', '椰果'],
+                    sugarLevels: ['全糖', '半糖', '微糖', '無糖'],
+                    iceLevels: ['正常冰', '少冰', '去冰', '熱飲']
+                },
+
+                customerPool: [
+                    { name: '上班族 小張', avatar: '👨‍💼' },
+                    { name: '高中生 妹子', avatar: '👩‍🎓' },
+                    { name: '外送員 阿傑', avatar: '🛵' },
+                    { name: '運動員 大壯', avatar: '🏋️' },
+                    { name: '鄰居 媽媽', avatar: '👩' }
+                ],
+
+                currentCustomer: {
+                    name: '',
+                    avatar: '',
+                    order: { base: '', topping: '', sugar: '', ice: '' },
+                    patience: 100
+                },
+
+                currentDrink: { base: '', topping: '', sugar: '', ice: '' },
+
+                get isDrinkComplete() {
+                    return Boolean(
+                        this.currentDrink.base && 
+                        this.currentDrink.topping && 
+                        this.currentDrink.sugar && 
+                        this.currentDrink.ice
+                    );
+                },
+
+                get currentDrinkSummaryText() {
+                    const { base, topping, sugar, ice } = this.currentDrink;
+                    if (!base && !topping && !sugar && !ice) {
+                        return '空杯中 (請點選下方選項)';
+                    }
+                    return `${base || '未選茶'} + ${topping || '未選料'} (${sugar || '未選甜度'}/${ice || '未選冰'})`;
+                },
+
+                initGame() {
+                    this.stopTimers();
+                    this.loadHighScore();
+                    this.money = GAME_CONFIG.INITIAL_MONEY;
+                    this.reputation = GAME_CONFIG.INITIAL_REPUTATION;
+                    this.day = 1;
+                    this.gameState = 'START';
+                    this.gameOverReason = '';
+                    this.upgrades = { hasAutoSealer: false, unlockedPudding: false };
+                    this.recipeOptions.toppings = ['無配料', '珍珠', '椰果'];
+                    this.resetDrink();
+                },
+
+                buyUpgrade(key, cost) {
+                    if (this.money >= cost && !this.upgrades[key]) {
+                        this.money -= cost;
+                        this.upgrades[key] = true;
+                        
+                        if (key === 'unlockedPudding' && !this.recipeOptions.toppings.includes('布丁')) {
+                            this.recipeOptions.toppings.push('布丁');
+                        }
+                        this.addFloatingText(`-$${cost}`, 50, 40, 'loss');
+                    }
+                },
+
+                addFloatingText(text, x = 50, y = 40, type = 'gain') {
+                    const id = Date.now() + Math.random();
+                    this.floatingTexts.push({ id, text, x, y, type });
+                    setTimeout(() => {
+                        this.floatingTexts = this.floatingTexts.filter(t => t.id !== id);
+                    }, 1200);
+                },
+
+                loadHighScore() {
+                    const saved = localStorage.getItem('boba_high_score');
+                    if (saved) this.highScore = parseInt(saved, 10);
+                },
+
+                updateHighScore() {
+                    if (this.money > this.highScore) {
+                        this.highScore = this.money;
+                        localStorage.setItem('boba_high_score', this.highScore.toString());
+                    }
+                },
+
+                startGame() {
+                    this.stopTimers();
+                    this.gameState = 'PLAYING';
+                    this.dailyStats = { earnings: 0, servedCount: 0 };
+                    this.triggerDailyEvent();
+                    this.spawnCustomer();
+                    this.startTimers();
+                },
+
+                startTimers() {
+                    this.timeLeft = GAME_CONFIG.DAY_DURATION_SECONDS;
+
+                    this.timerInterval = setInterval(() => {
+                        if (this.gameState !== 'PLAYING') return;
+                        if (this.timeLeft > 0) {
+                            this.timeLeft--;
+                        } else {
+                            this.endDay();
+                        }
+                    }, 1000);
+
+                    this.patienceInterval = setInterval(() => {
+                        if (this.gameState !== 'PLAYING') return;
+
+                        if (this.currentCustomer.patience > 0) {
+                            this.currentCustomer.patience -= GAME_CONFIG.PATIENCE_DECAY_RATE;
+                            if (this.currentCustomer.patience <= 0) {
+                                this.handleCustomerTimeout();
+                            }
+                        }
+                    }, 1000);
+                },
+
+                stopTimers() {
+                    if (this.timerInterval) clearInterval(this.timerInterval);
+                    if (this.patienceInterval) clearInterval(this.patienceInterval);
+                    this.timerInterval = null;
+                    this.patienceInterval = null;
+                },
+
+                triggerDailyEvent() {
+                    const events = [
+                        { title: '平常的一天', description: '今天天氣晴朗，適合喝杯珍奶！', priceMultiplier: 1.0 },
+                        { title: '酷暑來襲', description: '天氣太熱了！飲料售價增加 20%', priceMultiplier: 1.2 },
+                        { title: '珍珠熱潮', description: '今天大家特別想吃珍珠，顧客消費意願提升！', priceMultiplier: 1.1 }
+                    ];
+                    this.dailyEvent = events[Math.floor(Math.random() * events.length)];
+                },
+
+                spawnCustomer() {
+                    const randomPerson = this.customerPool[Math.floor(Math.random() * this.customerPool.length)];
+                    const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+                    this.currentCustomer = {
+                        name: randomPerson.name,
+                        avatar: randomPerson.avatar,
+                        order: {
+                            base: getRandom(this.recipeOptions.bases),
+                            topping: getRandom(this.recipeOptions.toppings),
+                            sugar: getRandom(this.recipeOptions.sugarLevels),
+                            ice: getRandom(this.recipeOptions.iceLevels)
+                        },
+                        patience: 100
+                    };
+                    this.resetDrink();
+                },
+
+                checkRecipeMatch(drink, order) {
+                    return drink.base === order.base &&
+                           drink.topping === order.topping &&
+                           drink.sugar === order.sugar &&
+                           drink.ice === order.ice;
+                },
+
+                serveDrink() {
+                    if (this.gameState !== 'PLAYING' || !this.isDrinkComplete || this.isProcessingOrder) {
+                        return;
+                    }
+
+                    this.isProcessingOrder = true;
+                    const isMatch = this.checkRecipeMatch(this.currentDrink, this.currentCustomer.order);
+
+                    if (isMatch) {
+                        this.handleServeSuccess();
+                    } else {
+                        this.handleServeFailure();
+                    }
+
+                    this.postProcessTransaction();
+                },
+
+                handleServeSuccess() {
+                    let priceBonus = this.currentDrink.topping === '布丁' ? 30 : 0;
+                    let autoSealerBonus = this.upgrades.hasAutoSealer ? 15 : 0;
+
+                    const earned = Math.round((GAME_CONFIG.BASE_DRINK_PRICE + priceBonus + autoSealerBonus) * this.dailyEvent.priceMultiplier);
+                    
+                    this.money += earned;
+                    this.reputation = Math.min(100, this.reputation + GAME_CONFIG.REPUTATION_GAIN_MATCH);
+                    
+                    this.dailyStats.earnings += earned;
+                    this.dailyStats.servedCount++;
+
+                    this.addFloatingText(`+$${earned}`, 50, 45, 'gain');
+                    this.showMessage(`製作正確！賺取 $${earned}，商譽 +${GAME_CONFIG.REPUTATION_GAIN_MATCH}`, 'success');
+                },
+
+                handleServeFailure() {
+                    this.reputation = Math.max(0, this.reputation - GAME_CONFIG.REPUTATION_LOSS_MISMATCH);
+                    this.addFloatingText(`-${GAME_CONFIG.REPUTATION_LOSS_MISMATCH}% 商譽`, 50, 45, 'loss');
+                    this.showMessage(`配方不符合顧客需求！(商譽 -${GAME_CONFIG.REPUTATION_LOSS_MISMATCH})`, 'error');
+                },
+
+                handleCustomerTimeout() {
+                    if (this.gameState !== 'PLAYING') return;
+
+                    this.reputation = Math.max(0, this.reputation - GAME_CONFIG.REPUTATION_LOSS_TIMEOUT);
+                    this.addFloatingText(`顧客離去 -${GAME_CONFIG.REPUTATION_LOSS_TIMEOUT}%`, 50, 45, 'loss');
+                    this.showMessage(`顧客等太久生氣離開了！(商譽 -${GAME_CONFIG.REPUTATION_LOSS_TIMEOUT})`, 'error');
+                    this.postProcessTransaction();
+                },
+
+                postProcessTransaction() {
+                    this.updateHighScore();
+                    this.checkGameStatus();
+                    if (this.gameState === 'PLAYING') {
+                        this.spawnCustomer();
+                    }
+                    this.isProcessingOrder = false;
+                },
+
+                resetDrink() {
+                    this.currentDrink = { base: '', topping: '', sugar: '', ice: '' };
+                },
+
+                showMessage(msg, type = 'success') {
+                    this.message = msg;
+                    this.messageType = type;
+                    
+                    if (this.messageTimeoutHandle) {
+                        clearTimeout(this.messageTimeoutHandle);
+                    }
+                    this.messageTimeoutHandle = setTimeout(() => {
+                        this.message = '';
+                    }, GAME_CONFIG.MESSAGE_DURATION_MS);
+                },
+
+                endDay() {
+                    this.stopTimers();
+                    this.updateHighScore();
+                    
+                    if (this.money >= GAME_CONFIG.TARGET_MONEY) {
+                        this.gameState = 'VICTORY';
+                    } else if (this.reputation <= 0) {
+                        this.gameOverReason = '你的店家商譽歸零，顧客再也不登門了！';
+                        this.gameState = 'GAME_OVER';
+                    } else if (this.money < 0) {
+                        this.gameOverReason = '店面資金破產，無法繼續營運！';
+                        this.gameState = 'GAME_OVER';
+                    } else if (this.day >= GAME_CONFIG.MAX_DAYS) {
+                        this.gameOverReason = `第 ${GAME_CONFIG.MAX_DAYS} 天結束了，但未能達成 $${GAME_CONFIG.TARGET_MONEY} 的營運目標。`;
+                        this.gameState = 'GAME_OVER';
+                    } else {
+                        this.gameState = 'DAY_END';
+                    }
+                },
+
+                nextDay() {
+                    this.day++;
+                    this.startGame();
+                },
+
+                checkGameStatus() {
+                    if (this.reputation <= 0) {
+                        this.stopTimers();
+                        this.gameOverReason = '你的店家商譽歸零，顧客再也不登門了！';
+                        this.gameState = 'GAME_OVER';
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

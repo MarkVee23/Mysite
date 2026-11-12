@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>星語塔羅｜線上塔羅占卜與完整中文解牌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0a1d; --ink:#efe6d2; --muted:#a49fbf; --gold:#d8b66a; --gold2:#f1d99a;
+  --panel:rgba(255,255,255,.045); --line:rgba(216,182,106,.28);
+  --cw:108px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:"Noto Serif TC",serif; color:var(--ink); min-height:100vh; line-height:1.75;
+  background:
+    radial-gradient(1.2px 1.2px at 12% 18%,#fff8 50%,transparent 51%),
+    radial-gradient(1px 1px at 72% 12%,#fff7 50%,transparent 51%),
+    radial-gradient(1.4px 1.4px at 40% 70%,#fff6 50%,transparent 51%),
+    radial-gradient(1px 1px at 88% 60%,#fff8 50%,transparent 51%),
+    radial-gradient(1px 1px at 25% 88%,#fff5 50%,transparent 51%),
+    radial-gradient(1.3px 1.3px at 60% 40%,#fff5 50%,transparent 51%),
+    radial-gradient(900px 600px at 50% -10%,#2e2366 0%,transparent 70%),
+    radial-gradient(700px 500px at 100% 100%,#3a1d4f 0%,transparent 70%),
+    var(--bg);
+  background-attachment:fixed;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+header{text-align:center;margin-bottom:18px}
+.brand{font-family:Cinzel,serif;letter-spacing:.32em;color:var(--gold);font-size:13px}
+h1{margin:6px 0 4px;font-size:clamp(28px,5vw,42px);font-weight:700;letter-spacing:.12em;
+  background:linear-gradient(180deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:14px;margin:0}
+nav.tabs{display:flex;justify-content:center;gap:8px;margin:20px 0 26px}
+nav.tabs button,.btn,.chip-btn{
+  font-family:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  padding:9px 20px;border-radius:999px;font-size:15px;transition:.2s}
+nav.tabs button.on{background:linear-gradient(180deg,#e6c87e,#b8944a);color:#1a1530;border-color:transparent;font-weight:700}
+.btn:hover,nav.tabs button:hover,.chip-btn:hover{border-color:var(--gold)}
+.btn.primary{background:linear-gradient(180deg,#e6c87e,#b8944a);color:#1a1530;border:none;font-weight:700;padding:12px 30px;font-size:16px;box-shadow:0 6px 24px #d8b66a33}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;backdrop-filter:blur(4px)}
+.panel h2{margin:0 0 14px;font-size:18px;color:var(--gold2);letter-spacing:.08em}
+label.lbl{display:block;font-size:14px;color:var(--muted);margin:16px 0 8px}
+textarea,select{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#0008;border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none}
+textarea:focus,select:focus{border-color:var(--gold)}
+textarea{min-height:70px;resize:vertical}
+.spreads{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.sp{border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;background:#0004;transition:.2s}
+.sp:hover{border-color:var(--gold)}
+.sp.on{border-color:var(--gold);background:linear-gradient(180deg,#d8b66a22,#d8b66a08);box-shadow:inset 0 0 0 1px var(--gold)}
+.sp b{display:block;font-size:15px}
+.sp span{font-size:12.5px;color:var(--muted)}
+.sp em{font-style:normal;font-family:Cinzel,serif;color:var(--gold);font-size:12px;float:right}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.toggle{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--gold);width:17px;height:17px}
+.center{text-align:center}
+.hint{color:var(--muted);font-size:14px;margin:6px 0 14px;text-align:center}
+.hint b{color:var(--gold2)}
+/* fan */
+.fan-wrap{overflow-x:auto;overflow-y:visible;padding:26px 10px 18px;margin:0 -6px;scrollbar-width:thin}
+.fan{display:flex;min-width:max-content;padding:0 30px}
+.fcard{width:58px;aspect-ratio:100/160;margin-left:-40px;cursor:pointer;transition:transform .2s,opacity .3s;border-radius:6px;flex:none;filter:drop-shadow(0 4px 6px #0008)}
+.fcard:first-child{margin-left:0}
+.fcard img{width:100%;height:100%;display:block}
+.fcard:hover{transform:translateY(-16px)}
+.fcard.taken{opacity:0;pointer-events:none;transform:translateY(-40px)}
+.fan.shuffling .fcard{animation:shuf .5s ease-in-out infinite alternate}
+@keyframes shuf{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--dr))}}
+/* cards */
+.tcard{width:var(--cw);aspect-ratio:100/160;perspective:900px;cursor:pointer;position:relative}
+.tcard .inner{position:relative;width:100%;height:100%;transition:transform .8s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.tcard.flipped .inner{transform:rotateY(180deg)}
+.tcard .side{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:drop-shadow(0 6px 14px #000a)}
+.tcard .side img,.tcard .side svg{width:100%;height:100%;display:block}
+.tcard .front{transform:rotateY(180deg)}
+.tcard .front.rev svg{transform:rotate(180deg)}
+.tcard.deal{animation:deal .45s ease-out}
+@keyframes deal{from{transform:translateY(-60px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.tcard.flipped.glow .side.front{filter:drop-shadow(0 0 14px #d8b66a66)}
+/* spread layouts */
+.area{display:flex;justify-content:center;flex-wrap:wrap;gap:18px;padding:10px 0 6px}
+.slot{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.slot .ph{width:var(--cw);aspect-ratio:100/160;border:1.5px dashed var(--line);border-radius:8px;display:grid;place-items:center;color:var(--gold);font-family:Cinzel,serif;font-size:22px;opacity:.7}
+.slot .cap{font-size:12.5px;color:var(--muted);text-align:center;max-width:calc(var(--cw) + 30px);line-height:1.35}
+.slot .cap b{color:var(--gold2);font-family:Cinzel,serif;margin-right:3px}
+.area.celtic{--cw:80px;gap:28px;align-items:center;flex-wrap:nowrap}
+.cross{display:grid;grid-template-columns:repeat(3,auto);grid-template-rows:repeat(3,auto);gap:10px 12px;align-items:center;justify-items:center}
+.staff{display:flex;flex-direction:column-reverse;gap:10px}
+.staff .slot{flex-direction:row;gap:8px}
+.staff .slot .cap{text-align:left;width:76px}
+.cross .s0{grid-area:2/2}
+.cross .s1{grid-area:2/2;z-index:3;margin-top:-18px}
+.cross .s1 .tcard,.cross .s1 .ph{transform:rotate(90deg)}
+.cross .s1 .cap{display:none}
+.cross .s2{grid-area:3/2}.cross .s3{grid-area:2/1}.cross .s4{grid-area:1/2}.cross .s5{grid-area:2/3}
+.area.choice{display:grid;grid-template-columns:repeat(2,auto);justify-content:center;gap:16px 60px}
+.area.choice .s0{grid-column:1/3;justify-self:center}
+.choice-col{display:flex;gap:14px;justify-content:center}
+.choice-head{grid-row:2;text-align:center;font-size:14px;color:var(--gold2);letter-spacing:.1em}
+/* reading */
+#reading{margin-top:30px}
+.rblock{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:20px 0;border-top:1px solid var(--line)}
+.rblock:first-of-type{border-top:none}
+.rblock .mini{width:120px}
+.rblock .mini svg{width:100%;height:auto;display:block;filter:drop-shadow(0 6px 12px #0009)}
+.rblock .mini.rev svg{transform:rotate(180deg)}
+.rpos{font-size:13px;color:var(--gold);font-family:Cinzel,"Noto Serif TC",serif;letter-spacing:.06em}
+.rtitle{font-size:21px;font-weight:700;margin:2px 0 4px}
+.rtitle small{font-size:13px;font-weight:400;color:var(--muted);margin-left:6px}
+.tag{display:inline-block;font-size:12px;padding:1px 10px;border-radius:999px;margin-left:6px;vertical-align:middle;font-weight:400}
+.tag.up{background:#5fbf8f22;color:#8fe0b5;border:1px solid #5fbf8f55}
+.tag.rv{background:#d4626222;color:#f1a0a0;border:1px solid #d4626255}
+.posdesc{font-size:13.5px;color:var(--muted);margin:0 0 8px}
+.kws{margin:6px 0 10px}
+.kw{display:inline-block;font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:1px 10px;margin:0 6px 6px 0;color:var(--gold2)}
+.rsec{margin:8px 0}
+.rsec h4{margin:0;font-size:13.5px;color:var(--gold);font-weight:600;letter-spacing:.05em}
+.rsec p{margin:2px 0 0;font-size:15px}
+.advice{background:linear-gradient(90deg,#d8b66a1f,transparent);border-left:3px solid var(--gold);padding:8px 14px;border-radius:0 10px 10px 0;margin-top:10px;font-size:15px}
+.synth{margin-top:24px;background:linear-gradient(180deg,#2a2160aa,#1a1438aa);border:1px solid var(--gold);border-radius:18px;padding:22px 24px}
+.synth h3{margin:0 0 10px;color:var(--gold2);font-size:19px;letter-spacing:.1em}
+.synth p{margin:8px 0;font-size:15px}
+.synth .q{color:var(--muted);font-size:14px;border-bottom:1px dashed var(--line);padding-bottom:10px;margin-bottom:12px}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(30px);background:#1a1530;border:1px solid var(--gold);color:var(--gold2);padding:10px 22px;border-radius:999px;opacity:0;transition:.3s;pointer-events:none;z-index:99}
+.toast.show{opacity:1;transform:translateX(-50%)}
+/* gallery */
+.filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.chip-btn{padding:6px 16px;font-size:14px}
+.chip-btn.on{border-color:var(--gold);color:var(--gold2);background:#d8b66a1a}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:16px}
+.gcard{cursor:pointer;transition:transform .2s}
+.gcard:hover{transform:translateY(-5px)}
+.gcard svg{width:100%;height:auto;display:block;filter:drop-shadow(0 5px 10px #0009)}
+.gcard div{text-align:center;font-size:12px;color:var(--muted);margin-top:4px}
+.modal{position:fixed;inset:0;background:#05040ccc;display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.show{display:flex}
+.mbox{background:#15122c;border:1px solid var(--gold);border-radius:18px;max-width:720px;width:100%;max-height:90vh;overflow:auto;padding:24px;position:relative}
+.mbox .x{position:absolute;right:14px;top:10px;background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer}
+.mgrid{display:grid;grid-template-columns:150px 1fr;gap:22px}
+.mgrid svg{width:100%;height:auto}
+details.api{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:8px 14px;background:#0003}
+details.api summary{cursor:pointer;color:var(--gold);font-size:13.5px}
+details.api p{font-size:13.5px;color:#d9d2bf;margin:6px 0;font-family:Georgia,"Noto Serif TC",serif;line-height:1.6}
+details.api p b{color:var(--gold2);font-family:"Noto Serif TC",serif}
+.src{display:inline-block;font-size:12px;padding:3px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-top:8px}
+.src.live{color:#8fe0b5;border-color:#5fbf8f66}
+.src i{font-style:normal;display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:40px;opacity:.8}
+.hidden{display:none!important}
+@media (max-width:720px){
+  :root{--cw:80px}
+  .area{gap:12px}
+  .area.celtic{--cw:50px;gap:12px}
+  .staff .slot .cap{width:58px;font-size:11px}
+  .cross{gap:6px}
+  .cross .s1{margin-top:-10px}
+  .area.choice{gap:12px 18px}
+  .choice-col{gap:8px}
+  .rblock{grid-template-columns:76px 1fr;gap:14px}
+  .rblock .mini{width:76px}
+  .mgrid{grid-template-columns:1fr}
+  .mgrid > div:first-child{max-width:140px;margin:0 auto}
+  .slot .cap{font-size:11.5px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#26205a"/><stop offset="1" stop-color="#130f2e"/>
+    </linearGradient>
+    <radialGradient id="gHalo" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#f1d99a" stop-opacity=".28"/><stop offset="1" stop-color="#f1d99a" stop-opacity="0"/>
+    </radialGradient>
+    <symbol id="s-wands" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 18.5 L14 1.5"/><path d="M8.6 13.2 q-3.2 -.8 -3.8 -3.6 q3.2 .4 3.8 3.6z M11.2 7.8 q3.2 -.2 4.2 2.4 q-3.2 .6 -4.2 -2.4z" fill="currentColor" fill-opacity=".45"/></g></symbol>
+    <symbol id="s-cups" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2.5 h12 c0 5.2 -2.6 8.4 -6 8.4 c-3.4 0 -6 -3.2 -6 -8.4z" fill="currentColor" fill-opacity=".25"/><path d="M10 11 v5.2 M6.4 18 h7.2"/></g></symbol>
+    <symbol id="s-swords" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 1 l1.7 3 v9 h-3.4 v-9z" fill="currentColor" fill-opacity=".25"/><path d="M5.2 13 h9.6 M10 13 v6"/></g></symbol>
+    <symbol id="s-pentacles" viewBox="0 0 20 20"><g fill="none" stroke="currentColor" stroke-linejoin="round"><circle cx="10" cy="10" r="8.3" stroke-width="1.4" fill="currentColor" fill-opacity=".12"/><path d="M10 3.4 L13.9 15.3 L3.7 8 H16.3 L6.1 15.3Z" stroke-width="1"/></g></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header>
+    <div class="brand">✦ ARCANA · STELLA ✦</div>
+    <h1>星語塔羅</h1>
+    <p class="sub">靜心默念你的問題，讓 78 張牌為你映照內心的答案</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="on" data-tab="read">開始占卜</button>
+    <button data-tab="lib">牌義圖鑑</button>
+  </nav>
+
+  <!-- ========== READ ========== -->
+  <section id="tab-read">
+    <div id="setup" class="panel">
+      <h2>一、寫下你的問題</h2>
+      <textarea id="q" placeholder="例如：我接下來三個月的事業發展會如何？／我和他之間的關係會走向哪裡？（可留白，牌會給你當下最需要的訊息）"></textarea>
+      <div class="row" style="margin-top:4px">
+        <div style="flex:1;min-width:200px">
+          <label class="lbl">問題類型（影響解牌重點）</label>
+          <select id="topic">
+            <option value="general">綜合運勢／自我探索</option>
+            <option value="love">感情／人際關係</option>
+            <option value="work">事業／學業／財運</option>
+          </select>
+        </div>
+        <div style="padding-top:40px">
+          <label class="toggle"><input type="checkbox" id="rev" checked> 啟用逆位牌</label>
+        </div>
+      </div>
+      <h2 style="margin-top:26px">二、選擇牌陣</h2>
+      <div class="spreads" id="spreads"></div>
+      <div class="center" style="margin-top:24px">
+        <button class="btn primary" id="startBtn">✦ 呼叫 Tarot API 洗牌並開始抽牌</button><br>
+        <span class="src" id="srcBadge"><i></i>資料來源：Tarot API（tarotapi.dev）</span>
+      </div>
+    </div>
+
+    <div id="drawStage" class="hidden">
+      <div class="panel">
+        <p class="hint" id="drawHint"></p>
+        <div class="fan-wrap"><div class="fan" id="fan"></div></div>
+        <div class="center" style="margin-top:6px">
+          <button class="btn ghost" id="autoBtn">讓命運替我抽</button>
+          <button class="btn" id="flipAllBtn" style="display:none">全部翻開</button>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:18px">
+        <div class="area" id="area"></div>
+      </div>
+    </div>
+
+    <div id="reading"></div>
+  </section>
+
+  <!-- ========== LIBRARY ========== -->
+  <section id="tab-lib" class="hidden">
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>牌卡英文原典資料來自 <a href="https://tarotapi.dev" style="color:var(--gold)">Tarot API（tarotapi.dev）</a>，取材自 A.E. Waite《The Pictorial Key to the Tarot》（1910）。<br>塔羅占卜僅供娛樂與自我反思之用，重要決定請綜合現實狀況與專業意見。</footer>
+</div>
+
+<div class="modal" id="modal"><div class="mbox"><button class="x" id="mclose">×</button><div id="mcontent"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== 牌義資料 ===================== */
+// [中文名, 英文名, 星象符號, 對應, 關鍵字, 正位, 逆位, 感情, 事業財運, 建議]
+const MAJOR = [
+["愚者","The Fool","♅","天王星・風元素","新的開始、自由、冒險、純真",
+ "你正站在一段新旅程的起點，帶著純真與好奇準備躍入未知。愚者鼓勵你相信直覺、放下過多的顧慮，用開放的心擁抱各種可能。前方雖然看不清楚，但當你踏出第一步，路自然會在腳下展開。",
+ "魯莽衝動、不顧後果，或是因為恐懼而遲遲不敢開始。也可能代表缺乏計畫、過於天真而忽略了明顯的風險。請誠實檢視：你是在勇敢冒險，還是在逃避該負的責任？",
+ "輕鬆自在、充滿新鮮感的戀情；單身者可能遇到意想不到的緣分。不需要急著定義關係，享受相處的當下。",
+ "轉職、創業或嘗試全新領域的好時機。財務上可能有一筆新的開始，但記得做好基本的功課與預算。",
+ "勇敢跳躍，但記得先看一眼腳下的路。"],
+["魔術師","The Magician","☿","水星","意志、創造、行動力、資源具足",
+ "你已經擁有實現目標所需要的一切資源與能力。魔術師象徵把想法化為現實的力量，此刻是主動出擊、展現才華的最佳時機。只要專注你的意念並付諸行動，事情就會照著你的意志成形。",
+ "才能沒有被好好發揮、缺乏方向，或是有操弄、欺騙的意圖存在。也可能是自信不足，計畫一直停留在空談階段。同時要小心身邊花言巧語、言過其實的人。",
+ "你的魅力十足，主動表達心意會有好結果。逆位時需留意對方的話語是否真誠，別被甜言蜜語迷惑。",
+ "提案、簽約、談判、展現專業的絕佳時機，溝通與技術能力就是你的武器；適合開創副業或新收入來源。",
+ "你已經準備好了，現在就開始。"],
+["女祭司","The High Priestess","☽","月亮","直覺、潛意識、靜默、神秘、內在智慧",
+ "答案不在外面，而在你的內心深處。女祭司提醒你暫緩行動，靜下心來傾聽直覺、夢境與身體傳來的訊息。有些事情尚未揭曉，時機未到時，耐心等待真相自然浮現就是最好的策略。",
+ "忽視自己的直覺、過度依賴他人意見，或是有秘密、隱情被壓抑在檯面下。也可能與內在失去連結，感到空虛迷惘；或是表面平靜、內心卻充滿未說出口的情緒。",
+ "關係中有尚未說出口的感受，或是一段柏拉圖式、精神層面的連結。曖昧期需要時間觀察，不宜急著攤牌。",
+ "適合研究、規劃、學習與幕後工作，不要急著公開計畫。財務上宜保守，先蒐集更多資訊再做決定。",
+ "安靜下來，其實你已經知道答案。"],
+["皇后","The Empress","♀","金星","豐盛、滋養、美感、創造力、母性",
+ "豐收與滋養的能量正環繞著你。皇后代表創造、美好與無條件的關愛，生活的各個面向都有機會開花結果。好好享受感官之美與生活中的小確幸，善待自己，也溫柔地照顧身邊的人。",
+ "過度依賴他人、創造力受阻，或是忽略了自我照顧，把能量全給了別人。也可能是過度保護、以愛之名控制他人，或是對外表與物質過度執著。",
+ "甜蜜溫暖、充滿愛意的關係，雙方都感受到被呵護；也可能與懷孕、成家或家庭事務有關。",
+ "創意產業、設計、內容創作、美業與餐飲有好表現；長期耕耘的事情開始收成，財運豐盈。",
+ "先滋養自己，豐盛會隨之而來。"],
+["皇帝","The Emperor","♈","牡羊座","秩序、權威、結構、紀律、穩定",
+ "建立結構與秩序的時候到了。皇帝代表理性、紀律與領導力，用穩健的規劃與堅定的意志掌控局面，能為你帶來長久的穩定與成就。這張牌也提醒你：站上主導位置，就要為自己的決定負責。",
+ "專制、僵化、控制慾過強，或是缺乏紀律、權威受到挑戰。也可能反映與父親、上司或體制之間的衝突，或是自己不敢承擔領導責任。",
+ "穩定可靠、能給予安全感的關係，但需留意一方過於強勢、凡事都要照他的規矩來。",
+ "適合管理職、建立制度、掌握主導權；與政府、大企業或公部門往來有利。財務上宜建立紀律與長期規劃。",
+ "定下規則，並為你的決定負起責任。"],
+["教皇","The Hierophant","♉","金牛座","傳統、信仰、導師、規範、教育",
+ "遵循傳統與既定體制會帶來助益。教皇象徵精神導師、教育與信念系統，此時適合向有經驗的前輩請益，或加入能帶給你歸屬感的群體與社群。照著經過驗證的方法走，會比自己摸索更順利。",
+ "打破傳統、質疑權威，勇敢走出屬於自己的路；或是反過來，受困於僵化的教條與他人的期待之中，不敢做自己。",
+ "傳統而正式的關係，可能談及婚姻、見家長；逆位時則可能是不被祝福、不合常規的戀情。",
+ "適合進修、考證照、在組織中循規蹈矩地發展；找一位導師會讓你少走很多冤枉路。",
+ "向前人學習，再決定哪些規則真正適合你。"],
+["戀人","The Lovers","♊","雙子座","愛、選擇、結合、價值觀、和諧",
+ "一段深刻的連結，或是一個重要的選擇。戀人牌不只關於愛情，更關於依照內心真正的價值觀做出決定。當你的選擇與真實的自己一致，你會感到完整而踏實，關係也會因此更加真誠。",
+ "關係失衡、價值觀衝突，或是在選擇之間搖擺不定、不願承擔選擇的後果。也可能是誘惑、不忠，或是為了討好別人而背離了自己。",
+ "強烈的吸引與靈魂伴侶般的契合，是塔羅中極佳的愛情牌；單身者可能遇到讓你心動的對象。",
+ "面臨重要的職涯抉擇，或出現理念相合的合作夥伴；選擇與你價值觀一致的工作。",
+ "選擇那條與你的價值觀一致的路。"],
+["戰車","The Chariot","♋","巨蟹座","意志、勝利、前進、自律、掌控",
+ "憑著堅定的意志與自律，你能克服阻礙、贏得勝利。戰車要你駕馭內心相互拉扯的力量——理性與情感、渴望與恐懼——讓它們朝同一個方向前進。目標明確，就全速衝刺吧。",
+ "失去方向、失控，或是過於強勢而四處碰壁。內在的矛盾讓你原地打轉；也可能是太急於求勝，反而忽略了路上的警訊。",
+ "主動追求會有成果，但別只顧著往前衝而忽略對方的感受與步調。",
+ "在競爭中勝出、達成目標、事業快速推進；也可能與交通、出差、搬遷有關。",
+ "確定方向、握緊韁繩，然後全力前進。"],
+["力量","Strength","♌","獅子座","勇氣、柔韌、自制、耐心、內在力量",
+ "真正的力量來自溫柔與耐心，而不是蠻力。你有能力用愛與勇氣馴服內心的恐懼與衝動，以柔軟的方式化解困難。面對棘手的人事物，溫和而堅定的態度反而最有影響力。",
+ "自我懷疑、缺乏信心，或是情緒失控、被慾望與憤怒主宰。你可能忘了自己其實很有力量，需要重新與內在的勇氣連結。",
+ "以耐心與包容經營關係，能化解衝突、加深信任；溫柔是最好的語言。",
+ "用軟實力處理困難的人與事，你比自己想像中更有能力承擔挑戰。",
+ "溫柔地堅定，就是最大的力量。"],
+["隱者","The Hermit","♍","處女座","內省、獨處、智慧、尋求真理",
+ "是時候從外界的喧囂中退出，向內探索了。隱者提著一盞燈獨自前行，代表透過獨處、沉思與反省，找到真正屬於你的答案與人生方向。這段安靜的時光不是孤單，而是累積智慧。",
+ "過度孤立、與世隔絕，或是拒絕面對自己的內心；也可能是閉關夠久了，該帶著領悟回到人群之中。",
+ "需要獨處的空間，或是單身期正好用來認識自己；關係中可能有一方需要更多個人時間。",
+ "適合深度研究、專業精進、獨立作業；此時不宜追求曝光或擴張，先把內功練好。",
+ "關掉噪音，好好和自己對話。"],
+["命運之輪","Wheel of Fortune","♃","木星","轉變、週期、機運、命運的轉折",
+ "命運之輪正在轉動，好運與轉機即將到來。生命本來就有起伏的週期，順勢而為、把握時機，眼前的變化將帶你走向一個嶄新的階段。有些相遇與事件，冥冥之中自有安排。",
+ "運勢暫時走低、計畫受阻，或是抗拒必然到來的改變。請記得：輪子永遠在轉，現在的低點也終將過去。",
+ "命中注定的相遇，或是關係出現重大轉折；緣分到了，擋都擋不住。",
+ "意外的機會、職涯轉折點、財運上升；順勢而為，不要錯過時機。",
+ "擁抱改變，抓住正在轉動的機會。"],
+["正義","Justice","♎","天秤座","公平、真相、因果、責任、平衡",
+ "種什麼因，得什麼果。正義牌要求你誠實、公正地面對局勢，用理性做出平衡的判斷。法律、合約、文件相關的事宜將有公平的結果，你過去的努力與選擇也會得到相應的回報。",
+ "不公平、逃避責任，或判斷失衡、偏袒一方；法律糾紛對你不利。也可能是對自己過於嚴苛，把所有錯都往自己身上攬。",
+ "關係需要公平對待與坦誠溝通，付出要平衡；也可能涉及婚姻、離婚等法律事務。",
+ "合約、法律、談判事務的關鍵期；誠信與專業會得到回報，帳目務必清楚。",
+ "誠實面對事實，並承擔屬於你的那一部分。"],
+["吊人","The Hanged Man","♆","海王星・水元素","暫停、換位思考、犧牲、臣服、等待",
+ "事情暫時停滯，但這是必要的等待。吊人邀請你換一個角度看待問題，放下想要掌控一切的念頭，甘願暫時犧牲或退一步，往往能獲得意想不到的領悟與突破。",
+ "無謂的犧牲、拖延、抗拒等待，或是卡在原地不願改變。你可能一直在付出卻看不見回報，需要思考這份犧牲是否值得。",
+ "關係進入等待期，或在付出與犧牲之間失衡；試著站在對方的角度想一想。",
+ "專案暫停、等待時機或審核；適合重新思考策略，而不是硬推。",
+ "倒過來看，問題本身可能就是答案。"],
+["死神","Death","♏","天蠍座","結束、轉化、新生、放下",
+ "不必害怕，死神很少代表真正的死亡，而是象徵某個階段的結束與徹底的轉化。舊的模式、關係或身分正在落幕，唯有放下它們，才能為新生騰出空間。結束，是另一種開始。",
+ "抗拒改變、緊抓著已經不適合的事物不放，使停滯期不斷延長；也可能代表轉變正在緩慢、痛苦地進行中。",
+ "一段關係的結束，或是相處模式徹底改變、浴火重生。",
+ "離職、產業轉型、舊有模式終結；新的開始就在結束之後。",
+ "允許結束，新的會從灰燼中長出來。"],
+["節制","Temperance","♐","射手座","平衡、調和、耐心、中庸、療癒",
+ "以耐心與中庸之道，調和生活中各種看似對立的元素。節制代表療癒、協調與適度，不偏激、不急躁，慢慢融合工作與生活、理性與感性，你會找到最適合自己的平衡點。",
+ "失衡、過度、急躁，或是與他人缺乏協調；生活節奏被打亂，需要重新調整步調與界線。",
+ "和諧穩定、互相包容的關係，細水長流；也是療癒舊傷的好時機。",
+ "協調溝通、跨部門合作順利，穩定進步；財務上量入為出就很好。",
+ "不急不躁，找到屬於你的剛剛好。"],
+["惡魔","The Devil","♑","摩羯座","束縛、慾望、執著、成癮、陰影",
+ "你可能正被某種慾望、習慣、關係或物質所束縛。惡魔提醒你看清楚：那條鎖鏈其實是鬆的，你隨時可以選擇離開。誠實面對內心的陰影與渴望，是重新拿回力量的第一步。",
+ "掙脫束縛、覺醒，重新奪回生活的自主權；或是正在勇敢面對內心的陰影與成癮的模式。",
+ "強烈的肉體吸引，或不健康的依賴、控制關係；請檢視這段關係讓你更自由還是更被綁住。",
+ "被金錢、高薪或壓力綁住，或捲入職場權力遊戲；警惕誘惑與不當的捷徑。",
+ "看見是什麼在控制你，然後鬆開手。"],
+["高塔","The Tower","♂","火星","劇變、崩解、覺醒、突發事件",
+ "突如其來的變化打破了原有的結構，可能令人震驚與不安。但高塔倒下的，往往是建立在虛假基礎上的事物。這是破而後立的契機——當舊的崩塌，真相與自由也會隨之浮現。",
+ "勉強避開了災難，或是抗拒必要的崩解，使問題延後爆發；也可能代表一場內在的覺醒正在發生。",
+ "突然的衝突、真相揭露或分手，關係需要在真實的基礎上重建。",
+ "組織變動、計畫崩盤或預期外的損失，但也可能是讓你終於解脫的契機。",
+ "讓不穩的倒下，在真實的地基上重建。"],
+["星星","The Star","♒","水瓶座","希望、療癒、靈感、信心、平靜",
+ "風暴過後，星星帶來希望與療癒。你正重新找回信心與方向，內心逐漸平靜下來。保持樂觀、相信未來，像星光一樣溫柔而持續地發光，你的願望會慢慢實現。",
+ "失去希望、信心不足，或是對未來感到迷茫、覺得努力沒有意義。你需要重新和內在的光連結，從小小的希望開始。",
+ "純淨真誠的愛，傷痛過後的療癒與新希望；靈魂層次的契合。",
+ "創意靈感湧現、長期目標逐漸清晰，名聲與好評慢慢累積。",
+ "相信未來，持續朝著你的星星前進。"],
+["月亮","The Moon","♓","雙魚座","迷惑、不安、幻象、潛意識、直覺",
+ "事情並不像表面看起來那樣。月亮代表不確定、恐懼與幻象，你可能感到迷惘或莫名焦慮。慢慢前進，相信你的直覺，但也要分辨哪些是想像、哪些是事實。",
+ "迷霧逐漸散去、真相浮現，恐懼慢慢消退；或是仍困在自我欺騙與逃避之中。",
+ "關係中有不安全感、猜疑或隱瞞，需要坦誠溝通，不要只靠腦補。",
+ "資訊不夠明朗，小心欺騙與不實承諾；暫時不宜做重大決定或投資。",
+ "別在黑夜裡下結論，等天亮再看清楚。"],
+["太陽","The Sun","☉","太陽","成功、喜悅、活力、光明、自信",
+ "塔羅中最正向的牌之一！太陽帶來成功、喜悅與滿滿的活力，一切都在陽光下變得清晰而溫暖。自信地展現真實的自己，好事正在發生，你值得這份快樂。",
+ "暫時的低落、延遲，或喜悅被烏雲遮蔽；也可能是過度樂觀、太過自我中心。但即使是逆位，整體能量仍偏向正面。",
+ "幸福快樂、公開甜蜜的關係，可能有喜事或新生命的消息。",
+ "成功、受到肯定、事業順遂、財運亮眼，能量滿滿。",
+ "大方發光，讓世界看見你。"],
+["審判","Judgement","♇","冥王星・火元素","覺醒、召喚、重生、反省、評估",
+ "一個覺醒的時刻已經來臨，你聽見了內心深處的召喚。審判象徵回顧過去、原諒自己並且重生，做出能讓人生升級的重大決定。過去的努力也將在此時被重新評價。",
+ "自我懷疑、拒絕面對過去，或對自己過於嚴苛；也可能是錯過了重要的召喚，或遲遲不願做出決定。",
+ "舊情復燃，或重新評估這段關係，做出關鍵的決定。",
+ "職涯轉換的召喚、被重新評價、找到真正的天職；考試或審核有好消息。",
+ "回應內心的召喚，原諒過去的自己。"],
+["世界","The World","♄","土星","完成、圓滿、整合、成就、旅程",
+ "一個重要的循環圓滿完成了。你達成了目標，感受到內外整合的完整與成就。這是值得慶祝的時刻，同時也預示著一段更大的新旅程即將展開。",
+ "差臨門一腳、尚未完成，或是缺乏結束感而難以前進；需要完成最後的步驟，或為舊階段好好畫上句點。",
+ "圓滿穩定的關係，可能步入婚姻等新階段；遠距戀情也有好結果。",
+ "專案完成、目標達成，可能有國際、海外發展的機會。",
+ "慶祝你走過的路，然後迎接下一段旅程。"]
+];
+
+const SUITS = [
+ {id:"wands",name:"權杖",en:"Wands",el:"火",color:"#ec8a57",theme:"行動、熱情、創造力與事業企圖心",
+  synth:"權杖（火元素）佔多數，這件事的核心在於行動力與熱情。你需要的不是更多思考，而是勇敢地動起來、主動爭取。"},
+ {id:"cups",name:"聖杯",en:"Cups",el:"水",color:"#6cb4e0",theme:"情感、關係、直覺與內在感受",
+  synth:"聖杯（水元素）佔多數，這件事的核心在於情感與關係。請誠實面對自己的感受，人與人之間的連結是關鍵。"},
+ {id:"swords",name:"寶劍",en:"Swords",el:"風",color:"#cfd6ea",theme:"思想、溝通、決斷與衝突",
+  synth:"寶劍（風元素）佔多數，這件事的核心在於想法與溝通。可能有壓力或衝突，需要用清晰的思考與坦誠的對話來突破。"},
+ {id:"pentacles",name:"錢幣",en:"Pentacles",el:"土",color:"#e2bc5e",theme:"金錢、工作、身體與現實物質",
+  synth:"錢幣（土元素）佔多數，這件事的核心在於現實層面：金錢、工作、身體與資源。腳踏實地、按部就班會是最好的策略。"}
+];
+
+const RANKS = [
+ {n:"王牌",en:"Ace",top:"A",mean:"開始、潛能與種子"},
+ {n:"二",en:"Two",top:"II",mean:"選擇、平衡與夥伴"},
+ {n:"三",en:"Three",top:"III",mean:"成長、合作與擴展"},
+ {n:"四",en:"Four",top:"IV",mean:"穩定、基礎與停頓"},
+ {n:"五",en:"Five",top:"V",mean:"挑戰、衝突與變動"},
+ {n:"六",en:"Six",top:"VI",mean:"和諧、調整與流動"},
+ {n:"七",en:"Seven",top:"VII",mean:"評估、考驗與策略"},
+ {n:"八",en:"Eight",top:"VIII",mean:"行動、力量與推進"},
+ {n:"九",en:"Nine",top:"IX",mean:"接近完成、收成前夕"},
+ {n:"十",en:"Ten",top:"X",mean:"終結、圓滿與新循環"},
+ {n:"侍者",en:"Page",top:"PAGE",mean:"學習、好奇與新訊息",glyph:"◆"},
+ {n:"騎士",en:"Knight",top:"KNIGHT",mean:"行動、追尋與變化",glyph:"♞"},
+ {n:"皇后",en:"Queen",top:"QUEEN",mean:"內在成熟、滋養與感受力",glyph:"♛"},
+ {n:"國王",en:"King",top:"KING",mean:"外在掌控、權威與成就",glyph:"♚"}
+];
+
+// 每組：[關鍵字, 正位, 逆位, 感情, 事業財運, 建議]
+const MINOR = {
+wands:[
+["新靈感、熱情、開創、潛力","一股強烈的創造能量正在湧現，新計畫、新熱情或新機會即將被點燃。這是行動的訊號，適合大膽踏出第一步，讓靈感變成實際的成果。","熱情受阻或三分鐘熱度，想法很多卻遲遲無法啟動；可能是時機未到、動力不足，或方向不夠明確。","心動的火花出現，關係注入新鮮的激情；單身者可能遇到讓你眼睛一亮的人。","新專案、創業點子或升遷契機，主動提案會有好結果。","抓住靈感，今天就做出第一個具體行動。"],
+["規劃、抉擇、展望、遠見","你已站在起點眺望遠方，手握資源，正在規劃下一步的版圖。此刻需要在安穩與冒險之間做出選擇，世界比你想像得更大。","害怕未知而裹足不前，計畫一直停留在紙上；或對選擇感到焦慮，想要的太多而無法聚焦。","正在思考關係的未來方向，可能在兩個選項之間猶豫，或計畫一起的未來。","適合制定長期策略、評估拓展市場或轉職的可能性。","把願景寫成計畫，並給自己一個開始的日期。"],
+["拓展、遠見、等待成果、合作","先前的努力開始向外擴展，遠方的船隻即將歸來。視野正在打開，可能有跨區域、海外或對外合作的機會。","進度延誤、期待落空，或計畫缺乏遠見而受挫；合作對象可能不如預期。","遠距戀情有進展，或關係進入更寬廣的階段，彼此支持對方的發展。","業務拓展、海外合作、團隊擴編順利，前景看好。","保持耐心，同時為下一階段做好準備。"],
+["慶祝、穩定、歸屬、里程碑","階段性的成果值得好好慶祝。家庭、團隊或社群帶來安定感與喜悅，這是收穫與團聚的美好時刻。","和諧表象下的不安，家庭或團隊出現摩擦；或正處於搬遷、轉換的不穩定過渡期。","關係穩定甜蜜，可能談及同居、訂婚或見家長。","專案達成里程碑，團隊氣氛良好，適合辦慶功。","停下來，感謝自己與身邊的人。"],
+["競爭、衝突、磨合、意見分歧","意見分歧與競爭激烈，每個人都各持己見。這種衝突未必是壞事，良性的碰撞能激盪出更好的方案。","為了避免衝突而壓抑不滿；或爭執告一段落，大家終於找到共識。","小吵小鬧不斷，雙方都想主導；需要學習溝通而不是爭輸贏。","職場競爭激烈、內部意見分歧，是展現實力的時機。","把對抗轉為良性競爭，對事不對人。"],
+["勝利、肯定、榮耀、自信","你的努力獲得了公開的認可與讚賞，正處於凱旋歸來的位置，自信心大增，眾人都看見你的表現。","成果沒有被看見，或過度在意他人的評價；也可能是驕傲自滿帶來的跌跤。","被欣賞、被追求，關係讓你感到驕傲；戀情公開並獲得祝福。","升遷、得獎、業績亮眼、受到主管與客戶賞識。","享受榮耀，也別忘了與團隊分享功勞。"],
+["堅守、防衛、捍衛立場","你站在相對有利的位置，但面對多方挑戰，需要堅定立場、勇敢捍衛自己的信念與成果。","疲於應付而想放棄，或過度防衛、對所有人都充滿敵意，反而讓自己更孤立。","守護關係免受外界干擾，或在感情中堅持自己的底線。","面對競爭者與質疑，堅持你的專業立場就會贏。","確認什麼值得守護，然後毫不退讓。"],
+["迅速、進展、消息、加速","事情開始快速推進，消息接踵而至，原本停滯的局面突然加速，適合果斷行動、趁勢而為。","延誤、混亂、操之過急，或訊息傳遞出錯，導致誤會。","感情進展神速，或即將收到心儀對象的訊息；遠距關係有好消息。","案子快速推進、出差機會、重要通知即將到來。","趁勢而為，但仔細確認每一個訊息。"],
+["堅韌、戒備、最後關頭","你已歷經許多考驗，雖然疲憊卻仍堅持著。終點就在眼前，再撐一下就能成功，你比自己以為的更有韌性。","精疲力竭、防衛心過重，或因為過去的傷而無法再信任他人。","曾經受過傷而築起心牆；要分辨這是自我保護，還是自我封閉。","專案進入最後衝刺，壓力大但千萬不要在此時放棄。","休息不等於放棄，補充能量後再前進。"],
+["重擔、責任、過勞、壓力","你扛下了太多責任，壓力沉重到快看不見前方的路。成功其實近在眼前，但代價是身心的過度負荷。","學會放下與分工，卸下不屬於你的擔子；或是終於承受不住而崩潰。","關係中的付出失衡，一方承擔了太多。","工作量爆表，需要學會授權、排序與說不。","列出你肩上的事，至少放下一件。"],
+["好奇、探索、熱情的消息","充滿好奇與熱情的新開始，可能收到令人興奮的消息。這是嘗試新事物、探索新興趣的好時機。","想法很多卻不持久，衝動或缺乏方向；也可能是壞消息或延遲。","充滿新鮮感的曖昧，或對方熱情主動地示好。","學習新技能、實習、接觸全新領域，帶來成長。","帶著玩心去嘗試，不必一開始就完美。"],
+["行動、冒險、衝勁、熱血","充滿衝勁、勇往直前，適合大膽冒險、搬遷或旅行。你的熱情具有感染力，但也要小心衝動行事。","魯莽急躁、半途而廢，或熱情燒得太快而後繼無力。","熱烈的追求，但對方可能來得快也去得快。","積極開拓業務，但需注意細節與持續性。","保持衝勁，同時給自己一個踩剎車的機制。"],
+["自信、魅力、溫暖、大方","自信耀眼、熱情大方，你的魅力吸引眾人目光。你能同時兼顧多件事，並以溫暖的能量激勵身邊的人。","嫉妒、自我懷疑、情緒化，或過度在意他人眼光而失去自我。","魅力十足，桃花運旺；在關係中自信而溫暖。","領導力強，適合對外溝通、品牌、業務與表演類角色。","相信自己的光芒，勇敢站上舞台。"],
+["遠見、領導、企業家精神","具有遠見的領導者，能把願景化為行動，並帶領他人一同前進，展現強大的企業家精神與決斷力。","專斷急躁、對他人有不切實際的期待，或濫用權力。","主導關係、給予方向；需注意不要過於強勢。","創業、主導大型計畫，展現決策的魄力。","以身作則，讓願景成為團隊共同的目標。"]
+],
+cups:[
+["新的情感、愛、直覺湧現","情感如泉水般湧出，新的愛、友誼或心靈上的滿足即將到來。你的心門正在打開，準備好接收與給予愛。","情感封閉、壓抑，或付出的愛沒有得到回應；也可能是對自己缺乏愛。","新戀情開始，或關係重新燃起愛意，是極佳的愛情牌。","做真正熱愛的工作，創意靈感豐沛；工作帶來情感上的滿足。","誠實面對自己的感受，允許自己被愛。"],
+["連結、互相吸引、夥伴關係","兩人之間產生真誠的連結與互相吸引，一段平等、互惠的關係正在成形，彼此都願意付出。","關係失衡、溝通不良，或分手、合作破裂；一方付出多於另一方。","心靈相通、互有好感，可能確立關係或和好。","理想的合作夥伴出現，適合簽約或結盟。","主動表達心意，關係需要雙向奔赴。"],
+["慶祝、友誼、社群、歡聚","與好友歡聚、慶祝喜事，社交運旺盛，你感受到來自群體的支持與快樂。","過度玩樂、八卦是非，或小團體排擠、三角關係。","甜蜜愉快，可能有喜事；逆位時留意第三者介入。","團隊合作愉快，適合社群經營、活動與聯名合作。","和讓你放鬆的人聚一聚。"],
+["冷淡、沉思、錯過機會","對眼前的一切感到厭倦或不滿，沉浸在自己的內心世界，以致忽略了身邊遞來的新機會。","走出低潮，重新對生活產生興趣，願意接受新的機會。","對關係感到乏味，或沒有注意到別人的心意。","對工作提不起勁，可能忽略了眼前的好機會。","抬頭看看，有人正向你遞出杯子。"],
+["失落、遺憾、悲傷","為失去的事物感到悲傷與後悔，專注在倒下的杯子上，卻沒看見身後仍立著兩個完好的杯子。","走出悲傷，接受過去並開始療癒，重新看見自己仍擁有的。","分手的傷痛，或對過往關係的遺憾。","計畫失敗或遭受損失，需要從中學習並振作。","允許自己難過，然後轉身看看還剩下什麼。"],
+["回憶、純真、舊人、懷舊","懷舊與溫暖的回憶湧現，童年、故鄉或舊識重新出現在生活中，帶來純粹的善意與溫暖。","沉溺過去而無法前進，或把往事理想化；你需要活在當下。","舊情人重逢，或純真甜蜜的情感。","與舊同事或老客戶重新合作，舊人脈帶來機會。","從過去汲取溫暖，但別住在過去。"],
+["幻想、選擇、迷惑、誘惑","眼前有太多誘人的選擇，但其中充滿幻象。你需要分辨什麼是真實可行的，什麼只是美麗的白日夢。","從幻想中醒來，看清現實並做出明確的選擇。","對對象抱有不切實際的想像，或桃花多卻難以抉擇。","機會很多但需謹慎評估，避免好高騖遠。","把每個選項寫下來，逐一檢驗現實可行性。"],
+["離開、追尋、放下","你意識到現況已無法滿足內心，於是選擇轉身離開，去追尋更深層的意義與真正想要的生活。","害怕改變而留在不滿的處境，或漫無目的地逃避問題。","離開一段不再滋養你的關係，或需要暫時抽離。","辭職、轉換跑道，追求更有意義的工作。","離開不是失敗，而是對自己誠實。"],
+["願望成真、滿足、享受","俗稱「願望牌」，你所期望的事情很可能實現。這是享受物質與情感雙重滿足的時刻。","過度放縱、自滿，或是願望實現後才發現不如預期。","感情順心如意，對現況感到滿足。","目標達成，獲得想要的成果與報酬。","清楚說出你的願望，它正在靠近。"],
+["圓滿、家庭幸福、和諧","情感上的圓滿與和諧，家庭幸福、關係長久，是幸福美滿的象徵，彩虹就在你頭上。","家庭不和、價值觀衝突，或對完美幸福的期待反而帶來壓力。","穩定長久的關係，可能步入婚姻、建立家庭。","工作與生活平衡，團隊像家人一樣融洽。","珍惜身邊的人，幸福就藏在日常裡。"],
+["敏感、創意、情感的訊息","帶來情感上的好消息或小驚喜，你敏感而富有想像力，此時特別適合發揮創意。","情緒化、不成熟，或創意受阻；也可能收到令人失望的消息。","告白、曖昧訊息，或天真浪漫的戀情。","創意型工作有靈感，可能收到合作邀約。","聆聽直覺，寫下突如其來的靈感。"],
+["浪漫、邀約、追隨心意","浪漫的騎士帶著邀請而來。跟隨內心的感受前進，你散發著藝術氣息與溫柔的魅力。","情緒善變、不切實際，或甜言蜜語卻缺乏實際行動。","浪漫的追求、約會邀請甚至求婚，對方溫柔體貼。","收到提案或邀請，適合創意與藝術領域。","跟隨心意，但也看清承諾是否實在。"],
+["同理、直覺、溫柔、療癒","你富有同理心與直覺力，能溫柔地接納他人的情緒，是身邊人的情感支持者與療癒者。","情緒失衡、過度犧牲自己，或被他人的情緒淹沒。","深情體貼，關係中充滿理解與包容。","適合諮詢、照護、創作等需要同理心的工作。","照顧別人之前，先照顧好自己的情緒。"],
+["情緒成熟、包容、穩定","能平衡理性與感性，在風浪中保持冷靜，以成熟的態度處理情感與人際關係。","情緒壓抑或操控他人，表面平靜，內心卻波濤洶湧。","成熟可靠的伴侶，給予情感上的安全感。","穩重的管理者，善於處理人際與危機。","感受情緒，但不被情緒駕馭。"]
+],
+swords:[
+["突破、清晰、真相、決斷","一道清晰的思想之光劃破迷霧，帶來突破、真相與明確的決斷力。此刻你看得比誰都清楚。","思緒混亂、判斷錯誤，或言語傷人、濫用權力。","坦誠溝通讓關係撥雲見日，把話說清楚就好了。","新想法、關鍵決策，談判有所突破。","說實話，用清楚的邏輯切開問題。"],
+["僵局、逃避、兩難","你蒙著眼睛拒絕面對，在兩個選擇之間僵持不下，只為了維持表面上的平衡與平靜。","資訊過多而更加困惑；或是終於拿下眼罩，面對真相。","對關係的選擇視而不見，或陷入冷戰僵局。","決策卡關，需要更多資訊或第三方的意見。","拿下眼罩，逃避不會讓選擇消失。"],
+["心碎、傷痛、悲傷","令人心痛的事件或真相浮現，背叛、分離或失望帶來深刻的傷痛。","傷口正在癒合，從痛苦中慢慢釋放；或仍不願放下悲傷。","分手、背叛或三角關係帶來心碎。","令人失望的消息，或職場人際衝突。","讓眼淚流出來，承認傷痛是療癒的開始。"],
+["休息、恢復、沉澱","經歷紛擾後，你需要暫停休養，讓身心恢復，在安靜中重新整理思緒。","休息太久而停滯，或焦慮不安無法真正放鬆；也可能是該重新出發了。","關係需要冷靜期，暫時的距離有助於思考。","適合休假與沉澱，不宜在此時做重大決策。","允許自己真正地休息。"],
+["衝突、勝之不武、失和","你贏了爭執卻輸了關係。衝突中充滿算計，這份勝利帶著苦澀的味道。","放下爭執、尋求和解；或仍對過去的衝突耿耿於懷。","爭吵中說出傷人的話，需思考贏了是否值得。","辦公室政治、不公平的競爭，小心捲入是非。","問自己：我要的是贏，還是好？"],
+["過渡、離開困境、前行","你正從動盪中慢慢駛向平靜。雖然帶著傷痛，但正在往更好的地方前進。","無法離開困境，或過去的包袱一直跟著你。","關係走過難關，進入較平穩的階段。","轉換環境、搬遷或調職，情況逐漸好轉。","不必急著痊癒，持續前進就好。"],
+["策略、欺瞞、迴避","運用策略或私下行動；但也可能有欺騙、隱瞞，或想僥倖脫身的意圖。","謊言被揭穿、良心不安而坦白，或重新思考策略。","對方可能有所隱瞞，或關係中缺乏坦誠。","小心被搶功或資訊外洩，保護好你的成果。","檢查是否有人（包括自己）沒說實話。"],
+["受困、自我設限、無力","你感覺被困住、無能為力，但其實束縛是鬆的——困住你的多半是自己的想法與恐懼。","掙脫束縛，看見新的可能；或更深地陷入恐懼之中。","在關係中感到無力，或被自己的不安綁住。","覺得沒有選擇，其實出路就在身邊。","試著往前走一步，眼罩比繩子更緊。"],
+["焦慮、失眠、擔憂","深夜被焦慮與惡夢纏繞，擔憂放大了現實中的問題，內心承受著很大的壓力。","焦慮逐漸減輕；或壓力已到臨界點，需要向外求助。","對關係過度擔心、胡思亂想。","工作壓力造成失眠與焦慮。","把擔心說出來，找信任的人或專業協助。"],
+["結束、谷底、終結","痛苦的結局，事情已經來到最低點。但最壞的已經過去，天邊已經露出曙光。","從谷底慢慢復原；或拒絕接受事情已經結束的事實。","關係徹底結束，需要時間療傷。","計畫終止或失業，同時也是重新開始的契機。","承認它結束了，黎明就在後面。"],
+["好奇、觀察、求知","思維敏銳、充滿好奇心，渴望學習新知，適合調查、研究與蒐集資訊。","說話傷人、愛八卦、心直口快，或只說不做。","理性看待感情，透過聊天互相了解。","學習、研究、蒐集情報；留意職場流言。","多問問題，但說話前先想一想。"],
+["果斷、急進、直言","迅速而果斷地衝向目標，思維敏捷、行動力強，但可能過於急躁。","魯莽、衝動的言語造成傷害，或計畫不周全而失敗。","進展很快但可能缺乏溫柔，說話太直。","快速推進專案、處理危機，注意別傷到人。","速度很好，但先確認方向正確。"],
+["獨立、理性、洞察","頭腦清晰、獨立而理性，能直指問題的核心，誠實而有界線。","冷漠尖刻、過度批判，或因過往傷痛而封閉內心。","對感情有清楚的標準，不輕易妥協。","擅長分析、判斷與溝通，適合專業領域。","誠實地說出你的界線。"],
+["權威、判斷、公正","以理性、邏輯與專業做出判斷，具有知識上的權威，公正而清晰。","冷酷專斷、操控他人，或以理性之名傷人。","理性多於感性，需要多表達情感。","法律、顧問、管理等專業角色，做出關鍵決策。","以事實與原則做決定。"]
+],
+pentacles:[
+["新機會、財富的種子","物質層面的新開始：新工作、新收入、投資機會或健康的開端，基礎穩固而實在。","錯失機會、財務規劃不佳，或機會不如預期。","穩定踏實的關係開始，對方可靠。","新職位、加薪，或具體可行的商業機會。","把握看得見的機會，腳踏實地播種。"],
+["平衡、彈性、多工","同時兼顧多件事，靈活應對生活中的變化，在收支與時間之間取得平衡。","分身乏術、財務失衡，事情太多而失控。","需要在感情與工作之間取得平衡。","多工處理、兼職斜槓，需要好的時間管理。","排出優先順序，保持彈性但不貪多。"],
+["合作、技藝、團隊","透過團隊合作與專業技能完成作品，你的能力被看見並受到肯定。","團隊不合、品質不佳，或努力沒有被認可。","共同經營關係，一起規劃未來。","團隊合作順利，專業能力受到肯定。","尋求合作，借重每個人的專長。"],
+["守成、保守、控制","緊抓已經擁有的資源，追求安全感與穩定，但可能過於保守或吝嗇。","放開控制、慷慨分享；或財務失控、過度揮霍。","佔有慾強，或對關係缺乏安全感。","穩定守成，但可能錯失成長的機會。","守住重要的，放開不必要的控制。"],
+["匱乏、困境、孤立","經濟或精神上的困頓，感覺被排斥在外，但溫暖的幫助其實就在附近。","困境好轉、獲得援助，或重新找回信心。","一起面對困難，或在關係中感到孤單。","財務壓力、工作不穩，記得主動尋求資源。","開口求助並不丟臉。"],
+["施與受、慷慨、援助","資源的給予與接受，你慷慨分享，或得到他人的幫助，強調公平與互惠。","施予不公、附帶條件的幫助，或債務問題。","關係中互相付出，但要注意是否平等。","獲得資助、加薪，或扮演提攜他人的角色。","給予時不求回報，接受時心存感激。"],
+["耐心、評估、長期投資","努力已經播下種子，現在需要耐心等待成果，同時評估目前的投入是否值得。","投入多卻收穫少、缺乏耐心，或該停損卻遲遲不停。","關係需要時間培養，評估是否值得繼續投入。","長期投資的成效評估期，不要急於求成。","檢視成果，決定繼續灌溉還是換塊田。"],
+["專注、精進、匠人精神","專心致志地磨練技藝，透過重複的練習與努力不斷精進，一步步走向專業。","缺乏動力、敷衍了事，或過度追求完美。","用心經營關係，在細節中付出。","學習技能、專注工作，努力會累積成實力。","每天精進一點，時間會給你回報。"],
+["獨立、富足、自給自足","透過自身努力獲得物質上的富足與獨立，優雅而自信地享受成果。","過度依賴物質、財務不穩，或內心的孤單感。","經濟與情感獨立，不需依附他人也很完整。","財務自由、事業有成，享受努力的果實。","好好犒賞自己，你值得。"],
+["傳承、家族、長久財富","長期穩定的財富與家族傳承，事業基礎穩固，是物質層面的圓滿。","家族財務糾紛、遺產問題，或過度重視物質而忽略情感。","長久的承諾、組成家庭，獲得家人支持。","穩定的大企業、家族事業或長期財務規劃。","為長遠而建，想想你要留下什麼。"],
+["學習、務實、新計畫","認真踏實地學習新事物，對新的工作或理財計畫充滿興趣。","拖延、缺乏實際行動，或不切實際的計畫。","慢熱而真誠的感情，穩定發展中。","進修、實習、新職務的學習期。","從小處著手，持續學習。"],
+["穩健、可靠、勤奮","腳踏實地、按部就班地前進，可靠而負責，雖然慢但一定會到達。","停滯、無聊、過度保守或懶散。","可靠專一的伴侶，但可能缺少浪漫。","穩定推進、負責任，適合長期專案。","慢慢來，比較快。"],
+["照顧、務實、豐盛","溫暖而務實，善於照顧他人與經營生活，能兼顧事業與家庭的豐盛。","過度操勞、忽略自己，或物質上的不安全感。","溫柔體貼的照顧者，給予穩定的愛。","善於理財與管理，工作與生活兼顧。","照顧好身體與生活的基本盤。"],
+["成功、財富、穩重","事業有成、財務穩健的領導者，務實可靠，擅長將資源轉化為成果。","貪婪、過度物質主義，或固執保守。","能提供安全感與物質保障的伴侶。","事業高峰、財務成功，適合投資與管理。","以穩健的方式累積，善用你的資源。"]
+]};
+
+const ROMAN=["0","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX","XXI"];
+const GOLD="#e3c27a";
+
+/* 建立 78 張牌 */
+const DECK=[];
+MAJOR.forEach((m,i)=>DECK.push({id:"M"+i,major:true,num:i,name:m[0],en:m[1],glyph:m[2]+"︎",astro:m[3],
+  kw:m[4],up:m[5],rv:m[6],love:m[7],work:m[8],adv:m[9],color:GOLD,top:ROMAN[i]}));
+SUITS.forEach(s=>MINOR[s.id].forEach((d,r)=>DECK.push({id:s.id+r,major:false,suit:s.id,suitObj:s,rank:r,
+  name:s.name+RANKS[r].n,en:RANKS[r].en+" of "+s.en,kw:d[0],up:d[1],rv:d[2],love:d[3],work:d[4],adv:d[5],
+  color:s.color,top:RANKS[r].top})));
+
+/* ===================== 牌陣 ===================== */
+const SPREADS={
+ one:{name:"單張指引",count:1,desc:"快速獲得當下最需要的訊息",layout:"row",pos:[
+   {t:"核心指引",d:"這張牌是宇宙此刻想對你說的話，代表問題的核心能量與你最需要的提醒。"}]},
+ three:{name:"時間之流",count:3,desc:"過去・現在・未來",layout:"row",pos:[
+   {t:"過去",d:"影響這件事的過去經驗與根源，是一切的起點。"},
+   {t:"現在",d:"你目前所處的狀態與正在面對的能量。"},
+   {t:"未來",d:"若照目前的方向發展，接下來可能出現的趨勢。"}]},
+ love:{name:"愛情關係",count:5,desc:"看清你與對方的心",layout:"row",pos:[
+   {t:"你的心態",d:"你在這段關係中真實的感受與期待。"},
+   {t:"對方的心態",d:"對方目前對你、對這段關係的想法與感受。"},
+   {t:"關係現況",d:"兩人之間目前的狀態與互動模式。"},
+   {t:"阻礙與課題",d:"關係中需要面對、克服的障礙。"},
+   {t:"未來發展",d:"這段關係接下來可能的走向。"}]},
+ choice:{name:"二選一",count:5,desc:"兩條路，各自通往哪裡",layout:"choice",pos:[
+   {t:"現況",d:"你目前的處境，以及做這個選擇時的心態。"},
+   {t:"選擇A・過程",d:"如果選擇 A，過程中會經歷的狀況。"},
+   {t:"選擇A・結果",d:"選擇 A 最終可能帶來的結果。"},
+   {t:"選擇B・過程",d:"如果選擇 B，過程中會經歷的狀況。"},
+   {t:"選擇B・結果",d:"選擇 B 最終可能帶來的結果。"}]},
+ celtic:{name:"凱爾特十字",count:10,desc:"最經典、最完整的深度牌陣",layout:"celtic",pos:[
+   {t:"現況",d:"問題的核心，你目前所處的狀態。"},
+   {t:"挑戰",d:"橫跨在現況上的阻力或助力，是你此刻要面對的課題。"},
+   {t:"根基",d:"這件事深層的根源與潛意識的影響。"},
+   {t:"近期過去",d:"剛剛過去、正在離開的影響。"},
+   {t:"目標與可能",d:"你意識上追求的目標，或最好的可能性。"},
+   {t:"近期未來",d:"接下來不久即將發生的狀況。"},
+   {t:"自我態度",d:"你如何看待自己與這件事。"},
+   {t:"外在環境",d:"周遭的人、環境與他人對你的看法。"},
+   {t:"希望與恐懼",d:"你內心的期望與擔憂，兩者往往是一體兩面。"},
+   {t:"最終結果",d:"綜合以上所有能量，事情最可能的走向。"}]}
+};
+const TOPIC_LABEL={general:"綜合",love:"感情",work:"事業財運"};
+
+/* ===================== 卡面繪製 ===================== */
+const PIPS={
+ 2:[[50,52],[50,108]],3:[[50,42],[50,80],[50,118]],4:[[33,50],[67,50],[33,110],[67,110]],
+ 5:[[33,48],[67,48],[50,80],[33,112],[67,112]],6:[[33,42],[67,42],[33,80],[67,80],[33,118],[67,118]],
+ 7:[[33,40],[67,40],[50,60],[33,80],[67,80],[33,118],[67,118]],
+ 8:[[33,40],[67,40],[50,60],[33,80],[67,80],[50,100],[33,120],[67,120]],
+ 9:[[32,38],[68,38],[32,64],[68,64],[50,80],[32,96],[68,96],[32,122],[68,122]],
+ 10:[[32,36],[68,36],[50,50],[32,64],[68,64],[32,96],[68,96],[50,110],[32,124],[68,124]]
+};
+function faceSVG(c){
+  const col=c.color; let art="";
+  if(c.major){
+    let rays="";
+    for(let i=0;i<16;i++){const a=i*Math.PI/8,r1=36,r2=i%2?40:45;
+      rays+=`<line x1="${50+r1*Math.cos(a)}" y1="${80+r1*Math.sin(a)}" x2="${50+r2*Math.cos(a)}" y2="${80+r2*Math.sin(a)}"/>`;}
+    art=`<circle cx="50" cy="80" r="42" fill="url(#gHalo)"/>
+      <g stroke="${col}" stroke-opacity=".55" stroke-width=".7">${rays}</g>
+      <circle cx="50" cy="80" r="31" fill="none" stroke="${col}" stroke-opacity=".7" stroke-width=".9"/>
+      <circle cx="50" cy="80" r="27" fill="none" stroke="${col}" stroke-opacity=".3" stroke-width=".6" stroke-dasharray="1.5 2.5"/>
+      <text x="50" y="94" text-anchor="middle" font-size="38" fill="${col}" font-family="'Segoe UI Symbol','Noto Sans Symbols 2','DejaVu Sans',serif">${c.glyph}</text>
+      <text x="50" y="128" text-anchor="middle" font-size="6.4" fill="${col}" fill-opacity=".75" letter-spacing=".6" font-family="Cinzel,serif">${c.en.toUpperCase()}</text>`;
+  }else if(c.rank===0){
+    art=`<circle cx="50" cy="78" r="34" fill="url(#gHalo)"/><g style="color:${col}"><use href="#s-${c.suit}" x="24" y="52" width="52" height="52"/></g>
+      <text x="50" y="128" text-anchor="middle" font-size="6.4" fill="${col}" fill-opacity=".75" letter-spacing=".6" font-family="Cinzel,serif">${c.en.toUpperCase()}</text>`;
+  }else if(c.rank<10){
+    art=`<g style="color:${col}">`+PIPS[c.rank+1].map(([x,y])=>`<use href="#s-${c.suit}" x="${x-9}" y="${y-9}" width="18" height="18"/>`).join("")+`</g>`;
+  }else{
+    const R=RANKS[c.rank];
+    art=`<circle cx="50" cy="84" r="34" fill="url(#gHalo)"/>
+      <text x="50" y="58" text-anchor="middle" font-size="20" fill="${col}" font-family="'Segoe UI Symbol','Noto Sans Symbols 2','DejaVu Sans',serif">${R.glyph}︎</text>
+      <g style="color:${col}"><use href="#s-${c.suit}" x="29" y="66" width="42" height="42"/></g>
+      <text x="50" y="127" text-anchor="middle" font-size="6.4" fill="${col}" fill-opacity=".75" letter-spacing=".6" font-family="Cinzel,serif">${c.en.toUpperCase()}</text>`;
+  }
+  return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2.5" y="2.5" width="95" height="155" rx="6" fill="url(#gFace)" stroke="${col}" stroke-width="1.2"/>
+    <rect x="7" y="7" width="86" height="146" rx="3.5" fill="none" stroke="${col}" stroke-opacity=".38" stroke-width=".6"/>
+    <text x="50" y="21" text-anchor="middle" font-size="${c.top.length>4?7:9}" fill="${col}" font-family="Cinzel,serif" letter-spacing="1">${c.top}</text>
+    ${art}
+    <line x1="22" y1="135" x2="78" y2="135" stroke="${col}" stroke-opacity=".35" stroke-width=".6"/>
+    <text x="50" y="148" text-anchor="middle" font-size="${c.name.length>4?9.5:10.5}" fill="#f3e9d2" font-family="'Noto Serif TC',serif" font-weight="600">${c.name}</text>
+  </svg>`;
+}
+const BACK_SVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 160"><defs><pattern id="p" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r=".7" fill="#c9a85c" fill-opacity=".35"/></pattern><radialGradient id="g" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#3a2e7a"/><stop offset="1" stop-color="#161235"/></radialGradient></defs><rect x="2.5" y="2.5" width="95" height="155" rx="6" fill="url(#g)" stroke="#c9a85c" stroke-width="1.3"/><rect x="7.5" y="7.5" width="85" height="145" rx="3.5" fill="url(#p)" stroke="#c9a85c" stroke-opacity=".55" stroke-width=".6"/><circle cx="50" cy="80" r="26" fill="#161235" stroke="#c9a85c" stroke-width=".9"/><circle cx="50" cy="80" r="19" fill="none" stroke="#c9a85c" stroke-opacity=".5" stroke-width=".6"/><path d="M50 57 L54 76 L73 80 L54 84 L50 103 L46 84 L27 80 L46 76Z" fill="#d8b66a"/><path d="M50 22 a7 7 0 1 0 5.5 11.5 a5.6 5.6 0 1 1 -5.5 -11.5z" fill="#d8b66a" opacity=".85"/><path d="M50 138 a7 7 0 1 1 -5.5 -11.5 a5.6 5.6 0 1 0 5.5 11.5z" fill="#d8b66a" opacity=".85"/><circle cx="20" cy="22" r="1.4" fill="#d8b66a"/><circle cx="80" cy="22" r="1.4" fill="#d8b66a"/><circle cx="20" cy="138" r="1.4" fill="#d8b66a"/><circle cx="80" cy="138" r="1.4" fill="#d8b66a"/></svg>`;
+const BACK_URI="data:image/svg+xml,"+encodeURIComponent(BACK_SVG);
+
+/* ===================== 狀態 ===================== */
+const $=s=>document.querySelector(s);
+const st={spread:"three",deck:[],picked:[],flipped:0,topic:"general",rev:true,q:""};
+
+function rand(n){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n;}
+
+/* ===================== Tarot API ===================== */
+// API：https://tarotapi.dev/api/v1/cards/random?n=78（ekelen/tarot-api，資料取自 A.E. Waite《The Pictorial Key to the Tarot》）
+const API_BASE="https://tarotapi.dev/api/v1";
+const API_SNAPSHOT=[{"type": "major", "name_short": "ar01", "name": "The Magician", "value": "1", "meaning_up": "Skill, diplomacy, address, subtlety; sickness, pain, loss, disaster, snares of enemies; self-confidence, will; the Querent, if male.", "meaning_rev": "Physician, Magus, mental disease, disgrace, disquiet.", "desc": "A youthful figure in the robe of a magician, having the countenance of divine Apollo, with smile of confidence and shining eyes. Above his head is the mysterious sign of the Holy Spirit, the sign of life, like an endless cord, forming the figure 8 in a horizontal position . About his waist is a serpent-cincture, the serpent appearing to devour its own tail. This is familiar to most as a conventional symbol of eternity, but here it indicates more especially the eternity of attainment in the spirit. In the Magician's right hand is a wand raised towards heaven, while the left hand is pointing to the earth. This dual sign is known in very high grades of the Instituted Mysteries; it shews the descent of grace, virtue and light, drawn from things above and derived to things below. The suggestion throughout is therefore the possession and communication of the Powers and Gifts of the Spirit. On the table in front of the Magician are the symbols of the four Tarot suits, signifying the elements of natural life, which lie like counters before the adept, and he adapts them as he wills. Beneath are roses and lilies, the flos campi and lilium convallium, changed into garden flowers, to shew the culture of aspiration. This card signifies the divine motive in man, reflecting God, the will in the liberation of its union with that which is above. It is also the unity of individual being on all planes, and in a very high sense it is thought, in the fixation thereof. With further reference to what I have called the sign of life and its connexion with the number 8, it may be remembered that Christian Gnosticism speaks of rebirth in Christ as a change \"unto the Ogdoad.\" The mystic number is termed Jerusalem above, the Land flowing with Milk and Honey, the Holy Spirit and the Land of the Lord. According to Martinism, 8 is the number of Christ."}, {"type": "major", "name_short": "ar02", "name": "The High Priestess", "value": "2", "meaning_up": "Secrets, mystery, the future as yet unrevealed; the woman who interests the Querent, if male; the Querent herself, if female; silence, tenacity; mystery, wisdom, science.", "meaning_rev": "Passion, moral or physical ardour, conceit, surface knowledge.", "desc": "She has the lunar crescent at her feet, a horned diadem on her head, with a globe in the middle place, and a large solar cross on her breast. The scroll in her hands is inscribed with the word Tora, signifying the Greater Law, the Secret Law and the second sense of the Word. It is partly covered by her mantle, to shew that some things are implied and some spoken. She is seated between the white and black pillars--J. and B.--of the mystic Temple, and the veil of the Temple is behind her: it is embroidered with palms and pomegranates. The vestments are flowing and gauzy, and the mantle suggests light--a shimmering radiance. She has been called occult Science on the threshold of the Sanctuary of Isis, but she is really the Secret Church, the House which is of God and man. She represents also the Second Marriage of the Prince who is no longer of this world; she is the spiritual Bride and Mother, the daughter of the stars and the Higher Garden of Eden. She is, in fine, the Queen of the borrowed light, but this is the light of all. She is the Moon nourished by the milk of the Supernal Mother.\nIn a manner, she is also the Supernal Mother herself--that is to say, she is the bright reflection. It is in this sense of reflection that her truest and highest name in bolism is Shekinah--the co-habiting glory. According to Kabalism, there is a Shekinah both above and below. In the superior world it is called Binah, the Supernal Understanding which reflects to the emanations that are beneath. In the lower world it is MaIkuth--that world being, for this purpose, understood as a blessed Kingdom that with which it is made blessed being the Indwelling Glory. Mystically speaking, the Shekinah is the Spiritual Bride of the just man, and when he reads the Law she gives the Divine meaning. There are some respects in which this card is the highest and holiest of the Greater Arcana."}, {"type": "major", "name_short": "ar03", "name": "The Empress", "value": "3", "meaning_up": "Fruitfulness, action, initiative, length of days; the unknown, clandestine; also difficulty, doubt, ignorance.", "meaning_rev": "Light, truth, the unravelling of involved matters, public rejoicings; according to another reading, vacillation.", "desc": "A stately figure, seated, having rich vestments and royal aspect, as of a daughter of heaven and earth. Her diadem is of twelve stars, gathered in a cluster. The symbol of Venus is on the shield which rests near her. A field of corn is ripening in front of her, and beyond there is a fall of water. The sceptre which she bears is surmounted by the globe of this world. She is the inferior Garden of Eden, the Earthly Paradise, all that is symbolized by the visible house of man. She is not Regina coeli, but she is still refugium peccatorum, the fruitful mother of thousands. There are also certain aspects in which she has been correctly described as desire and the wings thereof, as the woman clothed with the sun, as Gloria Mundi and the veil of the Sanctum Sanctorum; but she is not, I may add, the soul that has attained wings, unless all the symbolism is counted up another and unusual way. She is above all things universal fecundity and the outer sense of the Word. This is obvious, because there is no direct message which has been given to man like that which is borne by woman; but she does not herself carry its interpretation.\nIn another order of ideas, the card of the Empress signifies the door or gate by which an entrance is obtained into this life, as into the Garden of Venus; and then the way which leads out therefrom, into that which is beyond, is the secret known to the High Priestess: it is communicated by her to the elect. Most old attributions of this card are completely wrong on the symbolism--as, for example, its identification with the Word, Divine Nature, the Triad, and so forth."}, {"type": "major", "name_short": "ar04", "name": "The Emperor", "value": "4", "meaning_up": "Stability, power, protection, realization; a great person; aid, reason, conviction; also authority and will.", "meaning_rev": "Benevolence, compassion, credit; also confusion to enemies, obstruction, immaturity.", "desc": "He has a form of the Crux ansata for his sceptre and a globe in his left hand. He is a crowned monarch--commanding, stately, seated on a throne, the arms of which axe fronted by rams' heads. He is executive and realization, the power of this world, here clothed with the highest of its natural attributes. He is occasionally represented as seated on a cubic stone, which, however, confuses some of the issues. He is the virile power, to which the Empress responds, and in this sense is he who seeks to remove the Veil of Isis; yet she remains virgo intacta.\nIt should be understood that this card and that of the Empress do not precisely represent the condition of married life, though this state is implied. On the surface, as I have indicated, they stand for mundane royalty, uplifted on the seats of the mighty; but above this there is the suggestion of another presence. They signify also--and the male figure especially--the higher kingship, occupying the intellectual throne. Hereof is the lordship of thought rather than of the animal world. Both personalities, after their own manner, are \"full of strange experience,\" but theirs is not consciously the wisdom which draws from a higher world. The Emperor has been described as (a) will in its embodied form, but this is only one of its applications, and (b) as an expression of virtualities contained in the Absolute Being--but this is fantasy."}, {"type": "major", "name_short": "ar05", "name": "The Hierophant", "value": "5", "meaning_up": "Marriage, alliance, captivity, servitude; by another account, mercy and goodness; inspiration; the man to whom the Querent has recourse.", "meaning_rev": "Society, good understanding, concord, overkindness, weakness.", "desc": "He wears the triple crown and is seated between two pillars, but they are not those of the Temple which is guarded by the High Priestess. In his left hand he holds a sceptre terminating in the triple cross, and with his right hand he gives the well-known ecclesiastical sign which is called that of esotericism, distinguishing between the manifest and concealed part of doctrine. It is noticeable in this connexion that the High Priestess makes no sign. At his feet are the crossed keys, and two priestly ministers in albs kneel before him. He has been usually called the Pope, which is a particular application of the more general office that he symbolizes. He is the ruling power of external religion, as the High Priestess is the prevailing genius of the esoteric, withdrawn power. The proper meanings of this card have suffered woeful admixture from nearly all hands. Grand Orient says truly that the Hierophant is the power of the keys, exoteric orthodox doctrine, and the outer side of the life which leads to the doctrine; but he is certainly not the prince of occult doctrine, as another commentator has suggested.\nHe is rather the summa totius theologiæ, when it has passed into the utmost rigidity of expression; but he symbolizes also all things that are righteous and sacred on the manifest side. As such, he is the channel of grace belonging to the world of institution as distinct from that of Nature, and he is the leader of salvation for the human race at large. He is the order and the head of the recognized hierarchy, which is the reflection of another and greater hierarchic order; but it may so happen that the pontiff forgets the significance of this his symbolic state and acts as if he contained within his proper measures all that his sign signifies or his symbol seeks to shew forth. He is not, as it has been thought, philosophy-except on the theological side; he is not inspiration; and he is not religion, although he is a mode of its expression."}, {"type": "major", "name_short": "ar06", "name": "The Lovers", "value": "6", "meaning_up": "Attraction, love, beauty, trials overcome.", "meaning_rev": "Failure, foolish designs. Another account speaks of marriage frustrated and contrarieties of all kinds.", "desc": "The sun shines in the zenith, and beneath is a great winged figure with arms extended, pouring down influences. In the foreground are two human figures, male and female, unveiled before each other, as if Adam and Eve when they first occupied the paradise of the earthly body. Behind the man is the Tree of Life, bearing twelve fruits, and the Tree of the Knowledge of Good and Evil is behind the woman; the serpent is twining round it. The figures suggest youth, virginity, innocence and love before it is contaminated by gross material desire. This is in all simplicity the card of human love, here exhibited as part of the way, the truth and the life. It replaces, by recourse to first principles, the old card of marriage, which I have described previously, and the later follies which depicted man between vice and virtue. In a very high sense, the card is a mystery of the Covenant and Sabbath.\nThe suggestion in respect of the woman is that she signifies that attraction towards the sensitive life which carries within it the idea of the Fall of Man, but she is rather the working of a Secret Law of Providence than a willing and conscious temptress. It is through her imputed lapse that man shall arise ultimately, and only by her can he complete himself. The card is therefore in its way another intimation concerning the great mystery of womanhood. The old meanings fall to pieces of necessity with the old pictures, but even as interpretations of the latter, some of them were of the order of commonplace and others were false in symbolism."}, {"type": "major", "name_short": "ar07", "name": "The Chariot", "value": "7", "meaning_up": "Succour, providence also war, triumph, presumption, vengeance, trouble.", "meaning_rev": "Riot, quarrel, dispute, litigation, defeat.", "desc": "An erect and princely figure carrying a drawn sword and corresponding, broadly speaking, to the traditional description which I have given in the first part. On the shoulders of the victorious hero are supposed to be the Urim and Thummim. He has led captivity captive; he is conquest on all planes--in the mind, in science, in progress, in certain trials of initiation. He has thus replied to the sphinx, and it is on this account that I have accepted the variation of Éliphas Lévi; two sphinxes thus draw his chariot. He is above all things triumph in the mind.\nIt is to be understood for this reason (a) that the question of the sphinx is concerned with a Mystery of Nature and not of the world of Grace, to which the charioteer could offer no answer; (b) that the planes of his conquest are manifest or external and not within himself; (c) that the liberation which he effects may leave himself in the bondage of the logical understanding; (d) that the tests of initiation through which he has passed in triumph are to be understood physically or rationally; and (e) that if he came to the pillars of that Temple between which the High Priestess is seated, he could not open the scroll called Tora, nor if she questioned him could he answer. He is not hereditary royalty and he is not priesthood."}, {"type": "major", "name_short": "ar08", "name": "Fortitude", "value": "8", "meaning_up": "Power, energy, action, courage, magnanimity; also complete success and honours.", "meaning_rev": "Despotism, abuse if power, weakness, discord, sometimes even disgrace.", "desc": "A woman, over whose head there broods the same symbol of life which we have seen in the card of the Magician, is closing the jaws of a lion. The only point in which this design differs from the conventional presentations is that her beneficent fortitude has already subdued the lion, which is being led by a chain of flowers. For reasons which satisfy myself, this card has been interchanged with that of justice, which is usually numbered eight. As the variation carries nothing with it which will signify to the reader, there is no cause for explanation. Fortitude, in one of its most exalted aspects, is connected with the Divine Mystery of Union; the virtue, of course, operates in all planes, and hence draws on all in its symbolism. It connects also with innocentia inviolata, and with the strength which resides in contemplation.\nThese higher meanings are, however, matters of inference, and I do not suggest that they are transparent on the surface of the card. They are intimated in a concealed manner by the chain of flowers, which signifies, among many other things, the sweet yoke and the light burden of Divine Law, when it has been taken into the heart of hearts. The card has nothing to do with self-confidence in the ordinary sense, though this has been suggested--but it concerns the confidence of those whose strength is God, who have found their refuge in Him. There is one aspect in which the lion signifies the passions, and she who is called Strength is the higher nature in its liberation. It has walked upon the asp and the basilisk and has trodden down the lion and the dragon."}, {"type": "major", "name_short": "ar09", "name": "The Hermit", "value": "9", "meaning_up": "Prudence, circumspection; also and especially treason, dissimulation, roguery, corruption.", "meaning_rev": "Concealment, disguise, policy, fear, unreasoned caution.", "desc": "The variation from the conventional models in this card is only that the lamp is not enveloped partially in the mantle of its bearer, who blends the idea of the Ancient of Days with the Light of the World It is a star which shines in the lantern. I have said that this is a card of attainment, and to extend this conception the figure is seen holding up his beacon on an eminence. Therefore the Hermit is not, as Court de Gebelin explained, a wise man in search of truth and justice; nor is he, as a later explanation proposes, an especial example of experience. His beacon intimates that \"where I am, you also may be.\"\nIt is further a card which is understood quite incorrectly when it is connected with the idea of occult isolation, as the protection of personal magnetism against admixture. This is one of the frivolous renderings which we owe to Éliphas Lévi. It has been adopted by the French Order of Martinism and some of us have heard a great deal of the Silent and Unknown Philosophy enveloped by his mantle from the knowledge of the profane. In true Martinism, the significance of the term Philosophe inconnu was of another order. It did not refer to the intended concealment of the Instituted Mysteries, much less of their substitutes, but--like the card itself--to the truth that the Divine Mysteries secure their own protection from those who are unprepared."}, {"type": "major", "name_short": "ar10", "name": "Wheel Of Fortune", "value": "10", "meaning_up": "Destiny, fortune, success, elevation, luck, felicity.", "meaning_rev": "Increase, abundance, superfluity.", "desc": "In this symbol I have again followed the reconstruction of Éliphas Lévi, who has furnished several variants. It is legitimate--as I have intimated--to use Egyptian symbolism when this serves our purpose, provided that no theory of origin is implied therein. I have, however, presented Typhon in his serpent form. The symbolism is, of course, not exclusively Egyptian, as the four Living Creatures of Ezekiel occupy the angles of the card, and the wheel itself follows other indications of Lévi in respect of Ezekiel's vision, as illustrative of the particular Tarot Key. With the French occultist, and in the design itself, the symbolic picture stands for the perpetual motion of a fluidic universe and for the flux of human life. The Sphinx is the equilibrium therein. The transliteration of Taro as Rota is inscribed on the wheel, counterchanged with the letters of the Divine Name--to shew that Providence is imphed through all. But this is the Divine intention within, and the similar intention without is exemplified by the four Living Creatures. Sometimes the sphinx is represented couchant on a pedestal above, which defrauds the symbolism by stultifying the essential idea of stability amidst movement.\nBehind the general notion expressed in the symbol there lies the denial of chance and the fatality which is implied therein. It may be added that, from the days of Lévi onward, the occult explanations of this card are--even for occultism itself--of a singularly fatuous kind. It has been said to mean principle, fecundity, virile honour, ruling authority, etc. The findings of common fortune-telling are better than this on their own plane."}, {"type": "major", "name_short": "ar11", "name": "Justice", "value": "11", "meaning_up": "Equity, rightness, probity, executive; triumph of the deserving side in law.", "meaning_rev": "Law in all its departments, legal complications, bigotry, bias, excessive severity.", "desc": "As this card follows the traditional symbolism and carries above all its obvious meanings, there is little to say regarding it outside the few considerations collected in the first part, to which the reader is referred.\nIt will be seen, however, that the figure is seated between pillars, like the High Priestess, and on this account it seems desirable to indicate that the moral principle which deals unto every man according to his works--while, of course, it is in strict analogy with higher things;--differs in its essence from the spiritual justice which is involved in the idea of election. The latter belongs to a mysterious order of Providence, in virtue of which it is possible for certain men to conceive the idea of dedication to the highest things. The operation of this is like the breathing of the Spirit where it wills, and we have no canon of criticism or ground of explanation concerning it. It is analogous to the possession of the fairy gifts and the high gifts and the gracious gifts of the poet: we have them or have not, and their presence is as much a mystery as their absence. The law of Justice is not however involved by either alternative. In conclusion, the pillars of Justice open into one world and the pillars of the High Priestess into another."}, {"type": "major", "name_short": "ar12", "name": "The Hanged Man", "value": "12", "meaning_up": "Wisdom, circumspection, discernment, trials, sacrifice, intuition, divination, prophecy.", "meaning_rev": "Selfishness, the crowd, body politic.", "desc": "The gallows from which he is suspended forms a Tau cross, while the figure--from the position of the legs--forms a fylfot cross. There is a nimbus about the head of the seeming martyr. It should be noted (1) that the tree of sacrifice is living wood, with leaves thereon; (2) that the face expresses deep entrancement, not suffering; (3) that the figure, as a whole, suggests life in suspension, but life and not death. It is a card of profound significance, but all the significance is veiled. One of his editors suggests that Éliphas Lévi did not know the meaning, which is unquestionable nor did the editor himself. It has been called falsely a card of martyrdom, a card a of prudence, a card of the Great Work, a card of duty; but we may exhaust all published interpretations and find only vanity. I will say very simply on my own part that it expresses the relation, in one of its aspects, between the Divine and the Universe.\nHe who can understand that the story of his higher nature is imbedded in this symbolism will receive intimations concerning a great awakening that is possible, and will know that after the sacred Mystery of Death there is a glorious Mystery of Resurrection."}, {"type": "major", "name_short": "ar13", "name": "Death", "value": "13", "meaning_up": "End, mortality, destruction, corruption also, for a man, the loss of a benefactor for a woman, many contrarieties; for a maid, failure of marriage projects.", "meaning_rev": "Inertia, sleep, lethargy, petrifaction, somnambulism; hope destroyed.", "desc": "The veil or mask of life is perpetuated in change, transformation and passage from lower to higher, and this is more fitly represented in the rectified Tarot by one of the apocalyptic visions than by the crude notion of the reaping skeleton. Behind it lies the whole world of ascent in the spirit. The mysterious horseman moves slowly, bearing a black banner emblazoned with the Mystic Rose, which signifies life. Between two pillars on the verge of the horizon there shines the sun of immortality. The horseman carries no visible weapon, but king and child and maiden fall before him, while a prelate with clasped hands awaits his end.\nThere should be no need to point out that the suggestion of death which I have made in connection with the previous card is, of course, to be understood mystically, but this is not the case in the present instance. The natural transit of man to the next stage of his being either is or may be one form of his progress, but the exotic and almost unknown entrance, while still in this life, into the state of mystical death is a change in the form of consciousness and the passage into a state to which ordinary death is neither the path nor gate. The existing occult explanations of the 13th card are, on the whole, better than usual, rebirth, creation, destination, renewal, and the rest."}, {"type": "major", "name_short": "ar14", "name": "Temperance", "value": "14", "meaning_up": "Economy, moderation, frugality, management, accommodation.", "meaning_rev": "Things connected with churches, religions, sects, the priesthood, sometimes even the priest who will marry the Querent; also disunion, unfortunate combinations, competing interests.", "desc": "A winged angel, with the sign of the sun upon his forehead and on his breast the square and triangle of the septenary. I speak of him in the masculine sense, but the figure is neither male nor female. It is held to be pouring the essences of life from chalice to chalice. It has one foot upon the earth and one upon waters, thus illustrating the nature of the essences. A direct path goes up to certain heights on the verge of the horizon, and above there is a great light, through which a crown is seen vaguely. Hereof is some part of the Secret of Eternal Life, as it is possible to man in his incarnation. All the conventional emblems are renounced herein.\nSo also are the conventional meanings, which refer to changes in the seasons, perpetual movement of life and even the combination of ideas. It is, moreover, untrue to say that the figure symbolizes the genius of the sun, though it is the analogy of solar light, realized in the third part of our human triplicity. It is called Temperance fantastically, because, when the rule of it obtains in our consciousness, it tempers, combines and harmonises the psychic and material natures. Under that rule we know in our rational part something of whence we came and whither we are going."}, {"type": "major", "name_short": "ar15", "name": "The Devil", "value": "15", "meaning_up": "Ravage, violence, vehemence, extraordinary efforts, force, fatality; that which is predestined but is not for this reason evil.", "meaning_rev": "Evil fatality, weakness, pettiness, blindness.", "desc": "The design is an accommodation, mean or harmony, between several motives mentioned in the first part. The Horned Goat of Mendes, with wings like those of a bat, is standing on an altar. At the pit of the stomach there is the sign of Mercury. The right hand is upraised and extended, being the reverse of that benediction which is given by the Hierophant in the fifth card. In the left hand there is a great flaming torch, inverted towards the earth. A reversed pentagram is on the forehead. There is a ring in front of the altar, from which two chains are carried to the necks of two figures, male and female. These are analogous with those of the fifth card, as if Adam and Eve after the Fall. Hereof is the chain and fatality of the material life.\nThe figures are tailed, to signify the animal nature, but there is human intelligence in the faces, and he who is exalted above them is not to be their master for ever. Even now, he is also a bondsman, sustained by the evil that is in him and blind to the liberty of service. With more than his usual derision for the arts which he pretended to respect and interpret as a master therein, Éliphas Lévi affirms that the Baphometic figure is occult science and magic. Another commentator says that in the Divine world it signifies predestination, but there is no correspondence in that world with the things which below are of the brute. What it does signify is the Dweller on the Threshold without the Mystical Garden when those are driven forth therefrom who have eaten the forbidden fruit."}, {"type": "major", "name_short": "ar16", "name": "The Tower", "value": "16", "meaning_up": "Misery, distress, indigence, adversity, calamity, disgrace, deception, ruin. It is a card in particular of unforeseen catastrophe.", "meaning_rev": "According to one account, the same in a lesser degree also oppression, imprisonment, tyranny.", "desc": "Occult explanations attached to this card are meagre and mostly disconcerting. It is idle to indicate that it depicts min in all its aspects, because it bears this evidence on the surface. It is said further that it contains the first allusion to a material building, but I do not conceive that the Tower is more or less material than the pillars which we have met with in three previous cases. I see nothing to warrant Papus in supposing that it is literally the fall of Adam, but there is more in favour of his alternative--that it signifies the materialization of the spiritual word. The bibliographer Christian imagines that it is the downfall of the mind, seeking to penetrate the mystery of God. I agree rather with Grand Orient that it is the ruin of the House of We, when evil has prevailed therein, and above all that it is the rending of a House of Doctrine. I understand that the reference is, however, to a House of Falsehood. It illustrates also in the most comprehensive way the old truth that \"except the Lord build the house, they labour in vain that build it.\"\nThere is a sense in which the catastrophe is a reflection from the previous card, but not on the side of the symbolism which I have tried to indicate therein. It is more correctly a question of analogy; one is concerned with the fall into the material and animal state, while the other signifies destruction on the intellectual side. The Tower has been spoken of as the chastisement of pride and the intellect overwhelmed in the attempt to penetrate the Mystery of God; but in neither case do these explanations account for the two persons who are the living sufferers. The one is the literal word made void and the other its false interpretation. In yet a deeper sense, it may signify also the end of a dispensation, but there is no possibility here for the consideration of this involved question."}, {"type": "major", "name_short": "ar17", "name": "The Star", "value": "17", "meaning_up": "Loss, theft, privation, abandonment; another reading says-hope and bright prospects,", "meaning_rev": "Arrogance, haughtiness, impotence.", "desc": "A great, radiant star of eight rays, surrounded by seven lesser stars--also of eight rays. The female figure in the foreground is entirely naked. Her left knee is on the land and her right foot upon the water. She pours Water of Life from two great ewers, irrigating sea and land. Behind her is rising ground and on the right a shrub or tree, whereon a bird alights. The figure expresses eternal youth and beauty. The star is l'étoile flamboyante, which appears in Masonic symbolism, but has been confused therein. That which the figure communicates to the living scene is the substance of the heavens and the elements. It has been said truly that the mottoes of this card are \"Waters of Life freely\" and \"Gifts of the Spirit.\"\nThe summary of several tawdry explanations says that it is a card of hope. On other planes it has been certified as immortality and interior light. For the majority of prepared minds, the figure will appear as the type of Truth unveiled, glorious in undying beauty, pouring on the waters of the soul some part and measure of her priceless possession. But she is in reality the Great Mother in the Kabalistic Sephira Binah, which is supernal Understanding, who communicates to the Sephiroth that are below in the measure that they can receive her influx."}, {"type": "major", "name_short": "ar18", "name": "The Moon", "value": "18", "meaning_up": "Hidden enemies, danger, calumny, darkness, terror, deception, occult forces, error.", "meaning_rev": "Instability, inconstancy, silence, lesser degrees of deception and error.", "desc": "The distinction between this card and some of the conventional types is that the moon is increasing on what is called the side of mercy, to the right of the observer. It has sixteen chief and sixteen secondary rays. The card represents life of the imagination apart from life of the spirit. The path between the towers is the issue into the unknown. The dog and wolf are the fears of the natural mind in the presence of that place of exit, when there is only reflected light to guide it.\nThe last reference is a key to another form of symbolism. The intellectual light is a reflection and beyond it is the unknown mystery which it cannot shew forth. It illuminates our animal nature, types of which are represented below--the dog, the wolf and that which comes up out of the deeps, the nameless and hideous tendency which is lower than the savage beast. It strives to attain manifestation, symbolized by crawling from the abyss of water to the land, but as a rule it sinks back whence it came. The face of the mind directs a calm gaze upon the unrest below; the dew of thought falls; the message is: Peace, be still; and it may be that there shall come a calm upon the animal nature, while the abyss beneath shall cease from giving up a form."}, {"type": "major", "name_short": "ar19", "name": "The Sun", "value": "19", "meaning_up": "Material happiness, fortunate marriage, contentment.", "meaning_rev": "The same in a lesser sense.", "desc": "The naked child mounted on a white horse and displaying a red standard has been mentioned already as the better symbolism connected with this card. It is the destiny of the Supernatural East and the great and holy light which goes before the endless procession of humanity, coming out from the walled garden of the sensitive life and passing on the journey home. The card signifies, therefore, the transit from the manifest light of this world, represented by the glorious sun of earth, to the light of the world to come, which goes before aspiration and is typified by the heart of a child.\nBut the last allusion is again the key to a different form or aspect of the symbolism. The sun is that of consciousness in the spirit - the direct as the antithesis of the reflected light. The characteristic type of humanity has become a little child therein--a child in the sense of simplicity and innocence in the sense of wisdom. In that simplicity, he bears the seal of Nature and of Art; in that innocence, he signifies the restored world. When the self-knowing spirit has dawned in the consciousness above the natural mind, that mind in its renewal leads forth the animal nature in a state of perfect conformity."}, {"type": "major", "name_short": "ar20", "name": "The Last Judgment", "value": "20", "meaning_up": "Change of position, renewal, outcome. Another account specifies total loss though lawsuit.", "meaning_rev": "Weakness, pusillanimity, simplicity; also deliberation, decision, sentence.", "desc": "I have said that this symbol is essentially invariable in all Tarot sets, or at least the variations do not alter its character. The great angel is here encompassed by clouds, but he blows his bannered trumpet, and the cross as usual is displayed on the banner. The dead are rising from their tombs--a woman on the right, a man on the left hand, and between them their child, whose back is turned. But in this card there are more than three who are restored, and it has been thought worth while to make this variation as illustrating the insufficiency of current explanations. It should be noted that all the figures are as one in the wonder, adoration and ecstacy expressed by their attitudes. It is the card which registers the accomplishment of the great work of transformation in answer to the summons of the Supernal--which summons is heard and answered from within.\nHerein is the intimation of a significance which cannot well be carried further in the present place. What is that within us which does sound a trumpet and all that is lower in our nature rises in response--almost in a moment, almost in the twinkling of an eye? Let the card continue to depict, for those who can see no further, the Last judgment and the resurrection in the natural body; but let those who have inward eyes look and discover therewith. They will understand that it has been called truly in the past a card of eternal life, and for this reason it may be compared with that which passes under the name of Temperance."}, {"type": "major", "name_short": "ar00", "name": "The Fool", "value": "ZERO", "meaning_up": "Folly, mania, extravagance, intoxication, delirium, frenzy, bewrayment.", "meaning_rev": "Negligence, absence, distribution, carelessness, apathy, nullity, vanity.", "desc": "With light step, as if earth and its trammels had little power to restrain him, a young man in gorgeous vestments pauses at the brink of a precipice among the great heights of the world; he surveys the blue distance before him-its expanse of sky rather than the prospect below. His act of eager walking is still indicated, though he is stationary at the given moment; his dog is still bounding. The edge which opens on the depth has no terror; it is as if angels were waiting to uphold him, if it came about that he leaped from the height. His countenance is full of intelligence and expectant dream. He has a rose in one hand and in the other a costly wand, from which depends over his right shoulder a wallet curiously embroidered. He is a prince of the other world on his travels through this one-all amidst the morning glory, in the keen air. The sun, which shines behind him, knows whence he came, whither he is going, and how he will return by another path after many days. He is the spirit in search of experience. Many symbols of the Instituted Mysteries are summarized in this card, which reverses, under high warrants, all the confusions that have preceded it.\nIn his Manual of Cartomancy, Grand Orient has a curious suggestion of the office of Mystic Fool, as apart of his process in higher divination; but it might call for more than ordinary gifts to put it into operation. We shall see how the card fares according to the common arts of fortune-telling, and it will be an example, to those who can discern, of the fact, otherwise so evident, that the Trumps Major had no place originally in the arts of psychic gambling, when cards are used as the counters and pretexts. Of the circumstances under which this art arose we know, however, very little. The conventional explanations say that the Fool signifies the flesh, the sensitive life, and by a peculiar satire its subsidiary name was at one time the alchemist, as depicting folly at the most insensate stage."}, {"type": "major", "name_short": "ar21", "name": "The World", "value": "21", "meaning_up": "Assured success, recompense, voyage, route, emigration, flight, change of place.", "meaning_rev": "Inertia, fixity, stagnation, permanence.", "desc": "As this final message of the Major Trumps is unchanged--and indeed unchangeable--in respect of its design, it has been partly described already regarding its deeper sense. It represents also the perfection and end of the Cosmos, the secret which is within it, the rapture of the universe when it understands itself in God. It is further the state of the soul in the consciousness of Divine Vision, reflected from the self-knowing spirit. But these meanings are without prejudice to that which I have said concerning it on the material side.\nIt has more than one message on the macrocosmic side and is, for example, the state of the restored world when the law of manifestation shall have been carried to the highest degree of natural perfection. But it is perhaps more especially a story of the past, referring to that day when all was declared to be good, when the morning stars sang together and all the Sons of God shouted for joy. One of the worst explanations concerning it is that the figure symbolizes the Magus when he has reached the highest degree of initiation; another account says that it represents the absolute, which is ridiculous. The figure has been said to stand for Truth, which is, however, more properly allocated to the seventeenth card. Lastly, it has been called the Crown of the Magi."}, {"type": "minor", "name_short": "wapa", "name": "Page of Wands", "value": "page", "meaning_up": "Dark young man, faithful, a lover, an envoy, a postman. Beside a man, he will bear favourable testimony concerning him. A dangerous rival, if followed by the Page of Cups. Has the chief qualities of his suit. He may signify family intelligence.", "meaning_rev": "Anecdotes, announcements, evil news. Also indecision and the instability which accompanies it.", "desc": "In a scene similar to the former, a young man stands in the act of proclamation. He is unknown but faithful, and his tidings are strange."}, {"type": "minor", "name_short": "wakn", "name": "Knight of Wands", "value": "knight", "meaning_up": "Departure, absence, flight, emigration. A dark young man, friendly. Change of residence.", "meaning_rev": "Rupture, division, interruption, discord.", "desc": "He is shewn as if upon a journey, armed with a short wand, and although mailed is not on a warlike errand. He is passing mounds or pyramids. The motion of the horse is a key to the character of its rider, and suggests the precipitate mood, or things connected therewith."}, {"type": "minor", "name_short": "waqu", "name": "Queen of Wands", "value": "queen", "meaning_up": "A dark woman, countrywoman, friendly, chaste, loving, honourable. If the card beside her signifies a man, she is well disposed towards him; if a woman, she is interested in the Querent. Also, love of money, or a certain success in business.", "meaning_rev": "Good, economical, obliging, serviceable. Signifies also--but in certain positions and in the neighbourhood of other cards tending in such directions--opposition, jealousy, even deceit and infidelity.", "desc": "The Wands throughout this suit are always in leaf, as it is a suit of life and animation. Emotionally and otherwise, the Queen's personality corresponds to that of the King, but is more magnetic."}, {"type": "minor", "name_short": "waki", "name": "King of Wands", "value": "king", "meaning_up": "Dark man, friendly, countryman, generally married, honest and conscientious. The card always signifies honesty, and may mean news concerning an unexpected heritage to fall in before very long.", "meaning_rev": "Good, but severe; austere, yet tolerant.", "desc": "The physical and emotional nature to which this card is attributed is dark, ardent, lithe, animated, impassioned, noble. The King uplifts a flowering wand, and wears, like his three correspondences in the remaining suits, what is called a cap of maintenance beneath his crown. He connects with the symbol of the lion, which is emblazoned on the back of his throne."}, {"type": "minor", "name_short": "waac", "name": "Ace of Wands", "value": "ace", "meaning_up": "Creation, invention, enterprise, the powers which result in these; principle, beginning, source; birth, family, origin, and in a sense the virility which is behind them; the starting point of enterprises; according to another account, money, fortune, inheritance.", "meaning_rev": "Fall, decadence, ruin, perdition, to perish also a certain clouded joy.", "desc": "A hand issuing from a cloud grasps a stout wand or club."}, {"type": "minor", "name_short": "wa02", "name": "Two of Wands", "value": "two", "meaning_up": "Between the alternative readings there is no marriage possible; on the one hand, riches, fortune, magnificence; on the other, physical suffering, disease, chagrin, sadness, mortification. The design gives one suggestion; here is a lord overlooking his dominion and alternately contemplating a globe; it looks like the malady, the mortification, the sadness of Alexander amidst the grandeur of this world's wealth.", "meaning_rev": "Surprise, wonder, enchantment, emotion, trouble, fear.", "desc": "A tall man looks from a battlemented roof over sea and shore; he holds a globe in his right hand, while a staff in his left rests on the battlement; another is fixed in a ring. The Rose and Cross and Lily should be noticed on the left side."}, {"type": "minor", "name_short": "wa03", "name": "Three of Wands", "value": "three", "meaning_up": "He symbolizes established strength, enterprise, effort, trade, commerce, discovery; those are his ships, bearing his merchandise, which are sailing over the sea. The card also signifies able co-operation in business, as if the successful merchant prince were looking from his side towards yours with a view to help you.", "meaning_rev": "The end of troubles, suspension or cessation of adversity, toil and disappointment.", "desc": "A calm, stately personage, with his back turned, looking from a cliff's edge at ships passing over the sea. Three staves are planted in the ground, and he leans slightly on one of them."}, {"type": "minor", "name_short": "wa04", "name": "Four of Wands", "value": "four", "meaning_up": "They are for once almost on the surface--country life, haven of refuge, a species of domestic harvest-home, repose, concord, harmony, prosperity, peace, and the perfected work of these.", "meaning_rev": "The meaning remains unaltered; it is prosperity, increase, felicity, beauty, embellishment.", "desc": "From the four great staves planted in the foreground there is a great garland suspended; two female figures uplift nosegays; at their side is a bridge over a moat, leading to an old manorial house."}, {"type": "minor", "name_short": "wa05", "name": "Five of Wands", "value": "five", "meaning_up": "Imitation, as, for example, sham fight, but also the strenuous competition and struggle of the search after riches and fortune. In this sense it connects with the battle of life. Hence some attributions say that it is a card of gold, gain, opulence.", "meaning_rev": "Litigation, disputes, trickery, contradiction.", "desc": "A posse of youths, who are brandishing staves, as if in sport or strife. It is mimic warfare, and hereto correspond the"}, {"type": "minor", "name_short": "wa06", "name": "Six of Wands", "value": "six", "meaning_up": "The card has been so designed that it can cover several significations; on the surface, it is a victor triumphing, but it is also great news, such as might be carried in state by the King's courier; it is expectation crowned with its own desire, the crown of hope, and so forth.", "meaning_rev": "Apprehension, fear, as of a victorious enemy at the gate; treachery, disloyalty, as of gates being opened to the enemy; also indefinite delay.", "desc": "A laurelled horseman bears one staff adorned with a laurel crown; footmen with staves are at his side."}, {"type": "minor", "name_short": "wa07", "name": "Seven of Wands", "value": "seven", "meaning_up": "It is a card of valour, for, on the surface, six are attacking one, who has, however, the vantage position. On the intellectual plane, it signifies discussion, wordy strife; in business--negotiations, war of trade, barter, competition. It is further a card of success, for the combatant is on the top and his enemies may be unable to reach him.", "meaning_rev": "Perplexity, embarrassments, anxiety. It is also a caution against indecision.", "desc": "A young man on a craggy eminence brandishing a staff; six other staves are raised towards him from below."}, {"type": "minor", "name_short": "wa08", "name": "Eight of Wands", "value": "eight", "meaning_up": "Activity in undertakings, the path of such activity, swiftness, as that of an express messenger; great haste, great hope, speed towards an end which promises assured felicity; generally, that which is on the move; also the arrows of love.", "meaning_rev": "Arrows of jealousy, internal dispute, stingings of conscience, quarrels; and domestic disputes for persons who are married.", "desc": "The card represents motion through the immovable-a flight of wands through an open country; but they draw to the term of their course. That which they signify is at hand; it may be even on the threshold."}, {"type": "minor", "name_short": "wa09", "name": "Nine of Wands", "value": "nine", "meaning_up": "The card signifies strength in opposition. If attacked, the person will meet an onslaught boldly; and his build shews, that he may prove a formidable antagonist. With this main significance there are all its possible adjuncts--delay, suspension, adjournment.", "meaning_rev": "Obstacles, adversity, calamity.", "desc": "The figure leans upon his staff and has an expectant look, as if awaiting an enemy. Behind are eight other staves--erect, in orderly disposition, like a palisade."}, {"type": "minor", "name_short": "wa10", "name": "Ten of Wands", "value": "ten", "meaning_up": "A card of many significances, and some of the readings cannot be harmonized. I set aside that which connects it with honour and good faith. The chief meaning is oppression simply, but it is also fortune, gain, any kind of success, and then it is the oppression of these things. It is also a card of false-seeming, disguise, perfidy. The place which the figure is approaching may suffer from the rods that he carries. Success is stultified if the Nine of Swords follows, and if it is a question of a lawsuit, there will be certain loss.", "meaning_rev": "Contrarieties, difficulties, intrigues, and their analogies.", "desc": "A man oppressed by the weight of the ten staves which he is carrying."}, {"type": "minor", "name_short": "cupa", "name": "Page of Cups", "value": "page", "meaning_up": "Fair young man, one impelled to render service and with whom the Querent will be connected; a studious youth; news, message; application, reflection, meditation; also these things directed to business.", "meaning_rev": "Taste, inclination, attachment, seduction, deception, artifice.", "desc": "A fair, pleasing, somewhat effeminate page, of studious and intent aspect, contemplates a fish rising from a cup to look at him. It is the pictures of the mind taking form."}, {"type": "minor", "name_short": "cukn", "name": "Knight of Cups", "value": "knight", "meaning_up": "Arrival, approach--sometimes that of a messenger; advances, proposition, demeanour, invitation, incitement.", "meaning_rev": "Trickery, artifice, subtlety, swindling, duplicity, fraud.", "desc": "Graceful, but not warlike; riding quietly, wearing a winged helmet, referring to those higher graces of the imagination which sometimes characterize this card. He too is a dreamer, but the images of the side of sense haunt him in his vision."}, {"type": "minor", "name_short": "cuqu", "name": "Queen of Cups", "value": "queen", "meaning_up": "Good, fair woman; honest, devoted woman, who will do service to the Querent; loving intelligence, and hence the gift of vision; success, happiness, pleasure; also wisdom, virtue; a perfect spouse and a good mother.", "meaning_rev": "The accounts vary; good woman; otherwise, distinguished woman but one not to be trusted; perverse woman; vice, dishonour, depravity.", "desc": "Beautiful, fair, dreamy--as one who sees visions in a cup. This is, however, only one of her aspects; she sees, but she also acts, and her activity feeds her dream."}, {"type": "minor", "name_short": "cuki", "name": "King of Cups", "value": "king", "meaning_up": "Fair man, man of business, law, or divinity; responsible, disposed to oblige the Querent; also equity, art and science, including those who profess science, law and art; creative intelligence.", "meaning_rev": "Dishonest, double-dealing man; roguery, exaction, injustice, vice, scandal, pillage, considerable loss.", "desc": "He holds a short sceptre in his left hand and a great cup in his right; his throne is set upon the sea; on one side a ship is riding and on the other a dolphin is leaping. The implicit is that the Sign of the Cup naturally refers to water, which appears in all the court cards."}, {"type": "minor", "name_short": "cuac", "name": "Ace of Cups", "value": "ace", "meaning_up": "House of the true heart, joy, content, abode, nourishment, abundance, fertility; Holy Table, felicity hereof.", "meaning_rev": "House of the false heart, mutation, instability, revolution.", "desc": "The waters are beneath, and thereon are water-lilies; the hand issues from the cloud, holding in its palm the cup, from which four streams are pouring; a dove, bearing in its bill a cross-marked Host, descends to place the Wafer in the Cup; the dew of water is falling on all sides. It is an intimation of that which may lie behind the Lesser Arcana."}, {"type": "minor", "name_short": "cu02", "name": "Two of Cups", "value": "two", "meaning_up": "Love, passion, friendship, affinity, union, concord, sympathy, the interrelation of the sexes, and--as a suggestion apart from all offices of divination--that desire which is not in Nature, but by which Nature is sanctified.", "meaning_rev": "Lust, cupidity, jealousy, wish, desire, but the card may also give, says W., \"that desire which is not in nature, but by which nature is sanctified.\"", "desc": "A youth and maiden are pledging one another, and above their cups rises the Caduceus of Hermes, between the great wings of which there appears a lion's head. It is a variant of a sign which is found in a few old examples of this card. Some curious emblematical meanings are attached to it, but they do not concern us in this place."}, {"type": "minor", "name_short": "cu03", "name": "Three of Cups", "value": "three", "meaning_up": "The conclusion of any matter in plenty, perfection and merriment; happy issue, victory, fulfilment, solace, healing,", "meaning_rev": "Expedition, dispatch, achievement, end. It signifies also the side of excess in physical enjoyment, and the pleasures of the senses.", "desc": "Maidens in a garden-ground with cups uplifted, as if pledging one another."}, {"type": "minor", "name_short": "cu04", "name": "Four of Cups", "value": "four", "meaning_up": "Weariness, disgust, aversion, imaginary vexations, as if the wine of this world had caused satiety only; another wine, as if a fairy gift, is now offered the wastrel, but he sees no consolation therein. This is also a card of blended pleasure.", "meaning_rev": "Novelty, presage, new instruction, new relations.", "desc": "A young man is seated under a tree and contemplates three cups set on the grass before him; an arm issuing from a cloud offers him another cup. His expression notwithstanding is one of discontent with his environment."}, {"type": "minor", "name_short": "cu05", "name": "Five of Cups", "value": "five", "meaning_up": "A dark, cloaked figure, looking sideways at three prone cups two others stand upright behind him; a bridge is in the background, leading to a small keep or holding. Divanatory Meanings: It is a card of loss, but something remains over; three have been taken, but two are left; it is a card of inheritance, patrimony, transmission, but not corresponding to expectations; with some interpreters it is a card of marriage, but not without bitterness or frustration.", "meaning_rev": "News, alliances, affinity, consanguinity, ancestry, return, false projects.", "desc": "A dark, cloaked figure, looking sideways at three prone cups two others stand upright behind him; a bridge is in the background, leading to a small keep or holding. Divanatory Meanings: It is a card of loss, but something remains over; three have been taken, but two are left; it is a card of inheritance, patrimony, transmission, but not corresponding to expectations; with some interpreters it is a card of marriage, but not without bitterness or frustration. Reversed: News, alliances, affinity, consanguinity, ancestry, return, false projects"}, {"type": "minor", "name_short": "cu06", "name": "Six of Cups", "value": "six", "meaning_up": "A card of the past and of memories, looking back, as--for example--on childhood; happiness, enjoyment, but coming rather from the past; things that have vanished. Another reading reverses this, giving new relations, new knowledge, new environment, and then the children are disporting in an unfamiliar precinct.", "meaning_rev": "The future, renewal, that which will come to pass presently.", "desc": "Children in an old garden, their cups filled with flowers."}, {"type": "minor", "name_short": "cu07", "name": "Seven of Cups", "value": "seven", "meaning_up": "Fairy favours, images of reflection, sentiment, imagination, things seen in the glass of contemplation; some attainment in these degrees, but nothing permanent or substantial is suggested.", "meaning_rev": "Desire, will, determination, project.", "desc": "Strange chalices of vision, but the images are more especially those of the fantastic spirit."}, {"type": "minor", "name_short": "cu08", "name": "Eight of Cups", "value": "eight", "meaning_up": "The card speaks for itself on the surface, but other readings are entirely antithetical--giving joy, mildness, timidity, honour, modesty. In practice, it is usually found that the card shews the decline of a matter, or that a matter which has been thought to be important is really of slight consequence--either for good or evil.", "meaning_rev": "Great joy, happiness, feasting.", "desc": "A man of dejected aspect is deserting the cups of his felicity, enterprise, undertaking or previous concern."}, {"type": "minor", "name_short": "cu09", "name": "Nine of Cups", "value": "nine", "meaning_up": "Concord, contentment, physical bien-être; also victory, success, advantage; satisfaction for the Querent or person for whom the consultation is made.", "meaning_rev": "Truth, loyalty, liberty; but the readings vary and include mistakes, imperfections, etc.", "desc": "A goodly personage has feasted to his heart's content, and abundant refreshment of wine is on the arched counter behind him, seeming to indicate that the future is also assured. The picture offers the material side only, but there are other aspects."}, {"type": "minor", "name_short": "cu10", "name": "Ten of Cups", "value": "ten", "meaning_up": "Contentment, repose of the entire heart; the perfection of that state; also perfection of human love and friendship; if with several picture-cards, a person who is taking charge of the Querent's interests; also the town, village or country inhabited by the Querent.", "meaning_rev": "Repose of the false heart, indignation, violence.", "desc": "Appearance of Cups in a rainbow; it is contemplated in wonder and ecstacy by a man and woman below, evidently husband and wife. His right arm is about her; his left is raised upward; she raises her right arm. The two children dancing near them have not observed the prodigy but are happy after their own manner. There is a home-scene beyond."}, {"type": "minor", "name_short": "pepa", "name": "Page of Pentacles", "value": "page", "meaning_up": "Application, study, scholarship, reflection another reading says news, messages and the bringer thereof; also rule, management.", "meaning_rev": "Prodigality, dissipation, liberality, luxury; unfavourable news.", "desc": "A youthful figure, looking intently at the pentacle which hovers over his raised hands. He moves slowly, insensible of that which is about him."}, {"type": "minor", "name_short": "pekn", "name": "Knight of Pentacles", "value": "knight", "meaning_up": "Utility, serviceableness, interest, responsibility, rectitude-all on the normal and external plane.", "meaning_rev": "inertia, idleness, repose of that kind, stagnation; also placidity, discouragement, carelessness.", "desc": "He rides a slow, enduring, heavy horse, to which his own aspect corresponds. He exhibits his symbol, but does not look therein."}, {"type": "minor", "name_short": "pequ", "name": "Queen of Pentacles", "value": "queen", "meaning_up": "Opulence, generosity, magnificence, security, liberty.", "meaning_rev": "Evil, suspicion, suspense, fear, mistrust.", "desc": "The face suggests that of a dark woman, whose qualities might be summed up in the idea of greatness of soul; she has also the serious cast of intelligence; she contemplates her symbol and may see worlds therein."}, {"type": "minor", "name_short": "peki", "name": "King of Pentacles", "value": "king", "meaning_up": "Valour, realizing intelligence, business and normal intellectual aptitude, sometimes mathematical gifts and attainments of this kind; success in these paths.", "meaning_rev": "Vice, weakness, ugliness, perversity, corruption, peril.", "desc": "The figure calls for no special description the face is rather dark, suggesting also courage, but somewhat lethargic in tendency. The bull's head should be noted as a recurrent symbol on the throne. The sign of this suit is represented throughout as engraved or blazoned with the pentagram, typifying the correspondence of the four elements in human nature and that by which they may be governed. In many old Tarot packs this suit stood for current coin, money, deniers. I have not invented the substitution of pentacles and I have no special cause to sustain in respect of the alternative. But the consensus of divinatory meanings is on the side of some change, because the cards do not happen to deal especially with questions of money."}, {"type": "minor", "name_short": "peac", "name": "Ace of Pentacles", "value": "ace", "meaning_up": "Perfect contentment, felicity, ecstasy; also speedy intelligence; gold.", "meaning_rev": "The evil side of wealth, bad intelligence; also great riches. In any case it shews prosperity, comfortable material conditions, but whether these are of advantage to the possessor will depend on whether the card is reversed or not.", "desc": "A hand--issuing, as usual, from a cloud--holds up a pentacle."}, {"type": "minor", "name_short": "pe02", "name": "Two of Pentacles", "value": "two", "meaning_up": "On the one hand it is represented as a card of gaiety, recreation and its connexions, which is the subject of the design; but it is read also as news and messages in writing, as obstacles, agitation, trouble, embroilment.", "meaning_rev": "Enforced gaiety, simulated enjoyment, literal sense, handwriting, composition, letters of exchange.", "desc": "A young man, in the act of dancing, has a pentacle in either hand, and they are joined by that endless cord which is like the number 8 reversed."}, {"type": "minor", "name_short": "pe03", "name": "Three of Pentacles", "value": "three", "meaning_up": "Métier, trade, skilled labour; usually, however, regarded as a card of nobility, aristocracy, renown, glory.", "meaning_rev": "Mediocrity, in work and otherwise, puerility, pettiness, weakness.", "desc": "A sculptor at his work in a monastery. Compare the design which illustrates the Eight of Pentacles. The apprentice or amateur therein has received his reward and is now at work in earnest."}, {"type": "minor", "name_short": "pe04", "name": "Four of Pentacles", "value": "four", "meaning_up": "The surety of possessions, cleaving to that which one has, gift, legacy, inheritance.", "meaning_rev": "Suspense, delay, opposition.", "desc": "A crowned figure, having a pentacle over his crown, clasps another with hands and arms; two pentacles are under his feet. He holds to that which he has."}, {"type": "minor", "name_short": "pe05", "name": "Five of Pentacles", "value": "five", "meaning_up": "The card foretells material trouble above all, whether in the form illustrated--that is, destitution--or otherwise. For some cartomancists, it is a card of love and lovers-wife, husband, friend, mistress; also concordance, affinities. These alternatives cannot be harmonized.", "meaning_rev": "Disorder, chaos, ruin, discord, profligacy.", "desc": "Two mendicants in a snow-storm pass a lighted casement."}, {"type": "minor", "name_short": "pe06", "name": "Six of Pentacles", "value": "six", "meaning_up": "Presents, gifts, gratification another account says attention, vigilance now is the accepted time, present prosperity, etc.", "meaning_rev": "Desire, cupidity, envy, jealousy, illusion.", "desc": "A person in the guise of a merchant weighs money in a pair of scales and distributes it to the needy and distressed. It is a testimony to his own success in life, as well as to his goodness of heart."}, {"type": "minor", "name_short": "pe07", "name": "Seven of Pentacles", "value": "seven", "meaning_up": "These are exceedingly contradictory; in the main, it is a card of money, business, barter; but one reading gives altercation, quarrels--and another innocence, ingenuity, purgation.", "meaning_rev": "Cause for anxiety regarding money which it may be proposed to lend.", "desc": "A young man, leaning on his staff, looks intently at seven pentacles attached to a clump of greenery on his right; one would say that these were his treasures and that his heart was there."}, {"type": "minor", "name_short": "pe08", "name": "Eight of Pentacles", "value": "eight", "meaning_up": "Work, employment, commission, craftsmanship, skill in craft and business, perhaps in the preparatory stage.", "meaning_rev": "Voided ambition, vanity, cupidity, exaction, usury. It may also signify the possession of skill, in the sense of the ingenious mind turned to cunning and intrigue.", "desc": "An artist in stone at his work, which he exhibits in the form of trophies."}, {"type": "minor", "name_short": "pe09", "name": "Nine of Pentacles", "value": "nine", "meaning_up": "Prudence, safety, success, accomplishment, certitude, discernment.", "meaning_rev": "Roguery, deception, voided project, bad faith.", "desc": "A woman, with a bird upon her wrist, stands amidst a great abundance of grapevines in the garden of a manorial house. It is a wide domain, suggesting plenty in all things. Possibly it is her own possession and testifies to material well-being."}, {"type": "minor", "name_short": "pe10", "name": "Ten of Pentacles", "value": "ten", "meaning_up": "Gain, riches; family matters, archives, extraction, the abode of a family.", "meaning_rev": "Chance, fatality, loss, robbery, games of hazard; sometimes gift, dowry, pension.", "desc": "A man and woman beneath an archway which gives entrance to a house and domain. They are accompanied by a child, who looks curiously at two dogs accosting an ancient personage seated in the foreground. The child's hand is on one of them."}, {"type": "minor", "name_short": "swpa", "name": "Page of Swords", "value": "page", "meaning_up": "Authority, overseeing, secret service, vigilance, spying, examination, and the qualities thereto belonging.", "meaning_rev": "More evil side of these qualities; what is unforeseen, unprepared state; sickness is also intimated.", "desc": "A lithe, active figure holds a sword upright in both hands, while in the act of swift walking. He is passing over rugged land, and about his way the clouds are collocated wildly. He is alert and lithe, looking this way and that, as if an expected enemy might appear at any moment."}, {"type": "minor", "name_short": "swkn", "name": "Knight of Swords", "value": "knight", "meaning_up": "Skill, bravery, capacity, defence, address, enmity, wrath, war, destruction, opposition, resistance, ruin. There is therefore a sense in which the card signifies death, but it carries this meaning only in its proximity to other cards of fatality.", "meaning_rev": "Imprudence, incapacity, extravagance.", "desc": "He is riding in full course, as if scattering his enemies. In the design he is really a prototypical hero of romantic chivalry. He might almost be Galahad, whose sword is swift and sure because he is clean of heart."}, {"type": "minor", "name_short": "swqu", "name": "Queen of Swords", "value": "queen", "meaning_up": "Widowhood, female sadness and embarrassment, absence, sterility, mourning, privation, separation.", "meaning_rev": "Malice, bigotry, artifice, prudery, bale, deceit.", "desc": "Her right hand raises the weapon vertically and the hilt rests on an arm of her royal chair the left hand is extended, the arm raised her countenance is severe but chastened; it suggests familiarity with sorrow. It does not represent mercy, and, her sword notwithstanding, she is scarcely a symbol of power."}, {"type": "minor", "name_short": "swki", "name": "King of Swords", "value": "king", "meaning_up": "Whatsoever arises out of the idea of judgment and all its connexions-power, command, authority, militant intelligence, law, offices of the crown, and so forth.", "meaning_rev": "Cruelty, perversity, barbarity, perfidy, evil intention.", "desc": "He sits in judgment, holding the unsheathed sign of his suit. He recalls, of course, the conventional Symbol of justice in the Trumps Major, and he may represent this virtue, but he is rather the power of life and death, in virtue of his office."}, {"type": "minor", "name_short": "swac", "name": "Ace of Swords", "value": "ace", "meaning_up": "Triumph, the excessive degree in everything, conquest, triumph of force. It is a card of great force, in love as well as in hatred. The crown may carry a much higher significance than comes usually within the sphere of fortune-telling.", "meaning_rev": "The same, but the results are disastrous; another account says--conception, childbirth, augmentation, multiplicity.", "desc": "A hand issues from a cloud, grasping as word, the point of which is encircled by a crown."}, {"type": "minor", "name_short": "sw02", "name": "Two of Swords", "value": "two", "meaning_up": "Conformity and the equipoise which it suggests, courage, friendship, concord in a state of arms; another reading gives tenderness, affection, intimacy. The suggestion of harmony and other favourable readings must be considered in a qualified manner, as Swords generally are not symbolical of beneficent forces in human affairs.", "meaning_rev": "Imposture, falsehood, duplicity, disloyalty.", "desc": "A hoodwinked female figure balances two swords upon her shoulders."}, {"type": "minor", "name_short": "sw03", "name": "Three of Swords", "value": "three", "meaning_up": "Removal, absence, delay, division, rupture, dispersion, and all that the design signifies naturally, being too simple and obvious to call for specific enumeration.", "meaning_rev": "Mental alienation, error, loss, distraction, disorder, confusion.", "desc": "Three swords piercing a heart; cloud and rain behind."}, {"type": "minor", "name_short": "sw04", "name": "Four of Swords", "value": "four", "meaning_up": "Vigilance, retreat, solitude, hermit's repose, exile, tomb and coffin. It is these last that have suggested the design.", "meaning_rev": "Wise administration, circumspection, economy, avarice, precaution, testament.", "desc": "The effigy of a knight in the attitude of prayer, at full length upon his tomb."}, {"type": "minor", "name_short": "sw05", "name": "Five of Swords", "value": "five", "meaning_up": "Degradation, destruction, revocation, infamy, dishonour, loss, with the variants and analogues of these.", "meaning_rev": "The same; burial and obsequies.", "desc": "A disdainful man looks after two retreating and dejected figures. Their swords lie upon the ground. He carries two others on his left shoulder, and a third sword is in his right hand, point to earth. He is the master in possession of the field."}, {"type": "minor", "name_short": "sw06", "name": "Six of Swords", "value": "six", "meaning_up": "Journey by water, route, way, envoy, commissionary, expedient.", "meaning_rev": "Declaration, confession, publicity; one account says that it is a proposal of love.", "desc": "A ferryman carrying passengers in his punt to the further shore. The course is smooth, and seeing that the freight is light, it may be noted that the work is not beyond his strength."}, {"type": "minor", "name_short": "sw07", "name": "Seven of Swords", "value": "seven", "meaning_up": "Design, attempt, wish, hope, confidence; also quarrelling, a plan that may fail, annoyance. The design is uncertain in its import, because the significations are widely at variance with each other.", "meaning_rev": "Good advice, counsel, instruction, slander, babbling.", "desc": "A man in the act of carrying away five swords rapidly; the two others of the card remain stuck in the ground. A camp is close at hand."}, {"type": "minor", "name_short": "sw08", "name": "Eight of Swords", "value": "eight", "meaning_up": "Bad news, violent chagrin, crisis, censure, power in trammels, conflict, calumny; also sickness.", "meaning_rev": "Disquiet, difficulty, opposition, accident, treachery; what is unforeseen; fatality.", "desc": "A woman, bound and hoodwinked, with the swords of the card about her. Yet it is rather a card of temporary durance than of irretrievable bondage."}, {"type": "minor", "name_short": "sw09", "name": "Nine of Swords", "value": "nine", "meaning_up": "Death, failure, miscarriage, delay, deception, disappointment, despair.", "meaning_rev": "Imprisonment, suspicion, doubt, reasonable fear, shame.", "desc": "One seated on her couch in lamentation, with the swords over her. She is as one who knows no sorrow which is like unto hers. It is a card of utter desolation."}, {"type": "minor", "name_short": "sw10", "name": "Ten of Swords", "value": "ten", "meaning_up": "Whatsoever is intimated by the design; also pain, affliction, tears, sadness, desolation. It is not especially a card of violent death.", "meaning_rev": "Advantage, profit, success, favour, but none of these are permanent; also power and authority.", "desc": "A prostrate figure, pierced by all the swords belonging to the card."}]; // 同一份 API 資料的離線快照，連線失敗時使用
+const SUIT_CODE={wa:"wands",cu:"cups",sw:"swords",pe:"pentacles"};
+const RANK_CODE={ac:0,"02":1,"03":2,"04":3,"05":4,"06":5,"07":6,"08":7,"09":8,"10":9,pa:10,kn:11,qu:12,ki:13};
+function idFromShort(s){
+  if(s.startsWith("ar")) return "M"+parseInt(s.slice(2),10);
+  return SUIT_CODE[s.slice(0,2)]+RANK_CODE[s.slice(2)];
+}
+const API_DATA={}; // id -> API 回傳的卡片資料
+function absorbApi(cards){cards.forEach(a=>{API_DATA[idFromShort(a.name_short)]=a;});}
+absorbApi(API_SNAPSHOT);
+let apiLive=false;
+async function fetchApiDeck(){
+  const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),5000);
+  try{
+    const r=await fetch(`${API_BASE}/cards/random?n=78`,{signal:ctrl.signal});
+    if(!r.ok) throw new Error(r.status);
+    const j=await r.json(); clearTimeout(t);
+    if(!j.cards||j.cards.length!==78) throw new Error("bad data");
+    absorbApi(j.cards); apiLive=true;
+    return j.cards.map(a=>idFromShort(a.name_short)); // API 已隨機排序
+  }catch(e){
+    clearTimeout(t); apiLive=false;
+    const ids=API_SNAPSHOT.map(a=>idFromShort(a.name_short));
+    for(let i=ids.length-1;i>0;i--){const j=rand(i+1);[ids[i],ids[j]]=[ids[j],ids[i]];}
+    return ids;
+  }
+}
+function setBadge(){
+  const b=$("#srcBadge"); b.classList.toggle("live",apiLive);
+  b.innerHTML=apiLive?`<i></i>已即時連線 Tarot API（tarotapi.dev）`:`<i></i>此環境無法連外，已改用內建 Tarot API 資料快照`;
+}
+async function shuffle(){
+  const ids=await fetchApiDeck(); setBadge();
+  return ids.map(id=>({card:DECK.find(c=>c.id===id),rev:st.rev&&rand(2)===1}));
+}
+function apiDetails(c,rev){
+  const a=API_DATA[c.id]; if(!a) return "";
+  const esc=s=>String(s||"").replace(/[<>&]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[m]));
+  return `<details class="api"><summary>📜 偉特原典（Tarot API：${esc(a.name)}／${esc(a.name_short)}）</summary>
+    <p><b>${rev===undefined?"正位":rev?"逆位":"正位"}原文：</b>${esc(rev?a.meaning_rev:a.meaning_up)}</p>
+    ${rev===undefined?`<p><b>逆位原文：</b>${esc(a.meaning_rev)}</p>`:""}
+    <p><b>牌面描述：</b>${esc(a.desc)}</p></details>`;
+}
+
+/* 牌陣選擇 */
+function renderSpreads(){
+  $("#spreads").innerHTML=Object.entries(SPREADS).map(([k,s])=>
+    `<div class="sp ${k===st.spread?'on':''}" data-k="${k}"><em>${s.count} 張</em><b>${s.name}</b><span>${s.desc}</span></div>`).join("");
+  document.querySelectorAll(".sp").forEach(el=>el.onclick=()=>{st.spread=el.dataset.k;renderSpreads();});
+}
+renderSpreads();
+
+/* 開始 */
+$("#startBtn").onclick=async()=>{
+  st.q=$("#q").value.trim(); st.topic=$("#topic").value; st.rev=$("#rev").checked;
+  if(st.spread==="love") st.topic="love";
+  const btn=$("#startBtn"); btn.disabled=true; btn.textContent="✦ 正在連線 Tarot API 洗牌中…";
+  st.deck=await shuffle(); st.picked=[]; st.flipped=0;
+  btn.disabled=false; btn.textContent="✦ 呼叫 Tarot API 洗牌並開始抽牌";
+  $("#setup").classList.add("hidden"); $("#drawStage").classList.remove("hidden");
+  $("#reading").innerHTML=""; $("#flipAllBtn").style.display="none"; $("#autoBtn").style.display="";
+  renderArea(); renderFan(); updateHint();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+function renderFan(){
+  const fan=$("#fan");
+  fan.innerHTML=st.deck.map((_,i)=>`<div class="fcard" data-i="${i}" style="--dx:${rand(30)-15}px;--dy:${rand(16)-8}px;--dr:${rand(14)-7}deg;animation-delay:${rand(300)}ms"><img src="${BACK_URI}" alt=""></div>`).join("");
+  fan.classList.add("shuffling");
+  setTimeout(()=>fan.classList.remove("shuffling"),1600);
+  fan.querySelectorAll(".fcard").forEach(el=>el.onclick=()=>pick(+el.dataset.i,el));
+  const wrap=fan.parentElement; setTimeout(()=>{wrap.scrollLeft=(wrap.scrollWidth-wrap.clientWidth)/2;},50);
+}
+function updateHint(){
+  const sp=SPREADS[st.spread], n=st.picked.length;
+  if(n<sp.count) $("#drawHint").innerHTML=`請靜心默念你的問題，憑直覺從牌堆中抽出 <b>${sp.count}</b> 張牌（已抽 <b>${n}</b> / ${sp.count}）`;
+  else if(st.flipped<sp.count) $("#drawHint").innerHTML=`抽牌完成 ✦ 點擊牌面逐一翻開，感受每張牌帶給你的第一印象`;
+  else $("#drawHint").innerHTML=`所有牌已揭曉，往下閱讀完整解牌 ↓`;
+}
+function pick(i,el){
+  const sp=SPREADS[st.spread]; if(st.picked.length>=sp.count) return;
+  el.classList.add("taken");
+  const idx=st.picked.length; st.picked.push(st.deck[i]);
+  placeCard(idx);
+  updateHint();
+  if(st.picked.length===sp.count){ $("#autoBtn").style.display="none"; $("#flipAllBtn").style.display=""; }
+}
+$("#autoBtn").onclick=()=>{
+  const sp=SPREADS[st.spread];
+  const avail=[...document.querySelectorAll(".fcard:not(.taken)")];
+  let need=sp.count-st.picked.length, t=0;
+  while(need-- >0){
+    const k=rand(avail.length); const el=avail.splice(k,1)[0];
+    setTimeout(()=>pick(+el.dataset.i,el),t); t+=220;
+  }
+};
+$("#flipAllBtn").onclick=()=>{
+  document.querySelectorAll("#area .tcard:not(.flipped)").forEach((el,k)=>setTimeout(()=>el.click(),k*180));
+};
+
+function slotHTML(i,p){return `<div class="slot s${i}" id="slot${i}"><div class="ph">${i+1}</div><div class="cap"><b>${i+1}</b>${p.t}</div></div>`;}
+function renderArea(){
+  const sp=SPREADS[st.spread], a=$("#area");
+  a.className="area "+sp.layout;
+  if(sp.layout==="celtic"){
+    a.innerHTML=`<div class="cross">${[0,1,2,3,4,5].map(i=>slotHTML(i,sp.pos[i])).join("")}</div><div class="staff">${[6,7,8,9].map(i=>slotHTML(i,sp.pos[i])).join("")}</div>`;
+    a.querySelector(".s0 .cap").innerHTML=`<b>1</b>現況 ／ <b>2</b>挑戰（橫置）`;
+  }else if(sp.layout==="choice"){
+    a.innerHTML=slotHTML(0,sp.pos[0])+`<div class="choice-col">${slotHTML(1,sp.pos[1])}${slotHTML(2,sp.pos[2])}</div><div class="choice-col">${slotHTML(3,sp.pos[3])}${slotHTML(4,sp.pos[4])}</div>`;
+  }else{
+    a.innerHTML=sp.pos.map((p,i)=>slotHTML(i,p)).join("");
+  }
+}
+function placeCard(i){
+  const e=st.picked[i], slot=$("#slot"+i);
+  const d=document.createElement("div");
+  d.className="tcard deal";
+  d.innerHTML=`<div class="inner"><div class="side back"><img src="${BACK_URI}" alt=""></div><div class="side front ${e.rev?'rev':''}">${faceSVG(e.card)}</div></div>`;
+  d.onclick=()=>{
+    if(d.classList.contains("flipped")||st.picked.length<SPREADS[st.spread].count) return;
+    d.classList.add("flipped","glow"); st.flipped++; updateHint();
+    if(st.flipped===SPREADS[st.spread].count) setTimeout(renderReading,900);
+  };
+  slot.querySelector(".ph").replaceWith(d);
+}
+
+/* ===================== 解牌 ===================== */
+function topicText(c,rev,topic){
+  const lines=[];
+  const wrap=(label,txt)=>rev
+    ? `${label}：此牌正位時代表「${txt.replace(/。$/,"")}」。如今以逆位出現，這股能量可能受阻、延遲，或被過度使用，請留意自己是否正在抗拒它，或用錯了方式。`
+    : `${label}：${txt}`;
+  if(topic==="love"||topic==="general") lines.push(["感情",wrap("感情",c.love).replace(/^感情：/,"")]);
+  if(topic==="work"||topic==="general") lines.push(["事業財運",wrap("事業財運",c.work).replace(/^事業財運：/,"")]);
+  return lines;
+}
+function cardBlock(e,i,sp){
+  const c=e.card, p=sp.pos[i];
+  const meta=c.major?`大阿爾克那 ${ROMAN[c.num]}・對應 ${c.astro}`:`${c.suitObj.name}牌組（${c.suitObj.el}元素）・${RANKS[c.rank].n}：${RANKS[c.rank].mean}`;
+  const tps=topicText(c,e.rev,st.topic).map(([h,t])=>`<div class="rsec"><h4>◈ ${h}</h4><p>${t}</p></div>`).join("");
+  return `<div class="rblock">
+    <div class="mini ${e.rev?'rev':''}">${faceSVG(c)}</div>
+    <div>
+      <div class="rpos">第 ${i+1} 張・${p.t}</div>
+      <div class="rtitle">${c.name}<span class="tag ${e.rev?'rv':'up'}">${e.rev?'逆位':'正位'}</span><small>${c.en}</small></div>
+      <p class="posdesc">${p.d}<br>${meta}</p>
+      <div class="kws">${c.kw.split("、").map(k=>`<span class="kw">${k}</span>`).join("")}</div>
+      <div class="rsec"><h4>◈ ${e.rev?'逆位':'正位'}牌義</h4><p>${e.rev?c.rv:c.up}</p></div>
+      ${tps}
+      <div class="advice">✦ 給你的建議：${c.adv}${e.rev?'（逆位時，先找出卡住的地方，再朝這個方向調整。）':''}</div>
+      ${apiDetails(c,e.rev)}
+    </div></div>`;
+}
+function synthesis(sp){
+  const P=st.picked, N=P.length, out=[];
+  const majors=P.filter(e=>e.card.major).length;
+  const revs=P.filter(e=>e.rev).length;
+  const suitCount={};P.forEach(e=>{if(!e.card.major)suitCount[e.card.suit]=(suitCount[e.card.suit]||0)+1;});
+  const courts=P.filter(e=>!e.card.major&&e.card.rank>=10).length;
+
+  if(N===1){
+    const e=P[0];
+    out.push(`你抽到的是「${e.card.name}」${e.rev?"逆位":"正位"}。${e.card.major?"這是一張大阿爾克那，表示這個提醒對你而言意義重大，值得認真放在心上。":`它屬於${e.card.suitObj.name}牌組，與「${e.card.suitObj.theme}」有關，也代表${RANKS[e.card.rank].mean}的階段。`}`);
+    out.push(`今天就帶著這句話出發：<b>${e.card.adv}</b>`);
+    return out;
+  }
+  if(majors/N>=0.5) out.push(`大阿爾克那佔了 ${majors} / ${N} 張，顯示這件事牽涉到人生的重要課題，背後有較大的命運力量在推動，不完全是你能單方面掌控的——但你如何回應，仍然決定了結果。`);
+  else if(majors===0) out.push(`牌陣中全是小阿爾克那，代表這件事主要取決於日常的選擇與行動，主導權在你手上，只要調整做法，局勢就能改變。`);
+  else out.push(`牌陣中有 ${majors} 張大阿爾克那，代表這件事有關鍵的轉折點，其餘則落在日常的行動與選擇中。`);
+
+  const entries=Object.entries(suitCount).sort((a,b)=>b[1]-a[1]);
+  if(entries.length&&entries[0][1]>=2&&(!entries[1]||entries[0][1]>entries[1][1])){
+    out.push(SUITS.find(s=>s.id===entries[0][0]).synth);
+  }
+  if(N>=5){
+    const missing=SUITS.filter(s=>!suitCount[s.id]).map(s=>`${s.name}（${s.theme.split("、")[0]}）`);
+    if(missing.length>=1&&missing.length<=2) out.push(`牌陣中缺少 ${missing.join("、")} 的能量，這可能是你目前較忽略、需要補足的面向。`);
+  }
+  if(st.rev){
+    if(revs===0) out.push(`沒有出現任何逆位牌，整體能量流動順暢，事情較容易按照預期發展。`);
+    else if(revs/N>=0.5) out.push(`逆位牌有 ${revs} 張，比例偏高，代表能量有受阻、內化或延遲的傾向。建議放慢腳步，先處理內在的阻力或舊有的模式，而不是急著往前衝。`);
+    else out.push(`共有 ${revs} 張逆位牌，提醒你在這些位置上有需要調整與留意的地方。`);
+  }
+  if(courts>=2) out.push(`出現了 ${courts} 張宮廷牌，代表這件事和周遭的人密切相關，可能有多方人物的影響；這些牌也可能反映你自己需要扮演的角色。`);
+  const rc={};P.forEach(e=>{if(!e.card.major)rc[e.card.rank]=(rc[e.card.rank]||0)+1;});
+  Object.entries(rc).filter(([,v])=>v>=2).forEach(([r,v])=>out.push(`出現 ${v} 張「${RANKS[r].n}」，數字能量被強調：${RANKS[r].mean}，這正是你目前所處的階段主題。`));
+
+  if(st.spread==="choice"){
+    const score=e=>(e.rev?-1:1)+(e.card.major?0.5:0);
+    const A=score(P[1])+score(P[2])*1.5, B=score(P[3])+score(P[4])*1.5;
+    const res=(e)=>`「${e.card.name}」${e.rev?"逆位":"正位"}`;
+    let verdict = Math.abs(A-B)<0.6 ? "兩條路的能量相當接近，沒有絕對的好壞，關鍵在於你更願意承擔哪一種過程。"
+      : (A>B?"從牌面能量來看，選擇 A 的發展相對順暢。":"從牌面能量來看，選擇 B 的發展相對順暢。");
+    out.push(`比較兩條路：選擇 A 的結果是${res(P[2])}，選擇 B 的結果是${res(P[4])}。${verdict}最終仍請回到現況牌「${P[0].card.name}」的提醒，誠實面對自己真正想要的。`);
+  }
+  if(st.spread==="love"){
+    out.push(`你的心態是「${P[0].card.name}」，對方的心態是「${P[1].card.name}」。${P[0].rev===P[1].rev?"兩張牌方向一致，代表你們目前的狀態相當同步。":"兩張牌一正一逆，代表雙方目前的步調或期待不太一致，需要更多溝通。"}`);
+  }
+  const last=P[N-1];
+  out.push(`整體的關鍵落在最後一張「${last.card.name}」${last.rev?"逆位":"正位"}。牌給你的最後一句話是：<b>${last.card.adv}</b>`);
+  return out;
+}
+function renderReading(){
+  const sp=SPREADS[st.spread];
+  const syn=synthesis(sp);
+  $("#reading").innerHTML=`<div class="panel">
+      <h2>✦ 解牌｜${sp.name}（${TOPIC_LABEL[st.topic]}）</h2>
+      ${st.picked.map((e,i)=>cardBlock(e,i,sp)).join("")}
+      <div class="synth"><h3>✧ 綜合解讀</h3>
+        ${st.q?`<div class="q">你的問題：${st.q.replace(/[<>&]/g,"")}</div>`:""}
+        ${syn.map(t=>`<p>${t}</p>`).join("")}
+      </div>
+      <div class="actions">
+        <button class="btn" id="copyBtn">複製解牌內容</button>
+        <button class="btn primary" id="againBtn">重新占卜</button>
+      </div></div>`;
+  $("#copyBtn").onclick=()=>copyText(plainReading(sp,syn));
+  $("#againBtn").onclick=()=>{$("#drawStage").classList.add("hidden");$("#reading").innerHTML="";$("#setup").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});};
+  updateHint();
+  setTimeout(()=>$("#reading").scrollIntoView({behavior:"smooth",block:"start"}),100);
+}
+function plainReading(sp,syn){
+  let t=`【星語塔羅｜${sp.name}】\n`; if(st.q) t+=`問題：${st.q}\n`; t+="\n";
+  st.picked.forEach((e,i)=>{
+    const c=e.card;
+    t+=`${i+1}. ${sp.pos[i].t}：${c.name}（${e.rev?"逆位":"正位"}）\n${e.rev?c.rv:c.up}\n`;
+    topicText(c,e.rev,st.topic).forEach(([h,x])=>t+=`・${h}：${x}\n`);
+    t+=`・建議：${c.adv}\n\n`;
+  });
+  t+="【綜合解讀】\n"+syn.map(s=>s.replace(/<[^>]+>/g,"")).join("\n");
+  return t;
+}
+function copyText(t){
+  const done=()=>toast("已複製到剪貼簿 ✦");
+  const fallback=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");done();}catch(e){toast("複製失敗，請手動選取文字");}ta.remove();};
+  try{navigator.clipboard.writeText(t).then(done,fallback);}catch(e){fallback();}
+}
+function toast(m){const el=$("#toast");el.textContent=m;el.classList.add("show");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("show"),1800);}
+
+/* ===================== 牌義圖鑑 ===================== */
+const FILTERS=[["all","全部 78 張"],["major","大阿爾克那"],...SUITS.map(s=>[s.id,`${s.name}（${s.el}）`])];
+let curFilter="all";
+function renderLib(){
+  $("#filters").innerHTML=FILTERS.map(([k,n])=>`<button class="chip-btn ${k===curFilter?'on':''}" data-f="${k}">${n}</button>`).join("");
+  document.querySelectorAll("#filters button").forEach(b=>b.onclick=()=>{curFilter=b.dataset.f;renderLib();});
+  const list=DECK.filter(c=>curFilter==="all"||(curFilter==="major"?c.major:c.suit===curFilter));
+  $("#grid").innerHTML=list.map(c=>`<div class="gcard" data-id="${c.id}">${faceSVG(c)}<div>${c.kw.split("、")[0]}</div></div>`).join("");
+  document.querySelectorAll(".gcard").forEach(g=>g.onclick=()=>openCard(DECK.find(c=>c.id===g.dataset.id)));
+}
+function openCard(c){
+  const meta=c.major?`大阿爾克那 ${ROMAN[c.num]}・對應星象：${c.astro}`
+    :`${c.suitObj.name}牌組・${c.suitObj.el}元素：${c.suitObj.theme}<br>數字「${RANKS[c.rank].n}」：${RANKS[c.rank].mean}`;
+  $("#mcontent").innerHTML=`<div class="mgrid"><div>${faceSVG(c)}</div><div>
+    <div class="rtitle">${c.name}<small>${c.en}</small></div>
+    <p class="posdesc">${meta}</p>
+    <div class="kws">${c.kw.split("、").map(k=>`<span class="kw">${k}</span>`).join("")}</div>
+    <div class="rsec"><h4>◈ 正位牌義</h4><p>${c.up}</p></div>
+    <div class="rsec"><h4>◈ 逆位牌義</h4><p>${c.rv}</p></div>
+    <div class="rsec"><h4>◈ 感情</h4><p>${c.love}</p></div>
+    <div class="rsec"><h4>◈ 事業財運</h4><p>${c.work}</p></div>
+    <div class="advice">✦ 建議：${c.adv}</div>${apiDetails(c)}</div></div>`;
+  $("#modal").classList.add("show");
+}
+$("#mclose").onclick=()=>$("#modal").classList.remove("show");
+$("#modal").onclick=e=>{if(e.target.id==="modal")$("#modal").classList.remove("show");};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#modal").classList.remove("show");});
+
+/* tabs */
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  $("#tab-read").classList.toggle("hidden",b.dataset.tab!=="read");
+  $("#tab-lib").classList.toggle("hidden",b.dataset.tab!=="lib");
+  if(b.dataset.tab==="lib"&&!$("#grid").children.length) renderLib();
+});
+</script>
+</body>
+</html>
